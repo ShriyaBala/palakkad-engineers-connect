@@ -113,7 +113,7 @@
   }
   
   .page.flipped {
-    @apply transform -rotate-y-180;
+    transform: rotateY(-180deg);
   }
   
   .backface-hidden {

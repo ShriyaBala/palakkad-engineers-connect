@@ -98,6 +98,9 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			rotate: {
+				'y-180': 'rotateY(180deg)',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: { height: '0' },
