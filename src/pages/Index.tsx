@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
@@ -11,35 +10,28 @@ import { Button } from '@/components/ui/button';
 import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-
 const Index = () => {
   // Sample upcoming events
-  const upcomingEvents = [
-    {
-      id: 1,
-      title: "Monthly Technical Meetup",
-      date: "May 15, 2025",
-      location: "Palakkad Town Hall",
-      type: "Workshop"
-    },
-    {
-      id: 2,
-      title: "Civil Engineering Symposium",
-      date: "May 22, 2025",
-      location: "Engineering College, Palakkad",
-      type: "Conference"
-    },
-    {
-      id: 3,
-      title: "Electrical Engineers Association Meeting",
-      date: "May 29, 2025",
-      location: "Hotel Indraprastha, Palakkad",
-      type: "Meeting"
-    }
-  ];
-
-  return (
-    <Layout>
+  const upcomingEvents = [{
+    id: 1,
+    title: "Monthly Technical Meetup",
+    date: "May 15, 2025",
+    location: "Palakkad Town Hall",
+    type: "Workshop"
+  }, {
+    id: 2,
+    title: "Civil Engineering Symposium",
+    date: "May 22, 2025",
+    location: "Engineering College, Palakkad",
+    type: "Conference"
+  }, {
+    id: 3,
+    title: "Electrical Engineers Association Meeting",
+    date: "May 29, 2025",
+    location: "Hotel Indraprastha, Palakkad",
+    type: "Meeting"
+  }];
+  return <Layout>
       <HeroSection />
       
       <section className="py-12 bg-white">
@@ -113,8 +105,7 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {upcomingEvents.map((event) => (
-              <Card key={event.id} className="hover:shadow-md transition-shadow">
+            {upcomingEvents.map(event => <Card key={event.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-5">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="font-medium text-lg">{event.title}</h3>
@@ -132,15 +123,14 @@ const Index = () => {
                   </div>
                   <Button variant="ghost" className="w-full">View Details</Button>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
       
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-heading text-center mb-8">Featured Advertisements</h2>
+          
           <EnhancedAdvertisements />
           <div className="text-center mt-8">
             <Link to="/advertising">
@@ -193,8 +183,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
