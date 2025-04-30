@@ -19,6 +19,21 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
+          
+          {/* District level pages - these will be implemented later */}
+          <Route path="/about" element={<NotFound />} />
+          <Route path="/history" element={<NotFound />} />
+          <Route path="/executive-committee" element={<NotFound />} />
+          <Route path="/member-directory" element={<NotFound />} />
+          <Route path="/become-member" element={<NotFound />} />
+          <Route path="/events" element={<NotFound />} />
+          <Route path="/resources" element={<NotFound />} />
+          <Route path="/contact" element={<NotFound />} />
+          <Route path="/news" element={<NotFound />} />
+          <Route path="/gallery" element={<NotFound />} />
+          <Route path="/privacy" element={<NotFound />} />
+          <Route path="/terms" element={<NotFound />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

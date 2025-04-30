@@ -6,55 +6,138 @@ import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import EnhancedSearch from '@/components/EnhancedSearch';
 import FeaturedEngineers from '@/components/FeaturedEngineers';
 import EnhancedFlipbook from '@/components/EnhancedFlipbook';
-import { engineeringResourcesPages } from '@/components/FlipbookPages';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, Book, Users, FileText } from 'lucide-react';
+import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 const Index = () => {
+  // Sample upcoming events
+  const upcomingEvents = [
+    {
+      id: 1,
+      title: "Monthly Technical Meetup",
+      date: "May 15, 2025",
+      location: "Palakkad Town Hall",
+      type: "Workshop"
+    },
+    {
+      id: 2,
+      title: "Civil Engineering Symposium",
+      date: "May 22, 2025",
+      location: "Engineering College, Palakkad",
+      type: "Conference"
+    },
+    {
+      id: 3,
+      title: "Electrical Engineers Association Meeting",
+      date: "May 29, 2025",
+      location: "Hotel Indraprastha, Palakkad",
+      type: "Meeting"
+    }
+  ];
+
   return (
     <Layout>
       <HeroSection />
       
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="section-heading mb-4">Welcome to Palakkad Engineers Connect</h2>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                We are a thriving community of engineering professionals dedicated to fostering 
-                connections, sharing knowledge, and advancing the engineering profession in the 
-                Palakkad district of Kerala.
-              </p>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Our platform offers resources, networking opportunities, and tools to help engineers 
-                collaborate, grow professionally, and contribute to our local community.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="flex items-center gap-2">
-                  <Users size={18} />
-                  <span>Join the Community</span>
-                </Button>
-                <Button variant="outline" className="flex items-center gap-2">
-                  <CalendarCheck size={18} />
-                  <span>Upcoming Events</span>
-                </Button>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="absolute -top-6 -left-6 w-24 h-24 bg-engineering-100 rounded-lg rotate-6"></div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-kerala-100 rounded-lg -rotate-6"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=800"
-                alt="Engineers collaborating" 
-                className="relative z-10 rounded-lg shadow-xl"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="bg-engineering-50 border-engineering-100">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="bg-engineering-100 p-3 rounded-full">
+                    <Users className="h-6 w-6 text-engineering-600" />
+                  </div>
+                  <h2 className="text-xl font-bold">Member Services</h2>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Access exclusive benefits, networking opportunities, and professional development resources 
+                  as a member of Palakkad Engineers Association.
+                </p>
+                <Link to="/become-member">
+                  <Button variant="outline" className="w-full">Join Now</Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-kerala-50 border-kerala-100">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="bg-kerala-100 p-3 rounded-full">
+                    <Bell className="h-6 w-6 text-kerala-600" />
+                  </div>
+                  <h2 className="text-xl font-bold">Latest Updates</h2>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Stay informed about the latest developments, news, and announcements 
+                  from the Palakkad Engineering community.
+                </p>
+                <Link to="/news">
+                  <Button variant="outline" className="w-full">View Updates</Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gray-50 border-gray-100">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="bg-gray-100 p-3 rounded-full">
+                    <MapPin className="h-6 w-6 text-gray-600" />
+                  </div>
+                  <h2 className="text-xl font-bold">Find Engineers</h2>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Easily search for qualified engineering professionals in Palakkad district
+                  by location, specialization, or expertise.
+                </p>
+                <Link to="/engineers">
+                  <Button variant="outline" className="w-full">Search Directory</Button>
+                </Link>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
       
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+            <h2 className="section-heading mb-4 md:mb-0">Upcoming Events</h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <CalendarCheck size={18} />
+              <span>View All Events</span>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {upcomingEvents.map((event) => (
+              <Card key={event.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="p-5">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="font-medium text-lg">{event.title}</h3>
+                    <span className="bg-engineering-100 text-engineering-800 px-2 py-1 rounded text-xs">
+                      {event.type}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-gray-600 mb-2">
+                    <CalendarCheck size={16} className="mr-2 text-engineering-600" />
+                    <span>{event.date}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 mb-4">
+                    <MapPin size={16} className="mr-2 text-engineering-600" />
+                    <span>{event.location}</span>
+                  </div>
+                  <Button variant="ghost" className="w-full">View Details</Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="section-heading text-center mb-8">Featured Advertisements</h2>
           <EnhancedAdvertisements />
@@ -70,7 +153,7 @@ const Index = () => {
       
       <EnhancedSearch />
       
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <h2 className="section-heading mb-4 md:mb-0">Engineering Resources</h2>
@@ -79,7 +162,7 @@ const Index = () => {
               <span>Browse All Resources</span>
             </Button>
           </div>
-          <EnhancedFlipbook title="Engineering Resources" />
+          <EnhancedFlipbook title="District Engineering Resources" />
         </div>
       </section>
       
@@ -87,10 +170,10 @@ const Index = () => {
       
       <section className="py-16 bg-engineering-700 text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6 font-heading">Join Our Growing Community Today</h2>
+          <h2 className="text-3xl font-bold mb-6 font-heading">Join Our Palakkad District Engineers Community</h2>
           <p className="text-engineering-100 mb-8 max-w-2xl mx-auto">
             Connect with fellow engineers, access valuable resources, and stay updated with the latest 
-            developments in the engineering community of Palakkad.
+            developments in the engineering community of Palakkad district.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button className="bg-white text-engineering-800 hover:bg-gray-100 flex items-center gap-2">

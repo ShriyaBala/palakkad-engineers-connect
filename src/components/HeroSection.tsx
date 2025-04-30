@@ -1,77 +1,81 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Search, BookOpen, Users } from 'lucide-react';
+import { Search, Users, FileText, Calendar } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   return (
     <div className="bg-gradient-to-br from-engineering-700 to-engineering-900 text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-6">
             <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-heading leading-tight">
-                Connecting Engineers Across <span className="text-kerala-300">Palakkad</span>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-heading leading-tight">
+                Palakkad District <span className="text-kerala-300">Engineers Association</span>
               </h1>
               <p className="text-lg text-gray-200 max-w-lg">
-                Join our thriving community of engineering professionals to network, share knowledge, 
-                and discover opportunities in the Palakkad region.
+                Uniting engineering professionals across Palakkad district to foster innovation, 
+                collaboration, and professional growth in our local community.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-white text-engineering-800 hover:bg-gray-100 flex items-center gap-2">
+            <div className="grid grid-cols-2 gap-4">
+              <Button className="bg-white text-engineering-800 hover:bg-gray-100 flex items-center gap-2 w-full">
+                <Users size={18} />
+                <span>Member Directory</span>
+              </Button>
+              <Button variant="outline" className="text-white border-white hover:bg-white/10 flex items-center gap-2 w-full">
+                <Calendar size={18} />
+                <span>Upcoming Events</span>
+              </Button>
+              <Button variant="secondary" className="flex items-center gap-2 w-full">
+                <FileText size={18} />
+                <span>Resources</span>
+              </Button>
+              <Button className="bg-kerala-600 text-white hover:bg-kerala-700 flex items-center gap-2 w-full">
                 <Search size={18} />
                 <span>Find Engineers</span>
-              </Button>
-              <Button variant="outline" className="text-white border-white hover:bg-white/10 flex items-center gap-2">
-                <Users size={18} />
-                <span>Join Community</span>
-              </Button>
-              <Button variant="secondary" className="flex items-center gap-2">
-                <BookOpen size={18} />
-                <span>View Resources</span>
               </Button>
             </div>
           </div>
 
           <div className="hidden md:block relative">
-            <div className="aspect-square rounded-full bg-engineering-600/30 absolute -top-12 -right-12 w-64 h-64"></div>
-            <div className="aspect-square rounded-full bg-kerala-600/20 absolute -bottom-12 -left-12 w-80 h-80"></div>
-            <div className="relative z-10 bg-white p-4 rounded-lg shadow-xl transform rotate-3">
+            <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl transform rotate-2">
               <img 
-                src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=800"
-                alt="Engineers collaborating" 
+                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800"
+                alt="Engineering project in Palakkad" 
                 className="w-full h-auto rounded"
               />
             </div>
-            <div className="relative z-20 bg-white p-4 rounded-lg shadow-xl transform -rotate-6 -mt-40 ml-32">
+            <div className="absolute top-1/4 right-0 z-20 bg-white p-3 rounded-lg shadow-xl transform rotate-6 w-3/4">
               <img 
-                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800" 
-                alt="Engineering project" 
+                src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800"
+                alt="Palakkad engineering collaboration" 
                 className="w-full h-auto rounded"
               />
             </div>
+            <div className="absolute -bottom-10 left-10 z-0 w-24 h-24 bg-engineering-500/30 rounded-full blur-md"></div>
+            <div className="absolute top-10 right-10 z-0 w-32 h-32 bg-kerala-500/20 rounded-full blur-md"></div>
           </div>
         </div>
       </div>
       <div className="bg-white/10 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-white font-heading">500+</div>
-              <div className="text-sm text-gray-300">Community Members</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="bg-white/5 backdrop-blur-sm p-4 rounded-lg">
+              <div className="text-3xl font-bold text-white font-heading">200+</div>
+              <div className="text-sm text-gray-300">District Members</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-white font-heading">120+</div>
-              <div className="text-sm text-gray-300">Engineering Companies</div>
-            </div>
-            <div>
+            <div className="bg-white/5 backdrop-blur-sm p-4 rounded-lg">
               <div className="text-3xl font-bold text-white font-heading">50+</div>
-              <div className="text-sm text-gray-300">Resources Available</div>
+              <div className="text-sm text-gray-300">Local Companies</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-white font-heading">30+</div>
-              <div className="text-sm text-gray-300">Events Per Year</div>
+            <div className="bg-white/5 backdrop-blur-sm p-4 rounded-lg">
+              <div className="text-3xl font-bold text-white font-heading">20+</div>
+              <div className="text-sm text-gray-300">Technical Resources</div>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm p-4 rounded-lg">
+              <div className="text-3xl font-bold text-white font-heading">15+</div>
+              <div className="text-sm text-gray-300">Annual Events</div>
             </div>
           </div>
         </div>
