@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Search, MapPin, User, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -165,8 +164,8 @@ const EnhancedSearch: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchType, setSearchType] = useState<'location' | 'name' | 'occupation'>('location');
-  const [specializationFilter, setSpecializationFilter] = useState<string>('');
-  const [experienceFilter, setExperienceFilter] = useState<string>('');
+  const [specializationFilter, setSpecializationFilter] = useState<string>('all');
+  const [experienceFilter, setExperienceFilter] = useState<string>('any');
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -197,14 +196,14 @@ const EnhancedSearch: React.FC = () => {
     }
     
     // Apply specialization filter
-    if (specializationFilter) {
+    if (specializationFilter && specializationFilter !== 'all') {
       results = results.filter(engineer => 
         engineer.specialization === specializationFilter
       );
     }
     
     // Apply experience filter
-    if (experienceFilter) {
+    if (experienceFilter && experienceFilter !== 'any') {
       const minExperience = parseInt(experienceFilter);
       results = results.filter(engineer => 
         (engineer.experience || 0) >= minExperience
@@ -260,8 +259,8 @@ const EnhancedSearch: React.FC = () => {
   
   const resetFilters = () => {
     setSearchQuery('');
-    setSpecializationFilter('');
-    setExperienceFilter('');
+    setSpecializationFilter('all');
+    setExperienceFilter('any');
     setHasSearched(false);
     setSearchResults([]);
   };
@@ -334,7 +333,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Engineering Specialization" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Specializations</SelectItem>
+                      <SelectItem value="all">All Specializations</SelectItem>
                       {specializations.map((spec) => (
                         <SelectItem key={spec} value={spec}>{spec}</SelectItem>
                       ))}
@@ -347,7 +346,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Minimum Experience" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Any Experience</SelectItem>
+                      <SelectItem value="any">Any Experience</SelectItem>
                       <SelectItem value="1">1+ Years</SelectItem>
                       <SelectItem value="3">3+ Years</SelectItem>
                       <SelectItem value="5">5+ Years</SelectItem>
@@ -408,7 +407,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Engineering Specialization" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Specializations</SelectItem>
+                      <SelectItem value="all">All Specializations</SelectItem>
                       {specializations.map((spec) => (
                         <SelectItem key={spec} value={spec}>{spec}</SelectItem>
                       ))}
@@ -421,7 +420,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Minimum Experience" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Any Experience</SelectItem>
+                      <SelectItem value="any">Any Experience</SelectItem>
                       <SelectItem value="1">1+ Years</SelectItem>
                       <SelectItem value="3">3+ Years</SelectItem>
                       <SelectItem value="5">5+ Years</SelectItem>
@@ -482,7 +481,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Engineering Specialization" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Specializations</SelectItem>
+                      <SelectItem value="all">All Specializations</SelectItem>
                       {specializations.map((spec) => (
                         <SelectItem key={spec} value={spec}>{spec}</SelectItem>
                       ))}
@@ -495,7 +494,7 @@ const EnhancedSearch: React.FC = () => {
                       <SelectValue placeholder="Minimum Experience" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Any Experience</SelectItem>
+                      <SelectItem value="any">Any Experience</SelectItem>
                       <SelectItem value="1">1+ Years</SelectItem>
                       <SelectItem value="3">3+ Years</SelectItem>
                       <SelectItem value="5">5+ Years</SelectItem>

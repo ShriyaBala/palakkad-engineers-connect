@@ -79,7 +79,7 @@ const Index = () => {
               <span>Browse All Resources</span>
             </Button>
           </div>
-          <EnhancedFlipbook title="Engineering Resources" defaultPages={engineeringResourcesPages} />
+          <EnhancedFlipbook title="Engineering Resources" />
         </div>
       </section>
       
