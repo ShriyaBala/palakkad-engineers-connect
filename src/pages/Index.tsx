@@ -2,13 +2,14 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
-import AdvertisementSlider from '@/components/AdvertisementSlider';
-import SearchEngineers from '@/components/SearchEngineers';
+import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
+import EnhancedSearch from '@/components/EnhancedSearch';
 import FeaturedEngineers from '@/components/FeaturedEngineers';
-import Flipbook from '@/components/Flipbook';
+import EnhancedFlipbook from '@/components/EnhancedFlipbook';
 import { engineeringResourcesPages } from '@/components/FlipbookPages';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, Book } from 'lucide-react';
+import { CalendarCheck, Book, Users, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -31,7 +32,7 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="flex items-center gap-2">
-                  <Book size={18} />
+                  <Users size={18} />
                   <span>Join the Community</span>
                 </Button>
                 <Button variant="outline" className="flex items-center gap-2">
@@ -55,15 +56,30 @@ const Index = () => {
       
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AdvertisementSlider />
+          <h2 className="section-heading text-center mb-8">Featured Advertisements</h2>
+          <EnhancedAdvertisements />
+          <div className="text-center mt-8">
+            <Link to="/advertising">
+              <Button variant="outline" className="border-engineering-500 text-engineering-600 hover:bg-engineering-50">
+                Learn About Advertising With Us
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
       
-      <SearchEngineers />
+      <EnhancedSearch />
       
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Flipbook title="Engineering Resources" pages={engineeringResourcesPages} />
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h2 className="section-heading mb-4 md:mb-0">Engineering Resources</h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <FileText size={18} />
+              <span>Browse All Resources</span>
+            </Button>
+          </div>
+          <EnhancedFlipbook title="Engineering Resources" defaultPages={engineeringResourcesPages} />
         </div>
       </section>
       
@@ -76,9 +92,18 @@ const Index = () => {
             Connect with fellow engineers, access valuable resources, and stay updated with the latest 
             developments in the engineering community of Palakkad.
           </p>
-          <Button className="bg-white text-engineering-800 hover:bg-gray-100">
-            Become a Member
-          </Button>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button className="bg-white text-engineering-800 hover:bg-gray-100 flex items-center gap-2">
+              <Users size={18} />
+              <span>Become a Member</span>
+            </Button>
+            <Link to="/advertising">
+              <Button variant="outline" className="text-white border-white hover:bg-white/10 flex items-center gap-2">
+                <FileText size={18} />
+                <span>Advertise With Us</span>
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

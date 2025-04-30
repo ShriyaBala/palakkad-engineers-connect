@@ -87,6 +87,11 @@ export default {
 					700: '#0f766e',
 					800: '#115e59',
 					900: '#134e4a',
+				},
+				advertise: {
+					premium: '#ffd700', // Gold for premium ads
+					standard: '#c0c0c0', // Silver for standard ads
+					basic: '#cd7f32', // Bronze for basic ads
 				}
 			},
 			fontFamily: {
@@ -114,13 +119,18 @@ export default {
 				'fade-in': {
 					from: { opacity: '0' },
 					to: { opacity: '1' }
+				},
+				'pulse-highlight': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'flip-page': 'flip-page 0.5s ease-out forwards',
-				'fade-in': 'fade-in 0.3s ease-in'
+				'fade-in': 'fade-in 0.3s ease-in',
+				'pulse-highlight': 'pulse-highlight 2s ease-in-out infinite'
 			}
 		}
 	},
