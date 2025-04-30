@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,9 +15,10 @@ interface Advertisement {
   company?: string;
   location?: string;
   validUntil?: string;
+  industry?: string;
 }
 
-// Enhanced advertisements with tier information
+// Enhanced advertisements with tier information and industry categories
 const advertisements: Advertisement[] = [
   {
     id: 1,
@@ -31,6 +31,7 @@ const advertisements: Advertisement[] = [
     company: 'Kerala Engineering Association',
     location: 'Palakkad Town',
     validUntil: '2025-06-30',
+    industry: 'Events'
   },
   {
     id: 2,
@@ -43,6 +44,7 @@ const advertisements: Advertisement[] = [
     company: 'BuildRight Institute',
     location: 'Kanjikode',
     validUntil: '2025-05-15',
+    industry: 'Education'
   },
   {
     id: 3,
@@ -55,6 +57,7 @@ const advertisements: Advertisement[] = [
     company: 'Tech Recruiters Inc.',
     location: 'Ottapalam',
     validUntil: '2025-04-20',
+    industry: 'Recruitment'
   },
   {
     id: 4,
@@ -67,6 +70,7 @@ const advertisements: Advertisement[] = [
     company: 'Innovation Kerala',
     location: 'Palakkad Town',
     validUntil: '2025-07-10',
+    industry: 'Technology'
   },
   {
     id: 5,
@@ -79,35 +83,109 @@ const advertisements: Advertisement[] = [
     company: 'ToolMart Kerala',
     location: 'Chittur',
     validUntil: '2025-03-25',
+    industry: 'Retail'
   },
+  // New industry-specific advertisements
+  {
+    id: 6,
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1525896544042-354764aa27e6?auto=format&fit=crop&q=80&w=1200',
+    title: 'Premium Tiles Collection 2025',
+    description: 'Discover our exclusive range of imported tiles for your next construction project.',
+    link: '#',
+    tier: 'premium',
+    company: 'Kerala Tiles Market',
+    location: 'Palakkad Town',
+    validUntil: '2025-08-15',
+    industry: 'Tiles'
+  },
+  {
+    id: 7,
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
+    title: 'Metal Fabrication Services',
+    description: 'Custom metal fabrication for all your engineering and construction needs.',
+    link: '#',
+    tier: 'standard',
+    company: 'MetalCraft Industries',
+    location: 'Kanjikode Industrial Area',
+    validUntil: '2025-09-20',
+    industry: 'Metal'
+  },
+  {
+    id: 8,
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80&w=1200',
+    title: 'Luxury Apartment Project',
+    description: 'Invest in our upcoming luxury apartment complex in the heart of Palakkad.',
+    link: '#',
+    tier: 'premium',
+    company: 'Palakkad Builders',
+    location: 'Palakkad Town',
+    validUntil: '2025-12-31',
+    industry: 'Real Estate'
+  },
+  {
+    id: 9,
+    type: 'video',
+    src: 'https://player.vimeo.com/external/446766811.sd.mp4?s=2c72236251be1eda8324e5687bd16e28916c2b6e&profile_id=164&oauth2_token_id=57447761',
+    title: 'Advanced Construction Equipment',
+    description: 'Rent or purchase the latest construction equipment with special discounts for association members.',
+    link: '#',
+    tier: 'premium',
+    company: 'MachineRent Kerala',
+    location: 'Kanjikode',
+    validUntil: '2025-07-30',
+    industry: 'Construction'
+  },
+  {
+    id: 10,
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&q=80&w=1200',
+    title: 'Architectural Design Services',
+    description: 'Professional architectural design services for residential and commercial projects.',
+    link: '#',
+    tier: 'standard',
+    company: 'DesignPro Architects',
+    location: 'Palakkad Town',
+    validUntil: '2025-06-15',
+    industry: 'Architecture'
+  }
 ];
 
 interface EnhancedAdvertisementsProps {
   title?: string;
   showTierIndicator?: boolean;
   autoplayInterval?: number;
+  filter?: string;
 }
 
 const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({ 
   title = 'Featured Advertisements',
   showTierIndicator = true,
-  autoplayInterval = 5000
+  autoplayInterval = 5000,
+  filter
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Filter advertisements based on filter prop if provided
+  const filteredAds = filter 
+    ? advertisements.filter(ad => ad.industry === filter)
+    : advertisements;
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === advertisements.length - 1 ? 0 : prevIndex + 1
+      prevIndex === filteredAds.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? advertisements.length - 1 : prevIndex - 1
+      prevIndex === 0 ? filteredAds.length - 1 : prevIndex - 1
     );
   };
 
@@ -145,7 +223,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
   };
 
   const visitAdvertisement = () => {
-    const currentAd = advertisements[currentIndex];
+    const currentAd = filteredAds[currentIndex];
     toast({
       title: `Visiting ${currentAd.title}`,
       description: `Redirecting to advertiser's website...`,
@@ -168,8 +246,8 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
 
   useEffect(() => {
     // Handle video playing logic when slides change
-    const currentAd = advertisements[currentIndex];
-    if (currentAd.type === 'video' && videoRef.current) {
+    const currentAd = filteredAds[currentIndex];
+    if (currentAd && currentAd.type === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0;
       if (isPlaying) {
         videoRef.current.play().catch(e => console.error("Video play failed:", e));
@@ -177,10 +255,10 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
     }
     
     // Reset video playing state when changing to non-video slide
-    if (currentAd.type !== 'video') {
+    if (currentAd && currentAd.type !== 'video') {
       setIsVideoPlaying(false);
     }
-  }, [currentIndex]);
+  }, [currentIndex, filteredAds]);
 
   const getTierStyles = (tier: string) => {
     switch(tier) {
@@ -205,6 +283,14 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
     }
   };
 
+  if (filteredAds.length === 0) {
+    return (
+      <div className="bg-white shadow-md rounded-lg p-8 text-center">
+        <p className="text-gray-500">No advertisements available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative overflow-hidden bg-white shadow-md rounded-lg">
       <div className="text-center py-6">
@@ -223,7 +309,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {advertisements.map((ad) => {
+          {filteredAds.map((ad) => {
             const tierStyle = getTierStyles(ad.tier);
             
             return (
@@ -271,6 +357,11 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
                     )}
                     {ad.validUntil && (
                       <span>• Valid until {new Date(ad.validUntil).toLocaleDateString()}</span>
+                    )}
+                    {ad.industry && (
+                      <Badge variant="outline" className="border-white text-white">
+                        {ad.industry}
+                      </Badge>
                     )}
                   </div>
                   
@@ -329,15 +420,15 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
         </div>
         
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {advertisements.map((_, index) => {
-            const tierStyle = getTierStyles(advertisements[index].tier);
+          {filteredAds.map((_, index) => {
+            const tierStyle = getTierStyles(filteredAds[index].tier);
             
             return (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full transition-colors border ${
                   index === currentIndex 
-                    ? `bg-white border-white ${advertisements[index].tier === 'premium' && 'animate-pulse-highlight'}` 
+                    ? `bg-white border-white ${filteredAds[index].tier === 'premium' && 'animate-pulse-highlight'}` 
                     : `bg-white/40 border-transparent hover:bg-white/70`
                 }`}
                 onClick={() => setCurrentIndex(index)}

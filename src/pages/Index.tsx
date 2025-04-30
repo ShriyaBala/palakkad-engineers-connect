@@ -6,6 +6,7 @@ import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import EnhancedSearch from '@/components/EnhancedSearch';
 import FeaturedEngineers from '@/components/FeaturedEngineers';
 import EnhancedFlipbook from '@/components/EnhancedFlipbook';
+import IndustryAds from '@/components/IndustryAds';
 import { Button } from '@/components/ui/button';
 import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -150,6 +151,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Add the new IndustryAds component for industry-specific advertisements */}
+      <IndustryAds />
       
       <EnhancedSearch />
       
