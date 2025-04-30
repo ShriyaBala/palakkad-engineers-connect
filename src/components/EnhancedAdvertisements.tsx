@@ -258,7 +258,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
   }
   return <div className="relative overflow-hidden bg-white shadow-md rounded-lg">
       <div className="text-center py-6">
-        <h2 className="section-heading">{title}</h2>
+        
         {showTierIndicator && <div className="flex justify-center gap-3 mb-4">
             
             
