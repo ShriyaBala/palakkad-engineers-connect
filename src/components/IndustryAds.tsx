@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Building, Metal, Construction, Truck, Factory, Palette } from 'lucide-react';
+import { Building, Hammer, Construction, Truck, Factory, Palette } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import EnhancedAdvertisements from './EnhancedAdvertisements';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,7 +9,7 @@ const IndustryAds: React.FC = () => {
   const industries = [
     { id: 'all', name: 'All Industries', icon: <Building className="w-5 h-5" /> },
     { id: 'Tiles', name: 'Tiles Market', icon: <Palette className="w-5 h-5" /> },
-    { id: 'Metal', name: 'Metal Industry', icon: <Metal className="w-5 h-5" /> },
+    { id: 'Metal', name: 'Metal Industry', icon: <Hammer className="w-5 h-5" /> },
     { id: 'Construction', name: 'Construction', icon: <Construction className="w-5 h-5" /> },
     { id: 'Real Estate', name: 'Real Estate', icon: <Building className="w-5 h-5" /> },
     { id: 'Manufacturing', name: 'Manufacturing', icon: <Factory className="w-5 h-5" /> },
