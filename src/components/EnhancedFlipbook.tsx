@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
@@ -125,7 +124,7 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
       
       {pages.length > 0 ? (
         <div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <PageDisplay
               currentPage={currentPage}
               totalPages={pages.length}
@@ -134,9 +133,7 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
               allowPageRemoval={allowUpload}
               onRemovePage={removePage}
             />
-          </div>
-          
-          <div className="flex flex-wrap gap-4 justify-between">
+            
             <NavigationControls 
               onPrevPage={prevPage} 
               onNextPage={nextPage} 
@@ -145,6 +142,9 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
               onPageSelect={setCurrentPage}
               pages={pages}
             />
+          </div>
+          
+          <div className="flex flex-wrap gap-4 justify-end">
             <ZoomControls 
               onZoomIn={zoomIn} 
               onZoomOut={zoomOut} 

@@ -21,30 +21,32 @@ export const NavigationControls: React.FC<NavigationControlsProps> = ({
   pages = [] // Provide a default empty array if pages is undefined
 }) => {
   return (
-    <>
-      {/* Previous button */}
-      <Button
-        variant="ghost"
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white/80 text-gray-800 hover:bg-white rounded-full w-10 h-10 p-0 flex items-center justify-center shadow-md"
-        onClick={onPrevPage}
-        disabled={currentPage === 0}
-      >
-        <ChevronLeft size={24} />
-      </Button>
-      
-      {/* Next button */}
-      <Button
-        variant="ghost"
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white/80 text-gray-800 hover:bg-white rounded-full w-10 h-10 p-0 flex items-center justify-center shadow-md"
-        onClick={onNextPage}
-        disabled={currentPage === totalPages - 1}
-      >
-        <ChevronRight size={24} />
-      </Button>
+    <div className="w-full flex flex-col items-center">
+      <div className="relative w-full flex justify-center">
+        {/* Previous button */}
+        <Button
+          variant="ghost"
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white/80 text-gray-800 hover:bg-white rounded-full w-10 h-10 p-0 flex items-center justify-center shadow-md"
+          onClick={onPrevPage}
+          disabled={currentPage === 0}
+        >
+          <ChevronLeft size={24} />
+        </Button>
+        
+        {/* Next button */}
+        <Button
+          variant="ghost"
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white/80 text-gray-800 hover:bg-white rounded-full w-10 h-10 p-0 flex items-center justify-center shadow-md"
+          onClick={onNextPage}
+          disabled={currentPage === totalPages - 1}
+        >
+          <ChevronRight size={24} />
+        </Button>
+      </div>
       
       {/* Page thumbnails */}
-      {totalPages > 0 && pages && pages.length > 0 && (
-        <div className="max-w-2xl mx-auto mt-6 overflow-x-auto">
+      {totalPages > 0 && pages.length > 0 && (
+        <div className="w-full max-w-2xl mx-auto mt-6 overflow-x-auto">
           <div className="flex space-x-2 px-4">
             {pages.map((page, index) => (
               <button
@@ -64,7 +66,7 @@ export const NavigationControls: React.FC<NavigationControlsProps> = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

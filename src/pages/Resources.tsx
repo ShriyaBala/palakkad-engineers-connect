@@ -1,7 +1,10 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import PDFFlipbook from '@/components/PDFFlipbook';
+import EngineeringPDFFlipbook from '@/components/EngineeringPDFFlipbook';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Resources = () => {
   return (
@@ -12,22 +15,35 @@ const Resources = () => {
             Engineering Resources
           </h1>
           
-          <div className="grid grid-cols-1 gap-8">
-            <Card>
-              <CardContent className="p-6">
-                <PDFFlipbook 
-                  pdfUrl="/resources/directory inner.pdf"
-                  title="Engineering Directory"
-                />
-              </CardContent>
-            </Card>
+          <Tabs defaultValue="directory" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="directory">Engineering Directory</TabsTrigger>
+              <TabsTrigger value="resources">Community Resources</TabsTrigger>
+            </TabsList>
             
-            {/* You can add more resource cards here */}
-          </div>
+            <TabsContent value="directory" className="mt-0">
+              <Card>
+                <CardContent className="p-6">
+                  <PDFFlipbook 
+                    pdfUrl="/resources/directory inner.pdf"
+                    title="Engineering Directory"
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="resources" className="mt-0">
+              <Card>
+                <CardContent className="p-6">
+                  <EngineeringPDFFlipbook />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </Layout>
   );
 };
 
-export default Resources; 
+export default Resources;
