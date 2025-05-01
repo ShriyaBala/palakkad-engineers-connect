@@ -9,6 +9,7 @@ import { FileText } from 'lucide-react';
 // This would be the path to your pre-loaded PDF file
 const DEFAULT_PDF_URL = "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf";
 
+// Make sure this type matches the one used in EnhancedFlipbook
 interface FlipbookPage {
   id: number;
   type: 'image' | 'pdf';
@@ -40,7 +41,6 @@ const EngineeringPDFFlipbook: React.FC = () => {
     toast({
       title: "Engineering PDF Flipbook",
       description: "Browse through our engineering community resources",
-      icon: <FileText className="h-4 w-4" />
     });
   }, []);
 
