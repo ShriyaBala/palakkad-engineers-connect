@@ -157,7 +157,7 @@ const Index = () => {
               <span>Browse All Resources</span>
             </Button>
           </div>
-          {/* Replace the EnhancedFlipbook with our new EngineeringPDFFlipbook */}
+          {/* Use our pre-loaded PDF flipbook component */}
           <EngineeringPDFFlipbook />
         </div>
       </section>
