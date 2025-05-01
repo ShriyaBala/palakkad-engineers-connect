@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-
 const Index = () => {
   // Sample upcoming events
   const upcomingEvents = [{
@@ -151,7 +150,7 @@ const Index = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <h2 className="section-heading mb-4 md:mb-0">Engineering Resources</h2>
+            
             <Button variant="outline" className="flex items-center gap-2">
               <FileText size={18} />
               <span>Browse All Resources</span>
