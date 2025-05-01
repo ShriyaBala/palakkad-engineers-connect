@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Advertising from "./pages/Advertising";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +20,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
           
+          {/* Updated Resources route */}
+          <Route path="/resources" element={<Resources />} />
+          
           {/* District level pages - these will be implemented later */}
           <Route path="/about" element={<NotFound />} />
           <Route path="/history" element={<NotFound />} />
@@ -27,7 +30,6 @@ const App = () => (
           <Route path="/member-directory" element={<NotFound />} />
           <Route path="/become-member" element={<NotFound />} />
           <Route path="/events" element={<NotFound />} />
-          <Route path="/resources" element={<NotFound />} />
           <Route path="/contact" element={<NotFound />} />
           <Route path="/news" element={<NotFound />} />
           <Route path="/gallery" element={<NotFound />} />
