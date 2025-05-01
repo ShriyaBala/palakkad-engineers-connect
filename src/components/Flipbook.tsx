@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download, FileText } from 'lucide-react';
 
 interface FlipbookPage {
   id: number;
+  type?: 'image' | 'pdf';
   content: React.ReactNode;
 }
 
@@ -41,6 +41,27 @@ const Flipbook: React.FC<FlipbookProps> = ({ title, pages }) => {
     }
   };
 
+  const downloadPDF = () => {
+    // If the current page is a PDF (from an iframe), open it in a new tab
+    const iframeElement = document.querySelector('.flipbook-container iframe') as HTMLIFrameElement;
+    if (iframeElement && iframeElement.src) {
+      window.open(iframeElement.src.split('#')[0], '_blank');
+    } else {
+      // Otherwise, try to find any PDF in the pages
+      const pdfPage = pages.find(page => page.type === 'pdf');
+      if (pdfPage) {
+        const iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.srcdoc = pdfPage.content as string;
+        const embeddedIframe = iframe.contentDocument?.querySelector('iframe');
+        if (embeddedIframe && embeddedIframe.src) {
+          window.open(embeddedIframe.src.split('#')[0], '_blank');
+        }
+        document.body.removeChild(iframe);
+      }
+    }
+  };
+
   return (
     <div className="bg-gray-100 py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,6 +93,7 @@ const Flipbook: React.FC<FlipbookProps> = ({ title, pages }) => {
               variant="outline"
               size="sm"
               className="flex items-center gap-1"
+              onClick={downloadPDF}
             >
               <Download size={16} />
               <span>Download PDF</span>

@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { Building, Hammer, Construction, Truck, Factory, Palette } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import EnhancedAdvertisements from './EnhancedAdvertisements';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 const IndustryAds: React.FC = () => {
   const industries = [{
     id: 'all',
@@ -33,6 +35,7 @@ const IndustryAds: React.FC = () => {
     name: 'Logistics',
     icon: <Truck className="w-5 h-5" />
   }];
+
   return <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="section-heading text-center mb-8">Industry Advertisements</h2>
@@ -40,7 +43,12 @@ const IndustryAds: React.FC = () => {
         <Tabs defaultValue="all" className="space-y-8">
           <div className="flex justify-center">
             <TabsList className="grid grid-cols-3 md:grid-cols-7 gap-2">
-              {industries.map(industry => {})}
+              {industries.map(industry => (
+                <TabsTrigger key={industry.id} value={industry.id} className="flex items-center gap-2">
+                  {industry.icon}
+                  <span className="hidden md:inline">{industry.name}</span>
+                </TabsTrigger>
+              ))}
             </TabsList>
           </div>
           
@@ -59,4 +67,5 @@ const IndustryAds: React.FC = () => {
       </div>
     </section>;
 };
+
 export default IndustryAds;
