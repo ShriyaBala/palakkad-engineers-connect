@@ -133,8 +133,7 @@ const PDFFlipbook: React.FC<PDFFlipbookProps> = ({ pdfUrl, title }) => {
             onFlip={handlePageChange}
             showCover={true}
             mobileScrollSupport={true}
-            clickEventForward={true}
-          >
+            clickEventForward={true} startZIndex={0} autoSize={false} maxShadowOpacity={0} useMouseEvents={false} swipeDistance={0} showPageCorners={false} disableFlipByClick={false}>
             {pages.map((page) => (
               <Page key={page.id} content={page.content} />
             ))}
