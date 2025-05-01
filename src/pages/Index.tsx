@@ -4,12 +4,13 @@ import HeroSection from '@/components/HeroSection';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import EnhancedSearch from '@/components/EnhancedSearch';
 import FeaturedEngineers from '@/components/FeaturedEngineers';
-import EnhancedFlipbook from '@/components/EnhancedFlipbook';
+import EngineeringPDFFlipbook from '@/components/EngineeringPDFFlipbook';
 import IndustryAds from '@/components/IndustryAds';
 import { Button } from '@/components/ui/button';
 import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+
 const Index = () => {
   // Sample upcoming events
   const upcomingEvents = [{
@@ -156,7 +157,8 @@ const Index = () => {
               <span>Browse All Resources</span>
             </Button>
           </div>
-          <EnhancedFlipbook title="District Engineering Resources" />
+          {/* Replace the EnhancedFlipbook with our new EngineeringPDFFlipbook */}
+          <EngineeringPDFFlipbook />
         </div>
       </section>
       
