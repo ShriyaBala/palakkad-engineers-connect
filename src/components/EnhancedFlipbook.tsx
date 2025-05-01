@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
@@ -9,16 +10,19 @@ import UploadControls from './flipbook/UploadControls';
 import NavigationControls from './flipbook/NavigationControls';
 import PageDisplay from './flipbook/PageDisplay';
 import EmptyFlipbook from './flipbook/EmptyFlipbook';
+
 interface FlipbookPage {
   id: number;
   type: 'image' | 'pdf';
   content: React.ReactNode | string;
 }
+
 interface EnhancedFlipbookProps {
   title: string;
   defaultPages?: FlipbookPage[];
   allowUpload?: boolean;
 }
+
 const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
   title,
   defaultPages = [],
@@ -27,42 +31,51 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
   const [pages, setPages] = useState<FlipbookPage[]>(defaultPages);
   const [currentPage, setCurrentPage] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
+  
   const nextPage = () => {
     if (currentPage < pages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
+  
   const prevPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
+  
   const zoomIn = () => {
     if (zoomLevel < 2) {
       setZoomLevel(zoomLevel + 0.1);
     }
   };
+  
   const zoomOut = () => {
     if (zoomLevel > 0.5) {
       setZoomLevel(zoomLevel - 0.1);
     }
   };
+  
   const handleAddPages = (newPages: FlipbookPage[]) => {
     setPages([...pages, ...newPages]);
   };
-  const removePage = (pageId: number) => {
-    const newPages = pages.filter(page => page.id !== pageId);
+  
+  const removePage = () => {
+    const newPages = [...pages];
+    newPages.splice(currentPage, 1);
     setPages(newPages);
 
     // Adjust current page if needed
     if (currentPage >= newPages.length) {
       setCurrentPage(Math.max(0, newPages.length - 1));
     }
+    
     toast({
       title: "Page removed",
       description: "The page has been removed from the flipbook"
     });
   };
+  
   const downloadCurrentPage = () => {
     const currentPageContent = pages[currentPage];
     if (!currentPageContent) return;
@@ -85,12 +98,69 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
       window.open(iframeElement.src, '_blank');
       return;
     }
+    
     toast({
       title: "Download failed",
       description: "Could not download the current page",
       variant: "destructive"
     });
   };
-  return;
+  
+  return (
+    <div className="bg-gray-50 rounded-lg p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-semibold">{title}</h3>
+        {pages.length > 0 && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={downloadCurrentPage}
+            className="flex items-center gap-2"
+          >
+            <Download size={16} />
+            <span>Download Page</span>
+          </Button>
+        )}
+      </div>
+      
+      {pages.length > 0 ? (
+        <div>
+          <div className="mb-4">
+            <PageDisplay
+              currentPage={currentPage}
+              totalPages={pages.length}
+              zoomLevel={zoomLevel}
+              content={pages[currentPage]?.content}
+              allowPageRemoval={allowUpload}
+              onRemovePage={removePage}
+            />
+          </div>
+          
+          <div className="flex flex-wrap gap-4 justify-between">
+            <NavigationControls 
+              onPrevious={prevPage} 
+              onNext={nextPage} 
+              currentPage={currentPage} 
+              totalPages={pages.length}
+            />
+            <ZoomControls 
+              onZoomIn={zoomIn} 
+              onZoomOut={zoomOut} 
+              zoomLevel={zoomLevel}
+            />
+          </div>
+        </div>
+      ) : (
+        <EmptyFlipbook />
+      )}
+      
+      {allowUpload && (
+        <div className="mt-6">
+          <UploadControls onAddPages={handleAddPages} />
+        </div>
+      )}
+    </div>
+  );
 };
+
 export default EnhancedFlipbook;

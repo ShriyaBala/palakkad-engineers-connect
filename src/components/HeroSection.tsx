@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Users, FileText, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   return (
@@ -27,10 +28,12 @@ const HeroSection: React.FC = () => {
                 <Calendar size={18} />
                 <span>Upcoming Events</span>
               </Button>
-              <Button variant="secondary" className="flex items-center gap-2 w-full">
-                <FileText size={18} />
-                <span>Resources</span>
-              </Button>
+              <Link to="/resources" className="w-full">
+                <Button variant="secondary" className="flex items-center gap-2 w-full">
+                  <FileText size={18} />
+                  <span>Resources</span>
+                </Button>
+              </Link>
               <Button className="bg-kerala-600 text-white hover:bg-kerala-700 flex items-center gap-2 w-full">
                 <Search size={18} />
                 <span>Find Engineers</span>
