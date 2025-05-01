@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
@@ -29,8 +30,18 @@ const PDFFlipbook: React.FC<PDFFlipbookProps> = ({ pdfUrl, title }) => {
           <Viewer
             fileUrl={pdfUrl}
             plugins={[defaultLayoutPluginInstance]}
-            onDocumentLoad={({ numPages }) => setTotalPages(numPages)}
-            onPageChange={({ currentPage }) => setCurrentPage(currentPage)}
+            onDocumentLoad={(e) => {
+              // Extract numPages safely from the event object
+              if (e && 'doc' in e && e.doc && typeof e.doc.numPages === 'number') {
+                setTotalPages(e.doc.numPages);
+              }
+            }}
+            onPageChange={(e) => {
+              // Handle page change event
+              if (e && typeof e.currentPage === 'number') {
+                setCurrentPage(e.currentPage);
+              }
+            }}
           />
         </Worker>
       </div>
@@ -42,4 +53,4 @@ const PDFFlipbook: React.FC<PDFFlipbookProps> = ({ pdfUrl, title }) => {
   );
 };
 
-export default PDFFlipbook; 
+export default PDFFlipbook;

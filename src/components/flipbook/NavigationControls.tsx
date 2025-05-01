@@ -18,7 +18,7 @@ export const NavigationControls: React.FC<NavigationControlsProps> = ({
   onNextPage,
   onPrevPage,
   onPageSelect,
-  pages
+  pages = [] // Provide a default empty array if pages is undefined
 }) => {
   return (
     <>
@@ -43,7 +43,7 @@ export const NavigationControls: React.FC<NavigationControlsProps> = ({
       </Button>
       
       {/* Page thumbnails */}
-      {totalPages > 0 && (
+      {totalPages > 0 && pages && pages.length > 0 && (
         <div className="max-w-2xl mx-auto mt-6 overflow-x-auto">
           <div className="flex space-x-2 px-4">
             {pages.map((page, index) => (

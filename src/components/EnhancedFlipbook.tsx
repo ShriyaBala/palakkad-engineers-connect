@@ -138,10 +138,12 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
           
           <div className="flex flex-wrap gap-4 justify-between">
             <NavigationControls 
-              onPrevious={prevPage} 
-              onNext={nextPage} 
+              onPrevPage={prevPage} 
+              onNextPage={nextPage} 
               currentPage={currentPage} 
               totalPages={pages.length}
+              onPageSelect={setCurrentPage}
+              pages={pages}
             />
             <ZoomControls 
               onZoomIn={zoomIn} 
@@ -151,7 +153,7 @@ const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
           </div>
         </div>
       ) : (
-        <EmptyFlipbook />
+        <EmptyFlipbook allowUpload={allowUpload} />
       )}
       
       {allowUpload && (
