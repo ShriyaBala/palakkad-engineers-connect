@@ -1,21 +1,13 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import EnhancedSearch from '@/components/EnhancedSearch';
-
 const Members = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold mb-4 text-center text-engineering-800">
-            Member Directory
-          </h1>
-          <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-            Connect with qualified engineering professionals across Palakkad district.
-            Use our advanced search tools to find engineers by location, specialization, or name.
-          </p>
+          
+          
           
           <EnhancedSearch />
           
@@ -91,8 +83,6 @@ const Members = () => {
           </div>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Members;
