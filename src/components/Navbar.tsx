@@ -96,17 +96,6 @@ const Navbar: React.FC = () => {
               </button>
               {activeDropdown === 'mobile-about' && <div className="pl-6 space-y-1">
                   <Link to="/about" className="block py-2 hover:text-engineering-600">About Us</Link>
-                  <Link to="/history" className="block py-2 hover:text-engineering-600">History</Link>
-                  <Link to="/executive-committee" className="block py-2 hover:text-engineering-600">Executive Committee</Link>
-                </div>}
-              
-              <button className="flex items-center justify-between text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2 text-left w-full" onClick={() => toggleDropdown('mobile-members')}>
-                <span>Members</span>
-                <ChevronDown size={16} className={activeDropdown === 'mobile-members' ? 'rotate-180 transition-transform' : 'transition-transform'} />
-              </button>
-              {activeDropdown === 'mobile-members' && <div className="pl-6 space-y-1">
-                  <Link to="/member-directory" className="block py-2 hover:text-engineering-600">Member Directory</Link>
-                  <Link to="/become-member" className="block py-2 hover:text-engineering-600">Become a Member</Link>
                 </div>}
               
               <Link to="/events" className="text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2">
