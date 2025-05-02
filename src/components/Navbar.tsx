@@ -39,10 +39,9 @@ const Navbar: React.FC = () => {
                 <ChevronDown size={16} />
               </button>
               {activeDropdown === 'about' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
-                  
-                  
-                  
-                </div>}
+                <Link to="/about" className="block px-4 py-2 hover:bg-gray-50">About Us</Link>
+              
+              </div>}
             </div>
             
             <div className="relative">
