@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, ChevronDown } from 'lucide-react';
-
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-
   const toggleDropdown = (dropdown: string) => {
     if (activeDropdown === dropdown) {
       setActiveDropdown(null);
@@ -15,9 +12,7 @@ const Navbar: React.FC = () => {
       setActiveDropdown(dropdown);
     }
   };
-
-  return (
-    <header className="shadow-sm bg-white sticky top-0 z-50">
+  return <header className="shadow-sm bg-white sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
@@ -39,36 +34,26 @@ const Navbar: React.FC = () => {
             </Link>
             
             <div className="relative">
-              <button 
-                className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1"
-                onClick={() => toggleDropdown('about')}
-              >
+              <button className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1" onClick={() => toggleDropdown('about')}>
                 <span>About</span>
                 <ChevronDown size={16} />
               </button>
-              {activeDropdown === 'about' && (
-                <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
+              {activeDropdown === 'about' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
                   <Link to="/about" className="block px-4 py-2 hover:bg-gray-100">About Us</Link>
-                  <Link to="/history" className="block px-4 py-2 hover:bg-gray-100">History</Link>
-                  <Link to="/executive-committee" className="block px-4 py-2 hover:bg-gray-100">Executive Committee</Link>
-                </div>
-              )}
+                  
+                  
+                </div>}
             </div>
             
             <div className="relative">
-              <button 
-                className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1"
-                onClick={() => toggleDropdown('members')}
-              >
+              <button className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1" onClick={() => toggleDropdown('members')}>
                 <span>Members</span>
                 <ChevronDown size={16} />
               </button>
-              {activeDropdown === 'members' && (
-                <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
+              {activeDropdown === 'members' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
                   <Link to="/member-directory" className="block px-4 py-2 hover:bg-gray-100">Member Directory</Link>
                   <Link to="/become-member" className="block px-4 py-2 hover:bg-gray-100">Become a Member</Link>
-                </div>
-              )}
+                </div>}
             </div>
             
             <Link to="/events" className="text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1">
@@ -94,50 +79,36 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Mobile menu button */}
-          <button 
-            className="md:hidden p-2 text-gray-600 focus:outline-none"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+          <button className="md:hidden p-2 text-gray-600 focus:outline-none" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
         
         {/* Mobile navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+        {isMenuOpen && <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-1">
               <Link to="/" className="text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2">
                 Home
               </Link>
               
-              <button 
-                className="flex items-center justify-between text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2 text-left w-full"
-                onClick={() => toggleDropdown('mobile-about')}
-              >
+              <button className="flex items-center justify-between text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2 text-left w-full" onClick={() => toggleDropdown('mobile-about')}>
                 <span>About</span>
                 <ChevronDown size={16} className={activeDropdown === 'mobile-about' ? 'rotate-180 transition-transform' : 'transition-transform'} />
               </button>
-              {activeDropdown === 'mobile-about' && (
-                <div className="pl-6 space-y-1">
+              {activeDropdown === 'mobile-about' && <div className="pl-6 space-y-1">
                   <Link to="/about" className="block py-2 hover:text-engineering-600">About Us</Link>
                   <Link to="/history" className="block py-2 hover:text-engineering-600">History</Link>
                   <Link to="/executive-committee" className="block py-2 hover:text-engineering-600">Executive Committee</Link>
-                </div>
-              )}
+                </div>}
               
-              <button 
-                className="flex items-center justify-between text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2 text-left w-full"
-                onClick={() => toggleDropdown('mobile-members')}
-              >
+              <button className="flex items-center justify-between text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2 text-left w-full" onClick={() => toggleDropdown('mobile-members')}>
                 <span>Members</span>
                 <ChevronDown size={16} className={activeDropdown === 'mobile-members' ? 'rotate-180 transition-transform' : 'transition-transform'} />
               </button>
-              {activeDropdown === 'mobile-members' && (
-                <div className="pl-6 space-y-1">
+              {activeDropdown === 'mobile-members' && <div className="pl-6 space-y-1">
                   <Link to="/member-directory" className="block py-2 hover:text-engineering-600">Member Directory</Link>
                   <Link to="/become-member" className="block py-2 hover:text-engineering-600">Become a Member</Link>
-                </div>
-              )}
+                </div>}
               
               <Link to="/events" className="text-gray-700 hover:text-engineering-600 transition-colors px-4 py-2">
                 Events
@@ -160,11 +131,8 @@ const Navbar: React.FC = () => {
                 <Button size="sm" className="w-full">Join Us</Button>
               </div>
             </nav>
-          </div>
-        )}
+          </div>}
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Navbar;
