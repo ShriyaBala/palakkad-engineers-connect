@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Mail, Linkedin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Engineer {
   id: number;
@@ -56,9 +57,52 @@ const engineers: Engineer[] = [
     profileImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256',
     featured: true,
   },
+  {
+    id: 5,
+    name: 'Satheesh Kumar',
+    title: 'Environmental Engineer',
+    company: 'EcoSolutions Kerala',
+    location: 'Ottapalam',
+    specialization: ['Waste Management', 'Sustainability'],
+    profileImage: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&q=80&w=256',
+    featured: false,
+  },
+  {
+    id: 6,
+    name: 'Priya Nair',
+    title: 'Chemical Engineer',
+    company: 'Kerala Chemicals Ltd',
+    location: 'Shoranur',
+    specialization: ['Process Engineering', 'Quality Control'],
+    profileImage: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=256',
+    featured: false,
+  },
+  {
+    id: 7,
+    name: 'Thomas Philip',
+    title: 'Agricultural Engineer',
+    company: 'Kerala Agricultural Research',
+    location: 'Alathur',
+    specialization: ['Irrigation Systems', 'Sustainable Farming'],
+    profileImage: 'https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?auto=format&fit=crop&q=80&w=256',
+    featured: false,
+  },
+  {
+    id: 8,
+    name: 'Divya Menon',
+    title: 'Aerospace Engineer',
+    company: 'Hindustan Aeronautics Limited',
+    location: 'Palakkad Town',
+    specialization: ['Aerodynamics', 'Aircraft Systems'],
+    profileImage: 'https://images.unsplash.com/photo-1601412436009-d964bd02edbc?auto=format&fit=crop&q=80&w=256',
+    featured: false,
+  }
 ];
 
 const FeaturedEngineers: React.FC = () => {
+  // Filter engineers to show only featured ones in the main display
+  const featuredEngineers = engineers.filter(engineer => engineer.featured);
+  
   return (
     <div className="bg-white py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,7 +113,7 @@ const FeaturedEngineers: React.FC = () => {
         </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {engineers.map(engineer => (
+          {featuredEngineers.map(engineer => (
             <Card key={engineer.id} className="overflow-hidden hover:shadow-lg transition-all group">
               <div className="h-48 overflow-hidden relative">
                 <img 
@@ -118,9 +162,42 @@ const FeaturedEngineers: React.FC = () => {
         </div>
         
         <div className="text-center mt-10">
-          <a href="/engineers" className="text-engineering-600 hover:text-engineering-800 font-medium underline">
+          <Link to="/members" className="text-engineering-600 hover:text-engineering-800 font-medium underline">
             View all engineers →
-          </a>
+          </Link>
+        </div>
+
+        <div className="mt-16">
+          <h3 className="text-xl font-semibold mb-6 text-center">All Registered Engineers</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200">
+              <thead>
+                <tr className="bg-engineering-50">
+                  <th className="py-3 px-4 text-left">Name</th>
+                  <th className="py-3 px-4 text-left">Specialization</th>
+                  <th className="py-3 px-4 text-left">Location</th>
+                  <th className="py-3 px-4 text-left">Company</th>
+                </tr>
+              </thead>
+              <tbody>
+                {engineers.map((engineer) => (
+                  <tr key={engineer.id} className="border-t border-gray-200 hover:bg-gray-50">
+                    <td className="py-3 px-4 flex items-center">
+                      <img 
+                        src={engineer.profileImage} 
+                        alt={engineer.name} 
+                        className="w-8 h-8 rounded-full mr-3 object-cover"
+                      />
+                      <span>{engineer.name}</span>
+                    </td>
+                    <td className="py-3 px-4">{engineer.specialization.join(', ')}</td>
+                    <td className="py-3 px-4">{engineer.location}</td>
+                    <td className="py-3 px-4">{engineer.company}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
