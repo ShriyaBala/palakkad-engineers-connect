@@ -51,8 +51,8 @@ const Navbar: React.FC = () => {
                 <ChevronDown size={16} />
               </button>
               {activeDropdown === 'members' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
-                  <Link to="/member-directory" className="block px-4 py-2 hover:bg-gray-100">Member Directory</Link>
-                  <Link to="/become-member" className="block px-4 py-2 hover:bg-gray-100">Become a Member</Link>
+                  
+                  
                 </div>}
             </div>
             
