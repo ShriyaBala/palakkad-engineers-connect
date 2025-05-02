@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Users, FileText, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const HeroSection: React.FC = () => {
   return <div className="bg-gradient-to-br from-engineering-700 to-engineering-900 text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
@@ -20,16 +18,10 @@ const HeroSection: React.FC = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Link to="/members" className="w-full">
-                <Button className="bg-white text-engineering-800 hover:bg-gray-100 flex items-center gap-2 w-full">
-                  <Users size={18} />
-                  <span>Member Directory</span>
-                </Button>
+                
               </Link>
               <Link to="/events" className="w-full">
-                <Button variant="outline" className="text-white border-white hover:bg-white/10 flex items-center gap-2 w-full">
-                  <Calendar size={18} />
-                  <span>Upcoming Events</span>
-                </Button>
+                
               </Link>
               <Link to="/resources" className="w-full">
                 <Button variant="secondary" className="flex items-center gap-2 w-full">
@@ -80,5 +72,4 @@ const HeroSection: React.FC = () => {
       </div>
     </div>;
 };
-
 export default HeroSection;
