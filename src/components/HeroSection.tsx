@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Users, FileText, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const HeroSection: React.FC = () => {
-  return (
-    <div className="bg-gradient-to-br from-engineering-700 to-engineering-900 text-white">
+  return <div className="bg-gradient-to-br from-engineering-700 to-engineering-900 text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
@@ -43,19 +40,9 @@ const HeroSection: React.FC = () => {
 
           <div className="hidden md:block relative">
             <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl transform rotate-2">
-              <img 
-                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800"
-                alt="Engineering project in Palakkad" 
-                className="w-full h-auto rounded"
-              />
+              <img alt="Engineering project in Palakkad" src="/lovable-uploads/da1bd724-8c2f-444e-bcd8-8b6124249174.jpg" className="w-full h-auto rounded object-fill" />
             </div>
-            <div className="absolute top-1/4 right-0 z-20 bg-white p-3 rounded-lg shadow-xl transform rotate-6 w-3/4">
-              <img 
-                src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800"
-                alt="Palakkad engineering collaboration" 
-                className="w-full h-auto rounded"
-              />
-            </div>
+            
             <div className="absolute -bottom-10 left-10 z-0 w-24 h-24 bg-engineering-500/30 rounded-full blur-md"></div>
             <div className="absolute top-10 right-10 z-0 w-32 h-32 bg-kerala-500/20 rounded-full blur-md"></div>
           </div>
@@ -83,8 +70,6 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HeroSection;

@@ -147,20 +147,7 @@ const Index = () => {
       
       <EnhancedSearch />
       
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <Link to="/resources">
-              <Button variant="outline" className="flex items-center gap-2">
-                <FileText size={18} />
-                <span>Browse All Resources</span>
-              </Button>
-            </Link>
-          </div>
-          {/* Use our pre-loaded PDF flipbook component */}
-          <EngineeringPDFFlipbook />
-        </div>
-      </section>
+      
       
       <FeaturedEngineers />
       
