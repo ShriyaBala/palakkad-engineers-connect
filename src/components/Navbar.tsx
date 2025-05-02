@@ -47,8 +47,8 @@ const Navbar: React.FC = () => {
             
             <div className="relative">
               <button className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1" onClick={() => toggleDropdown('members')}>
-                <span>Members</span>
-                <ChevronDown size={16} />
+                
+                
               </button>
               {activeDropdown === 'members' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
                   
