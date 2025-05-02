@@ -1,14 +1,11 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import AdvertisingPlans from '@/components/AdvertisingPlans';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, BarChart3, Target, Users } from 'lucide-react';
-
 const Advertising = () => {
-  return (
-    <Layout>
+  return <Layout>
       <section className="bg-gradient-to-br from-engineering-700 to-engineering-900 text-white py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
@@ -19,12 +16,8 @@ const Advertising = () => {
               Reach qualified engineering professionals throughout Palakkad district and grow your business.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-white text-engineering-800 hover:bg-gray-100">
-                View Ad Plans
-              </Button>
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
-                Contact Sales
-              </Button>
+              
+              
             </div>
           </div>
         </div>
@@ -92,33 +85,13 @@ const Advertising = () => {
             </p>
           </div>
           
-          <EnhancedAdvertisements 
-            title="Sample Advertisements" 
-            showTierIndicator={true}
-          />
+          <EnhancedAdvertisements title="Sample Advertisements" showTierIndicator={true} />
         </div>
       </section>
 
       <AdvertisingPlans />
 
-      <section className="bg-engineering-700 text-white py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6 font-heading">Ready to Reach Palakkad's Engineering Community?</h2>
-          <p className="text-engineering-100 mb-8 max-w-2xl mx-auto">
-            Start advertising today and connect with qualified professionals who can benefit from your products and services.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-white text-engineering-800 hover:bg-gray-100">
-              Get Started
-            </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
-              Request Demo
-            </Button>
-          </div>
-        </div>
-      </section>
-    </Layout>
-  );
+      
+    </Layout>;
 };
-
 export default Advertising;

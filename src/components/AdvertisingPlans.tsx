@@ -1,71 +1,51 @@
-
 import React from "react";
 import { CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-const features = [
-  {
-    name: "Ad Display Duration",
-    basic: "7 days",
-    standard: "15 days",
-    premium: "30 days",
-  },
-  {
-    name: "Ad Rotation Priority",
-    basic: "Low (occasional appearance)",
-    standard: "Medium (regular appearance)",
-    premium: "High (frequent appearance)",
-  },
-  {
-    name: "Video Ads",
-    basic: false,
-    standard: true,
-    premium: true,
-  },
-  {
-    name: "Regional Targeting",
-    basic: false,
-    standard: true,
-    premium: true,
-  },
-  {
-    name: "Engineer Contact Access",
-    basic: "Limited (5 contacts)",
-    standard: "Moderate (20 contacts)",
-    premium: "Unlimited",
-  },
-  {
-    name: "Analytics Reports",
-    basic: false,
-    standard: true,
-    premium: true,
-  },
-  {
-    name: "Featured Placement",
-    basic: false,
-    standard: false,
-    premium: true,
-  },
-  {
-    name: "Direct Messaging",
-    basic: false,
-    standard: false,
-    premium: true,
-  },
-];
-
+const features = [{
+  name: "Ad Display Duration",
+  basic: "7 days",
+  standard: "15 days",
+  premium: "30 days"
+}, {
+  name: "Ad Rotation Priority",
+  basic: "Low (occasional appearance)",
+  standard: "Medium (regular appearance)",
+  premium: "High (frequent appearance)"
+}, {
+  name: "Video Ads",
+  basic: false,
+  standard: true,
+  premium: true
+}, {
+  name: "Regional Targeting",
+  basic: false,
+  standard: true,
+  premium: true
+}, {
+  name: "Engineer Contact Access",
+  basic: "Limited (5 contacts)",
+  standard: "Moderate (20 contacts)",
+  premium: "Unlimited"
+}, {
+  name: "Analytics Reports",
+  basic: false,
+  standard: true,
+  premium: true
+}, {
+  name: "Featured Placement",
+  basic: false,
+  standard: false,
+  premium: true
+}, {
+  name: "Direct Messaging",
+  basic: false,
+  standard: false,
+  premium: true
+}];
 const AdvertisingPlans: React.FC = () => {
-  return (
-    <section className="py-16 bg-white">
+  return <section className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="section-heading">Advertising Plans for Marketers</h2>
@@ -93,24 +73,18 @@ const AdvertisingPlans: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-2">
-                {features.map((feature) => (
-                  <li key={feature.name} className="flex items-start">
-                    {feature.basic ? (
-                      <>
+                {features.map(feature => <li key={feature.name} className="flex items-start">
+                    {feature.basic ? <>
                         <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0" />
                         <span>
                           <span className="font-medium">{feature.name}:</span>{" "}
                           {typeof feature.basic === "string" ? feature.basic : "Included"}
                         </span>
-                      </>
-                    ) : (
-                      <>
+                      </> : <>
                         <XCircle className="h-5 w-5 text-gray-300 mr-2 shrink-0" />
                         <span className="text-gray-500">{feature.name}</span>
-                      </>
-                    )}
-                  </li>
-                ))}
+                      </>}
+                  </li>)}
               </ul>
             </CardContent>
             <CardFooter>
@@ -137,24 +111,18 @@ const AdvertisingPlans: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-2">
-                {features.map((feature) => (
-                  <li key={feature.name} className="flex items-start">
-                    {feature.standard ? (
-                      <>
+                {features.map(feature => <li key={feature.name} className="flex items-start">
+                    {feature.standard ? <>
                         <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0" />
                         <span>
                           <span className="font-medium">{feature.name}:</span>{" "}
                           {typeof feature.standard === "string" ? feature.standard : "Included"}
                         </span>
-                      </>
-                    ) : (
-                      <>
+                      </> : <>
                         <XCircle className="h-5 w-5 text-gray-300 mr-2 shrink-0" />
                         <span className="text-gray-500">{feature.name}</span>
-                      </>
-                    )}
-                  </li>
-                ))}
+                      </>}
+                  </li>)}
               </ul>
             </CardContent>
             <CardFooter>
@@ -186,24 +154,18 @@ const AdvertisingPlans: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-2">
-                {features.map((feature) => (
-                  <li key={feature.name} className="flex items-start">
-                    {feature.premium ? (
-                      <>
+                {features.map(feature => <li key={feature.name} className="flex items-start">
+                    {feature.premium ? <>
                         <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0" />
                         <span>
                           <span className="font-medium">{feature.name}:</span>{" "}
                           {typeof feature.premium === "string" ? feature.premium : "Included"}
                         </span>
-                      </>
-                    ) : (
-                      <>
+                      </> : <>
                         <XCircle className="h-5 w-5 text-gray-300 mr-2 shrink-0" />
                         <span className="text-gray-500">{feature.name}</span>
-                      </>
-                    )}
-                  </li>
-                ))}
+                      </>}
+                  </li>)}
               </ul>
             </CardContent>
             <CardFooter>
@@ -214,20 +176,8 @@ const AdvertisingPlans: React.FC = () => {
           </Card>
         </div>
 
-        <div className="max-w-2xl mx-auto mt-12 text-center">
-          <h3 className="text-xl font-semibold mb-4">Custom Advertising Solutions</h3>
-          <p className="text-gray-600 mb-6">
-            Need a tailored advertising package for your specific needs? 
-            Contact our advertising team for custom solutions including event sponsorships, 
-            newsletter features, and more.
-          </p>
-          <Button variant="outline" className="border-engineering-500 text-engineering-600 hover:bg-engineering-50">
-            Contact for Custom Plan
-          </Button>
-        </div>
+        
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AdvertisingPlans;
