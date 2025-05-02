@@ -1,6 +1,7 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
-import FlipBook from '@/components/FlipBook';
+import PDFFlipbook from '@/components/PDFFlipbook';
 import { Card, CardContent } from '@/components/ui/card';
 
 const Resources = () => (
@@ -12,7 +13,10 @@ const Resources = () => (
         </h1>
         <Card>
           <CardContent className="flex justify-center">
-            <FlipBook />
+            <PDFFlipbook 
+              pdfUrl="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
+              title="Engineering Documentation"
+            />
           </CardContent>
         </Card>
       </div>
