@@ -2,29 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import FlipPage from 'react-flip-page';
 import '@/styles/flipbook.css';
 
 interface PageProps {
   pageNumber: number;
   image: string;
+  isLeft?: boolean;
 }
 
-const Page: React.FC<PageProps> = ({ pageNumber, image }) => {
+const Page: React.FC<PageProps> = ({ pageNumber, image, isLeft }) => {
   return (
-    <div className="page relative bg-white shadow-md" style={{ width: '100%', height: '100%' }}>
+    <div className={`page ${isLeft ? 'left-page' : 'right-page'}`}>
       <div className="page-content">
-        <div className="page-image">
-          <img 
-            src={image} 
-            alt={`Page ${pageNumber}`}
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            onError={(e) => console.error(`Error loading image: ${image}`)}
-          />
-        </div>
-        <div className="absolute bottom-4 right-4 text-sm text-gray-500">
-          {pageNumber}
-        </div>
+        <img 
+          src={image} 
+          alt={`Page ${pageNumber}`}
+          className="page-image"
+          onError={(e) => console.error(`Error loading image: ${image}`)}
+        />
+        <div className="page-number">{pageNumber}</div>
       </div>
     </div>
   );
@@ -35,12 +31,23 @@ const Flipbook: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Generate array of all 116 pages
   const pages = Array.from({ length: 116 }, (_, i) => {
     const pageNumber = (i + 1).toString().padStart(4, '0');
     return encodeURI(`/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-${pageNumber}.jpg`);
   });
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Check if images are loading
@@ -75,7 +82,34 @@ const Flipbook: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(0);
+    const pageNumber = parseInt(searchQuery);
+    if (!isNaN(pageNumber) && pageNumber > 0 && pageNumber <= pages.length) {
+      setCurrentPage(pageNumber - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (isMobile) {
+      if (currentPage < pages.length - 1) {
+        setCurrentPage(currentPage + 1);
+      }
+    } else {
+      if (currentPage < pages.length - 2) {
+        setCurrentPage(currentPage + 2);
+      }
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (isMobile) {
+      if (currentPage > 0) {
+        setCurrentPage(currentPage - 1);
+      }
+    } else {
+      if (currentPage > 0) {
+        setCurrentPage(currentPage - 2);
+      }
+    }
   };
 
   if (isLoading) {
@@ -97,39 +131,67 @@ const Flipbook: React.FC = () => {
       <form onSubmit={handleSearch} className="w-full max-w-xl mb-8 flex gap-2">
         <Input
           type="text"
-          placeholder="Search in directory..."
+          placeholder="Enter page number..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="flex-1"
         />
         <Button type="submit">
           <Search className="h-4 w-4 mr-2" />
-          Search
+          Go to Page
         </Button>
       </form>
 
       {/* Flipbook */}
-      <div className="book-container w-full flex justify-center" style={{ minHeight: '800px' }}>
-        <FlipPage
-          orientation="horizontal"
-          height={733}
-          width={550}
-          animationDuration={400}
-          uncutPages={true}
-          showSides={true}
-          flipOnTouch={true}
-          flipOnTouchZone={20}
-          perspective="1000px"
-          onPageChange={(page) => setCurrentPage(page)}
-        >
-          {pages.map((page, index) => (
-            <Page key={index} pageNumber={index + 1} image={page} />
-          ))}
-        </FlipPage>
+      <div className="book-container">
+        <div className="book">
+          <div className="pages">
+            {isMobile ? (
+              <Page 
+                pageNumber={currentPage + 1} 
+                image={pages[currentPage]} 
+                isLeft={false} 
+              />
+            ) : (
+              <>
+                <Page 
+                  pageNumber={currentPage + 1} 
+                  image={pages[currentPage]} 
+                  isLeft={true} 
+                />
+                <Page 
+                  pageNumber={currentPage + 2} 
+                  image={pages[currentPage + 1]} 
+                  isLeft={false} 
+                />
+              </>
+            )}
+          </div>
+          <div className="controls">
+            <button 
+              onClick={goToPreviousPage}
+              disabled={currentPage === 0}
+              className="control-button"
+            >
+              Previous
+            </button>
+            <button 
+              onClick={goToNextPage}
+              disabled={isMobile ? currentPage >= pages.length - 1 : currentPage >= pages.length - 2}
+              className="control-button"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="mt-6 text-center text-gray-600">
-        Page {currentPage + 1} of {pages.length}
+        {isMobile ? (
+          `Page ${currentPage + 1} of ${pages.length}`
+        ) : (
+          `Pages ${currentPage + 1}-${currentPage + 2} of ${pages.length}`
+        )}
       </div>
     </div>
   );
