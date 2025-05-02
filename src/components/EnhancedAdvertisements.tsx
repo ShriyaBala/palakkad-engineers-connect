@@ -243,19 +243,19 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
       case 'premium':
         return {
           badge: 'bg-advertise-premium text-black hover:bg-yellow-500',
-          class: 'border-advertise-premium shadow-[0_0_15px_rgba(255,215,0,0.3)]',
+          class: 'border-advertise-premium shadow-[0_0_15px_rgba(255,215,0,0.3)] relative z-10',
           label: 'Premium'
         };
       case 'standard':
         return {
           badge: 'bg-advertise-standard text-black hover:bg-gray-400',
-          class: 'border-advertise-standard',
+          class: 'border-advertise-standard relative z-0',
           label: 'Standard'
         };
       default:
         return {
           badge: 'bg-advertise-basic text-black hover:bg-amber-700',
-          class: 'border-advertise-basic',
+          class: 'border-advertise-basic relative z-0',
           label: 'Basic'
         };
     }
@@ -283,27 +283,29 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
           const tierStyle = getTierStyles(ad.tier);
           return <div key={ad.id} className={`min-w-full border-t-4 ${tierStyle.class}`}>
                 {ad.type === 'video' ? (
-                  <video 
-                    ref={videoRef} 
-                    src={ad.src} 
-                    className="w-full h-[400px] object-cover" 
-                    controls={true}
-                    playsInline
-                    preload="auto"
-                    muted
-                    loop
-                    autoPlay
-                    onPlay={handleVideoPlay} 
-                    onEnded={handleVideoEnd} 
-                    onPause={() => setIsVideoPlaying(false)}
-                    onError={(e) => {
-                      console.error("Video error:", e);
-                      // Try to reload the video
-                      if (videoRef.current) {
-                        videoRef.current.load();
-                      }
-                    }}
-                  />
+                  <div className="relative">
+                    <video 
+                      ref={videoRef} 
+                      src={ad.src} 
+                      className="w-full h-[400px] object-cover" 
+                      controls={true}
+                      playsInline
+                      preload="auto"
+                      muted
+                      loop
+                      autoPlay
+                      onPlay={handleVideoPlay} 
+                      onEnded={handleVideoEnd} 
+                      onPause={() => setIsVideoPlaying(false)}
+                      onError={(e) => {
+                        console.error("Video error:", e);
+                        if (videoRef.current) {
+                          videoRef.current.load();
+                        }
+                      }}
+                    />
+                    {ad.tier === 'premium' && <div className="absolute top-0 left-0 w-full h-full border-2 border-advertise-premium pointer-events-none"></div>}
+                  </div>
                 ) : (
                   <img src={ad.src} alt={ad.title} className="w-full h-[400px] object-cover" />
                 )}
@@ -336,8 +338,6 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
                 {ad.type === 'video' && <div className="absolute top-4 right-4 bg-black/60 px-2 py-1 rounded text-white text-xs">
                     Video Ad
                   </div>}
-                
-                {ad.tier === 'premium' && <div className="absolute top-0 left-0 w-full h-full border-2 border-advertise-premium pointer-events-none"></div>}
               </div>;
         })}
         </div>
