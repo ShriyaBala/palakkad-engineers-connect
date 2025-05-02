@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,10 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Advertising from "./pages/Advertising";
 import Resources from "./pages/Resources";
+import About from "./pages/About";
+import Members from "./pages/Members";
+import Events from "./pages/Events";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -19,18 +24,19 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
-          
-          {/* Updated Resources route */}
           <Route path="/resources" element={<Resources />} />
           
+          {/* Added pages with dummy content */}
+          <Route path="/about" element={<About />} />
+          <Route path="/members" element={<Members />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/contact" element={<Contact />} />
+          
           {/* District level pages - these will be implemented later */}
-          <Route path="/about" element={<NotFound />} />
           <Route path="/history" element={<NotFound />} />
           <Route path="/executive-committee" element={<NotFound />} />
           <Route path="/member-directory" element={<NotFound />} />
           <Route path="/become-member" element={<NotFound />} />
-          <Route path="/events" element={<NotFound />} />
-          <Route path="/contact" element={<NotFound />} />
           <Route path="/news" element={<NotFound />} />
           <Route path="/gallery" element={<NotFound />} />
           <Route path="/privacy" element={<NotFound />} />
