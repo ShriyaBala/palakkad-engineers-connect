@@ -19,29 +19,18 @@ interface Advertisement {
 
 // Enhanced advertisements with tier information and industry categories
 const advertisements: Advertisement[] = [{
-  id: 1,
-  type: 'image',
-  src: 'https://images.unsplash.com/photo-1581092436484-26c1ce9f3644?auto=format&fit=crop&q=80&w=1200',
-  title: 'Engineering Conference 2025',
-  description: 'Join the largest engineering conference in Kerala. Network with experts and industry leaders.',
-  link: '#',
-  tier: 'premium',
-  company: 'Kerala Engineering Association',
-  location: 'Palakkad Town',
-  validUntil: '2025-06-30',
-  industry: 'Events'
-}, {
+  
   id: 2,
   type: 'video',
-  src: 'https://player.vimeo.com/external/373503310.sd.mp4?s=20ae075343bbd512fb23cba16b9f9ad600e5715d&profile_id=164&oauth2_token_id=57447761',
-  title: 'Civil Engineering Workshop',
-  description: 'Learn advanced civil engineering techniques with hands-on training from industry experts.',
+  src: '/videos/857262-hd_1920_1080_24fps.mp4',
+  title: 'Smart Manufacturing Solutions',
+  description: 'Revolutionize your production with advanced robotics and AI-driven automation.',
   link: '#',
   tier: 'premium',
-  company: 'BuildRight Institute',
+  company: 'TechAutomation India',
   location: 'Kanjikode',
   validUntil: '2025-05-15',
-  industry: 'Education'
+  industry: 'Automation'
 }, {
   id: 3,
   type: 'image',
@@ -119,15 +108,15 @@ const advertisements: Advertisement[] = [{
 }, {
   id: 9,
   type: 'video',
-  src: 'https://player.vimeo.com/external/446766811.sd.mp4?s=2c72236251be1eda8324e5687bd16e28916c2b6e&profile_id=164&oauth2_token_id=57447761',
-  title: 'Advanced Construction Equipment',
-  description: 'Rent or purchase the latest construction equipment with special discounts for association members.',
+  src: '/videos/4017225-uhd_3840_2160_30fps.mp4',
+  title: 'Next-Gen Industrial Solutions',
+  description: 'Experience the power of Industry 4.0 with our cutting-edge manufacturing systems.',
   link: '#',
   tier: 'premium',
-  company: 'MachineRent Kerala',
+  company: 'SmartFactory Solutions',
   location: 'Kanjikode',
   validUntil: '2025-07-30',
-  industry: 'Construction'
+  industry: 'Manufacturing'
 }, {
   id: 10,
   type: 'image',
@@ -140,6 +129,18 @@ const advertisements: Advertisement[] = [{
   location: 'Palakkad Town',
   validUntil: '2025-06-15',
   industry: 'Architecture'
+}, {
+  id: 11,
+  type: 'video',
+  src: '/videos/857262-hd_1920_1080_24fps.mp4',
+  title: 'Advanced Manufacturing Technology',
+  description: 'Transform your factory with state-of-the-art automation and control systems.',
+  link: '#',
+  tier: 'premium',
+  company: 'Advanced Manufacturing Solutions',
+  location: 'Kanjikode Industrial Area',
+  validUntil: '2025-08-15',
+  industry: 'Manufacturing'
 }];
 interface EnhancedAdvertisementsProps {
   title?: string;
@@ -220,7 +221,15 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
     if (currentAd && currentAd.type === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0;
       if (isPlaying) {
-        videoRef.current.play().catch(e => console.error("Video play failed:", e));
+        videoRef.current.play().catch(e => {
+          console.error("Video play failed:", e);
+          // Try playing again after a short delay
+          setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.play().catch(e => console.error("Second attempt failed:", e));
+            }
+          }, 1000);
+        });
       }
     }
 
@@ -228,7 +237,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
     if (currentAd && currentAd.type !== 'video') {
       setIsVideoPlaying(false);
     }
-  }, [currentIndex, filteredAds]);
+  }, [currentIndex, filteredAds, isPlaying]);
   const getTierStyles = (tier: string) => {
     switch (tier) {
       case 'premium':
@@ -273,7 +282,31 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
           {filteredAds.map(ad => {
           const tierStyle = getTierStyles(ad.tier);
           return <div key={ad.id} className={`min-w-full border-t-4 ${tierStyle.class}`}>
-                {ad.type === 'image' ? <img src={ad.src} alt={ad.title} className="w-full h-[400px] object-cover" /> : <video ref={videoRef} src={ad.src} className="w-full h-[400px] object-cover" controls={false} muted={false} onPlay={handleVideoPlay} onEnded={handleVideoEnd} onPause={() => setIsVideoPlaying(false)} />}
+                {ad.type === 'video' ? (
+                  <video 
+                    ref={videoRef} 
+                    src={ad.src} 
+                    className="w-full h-[400px] object-cover" 
+                    controls={true}
+                    playsInline
+                    preload="auto"
+                    muted
+                    loop
+                    autoPlay
+                    onPlay={handleVideoPlay} 
+                    onEnded={handleVideoEnd} 
+                    onPause={() => setIsVideoPlaying(false)}
+                    onError={(e) => {
+                      console.error("Video error:", e);
+                      // Try to reload the video
+                      if (videoRef.current) {
+                        videoRef.current.load();
+                      }
+                    }}
+                  />
+                ) : (
+                  <img src={ad.src} alt={ad.title} className="w-full h-[400px] object-cover" />
+                )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-6 text-white">
                   <div className="flex justify-between items-start mb-2">
