@@ -1,160 +1,135 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
-
-// Import refactored components
-import ZoomControls from './flipbook/ZoomControls';
-import UploadControls from './flipbook/UploadControls';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import NavigationControls from './flipbook/NavigationControls';
 import PageDisplay from './flipbook/PageDisplay';
 import EmptyFlipbook from './flipbook/EmptyFlipbook';
+import ZoomControls from './flipbook/ZoomControls';
+import UploadControls from './flipbook/UploadControls';
 
 interface FlipbookPage {
-  id: number;
-  type: 'image' | 'pdf';
-  content: React.ReactNode | string;
+  url: string;
+  title?: string;
 }
 
 interface EnhancedFlipbookProps {
-  title: string;
+  title?: string;
   defaultPages?: FlipbookPage[];
-  allowUpload?: boolean;
+  allowUpload?: boolean; 
 }
 
-const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({
-  title,
-  defaultPages = [],
+const EnhancedFlipbook: React.FC<EnhancedFlipbookProps> = ({ 
+  title = "Engineering Directory", 
+  defaultPages = [], 
   allowUpload = true
 }) => {
   const [pages, setPages] = useState<FlipbookPage[]>(defaultPages);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
-  
-  const nextPage = () => {
-    if (currentPage < pages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    }
+  const flipbookRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Reset to first page when pages change
+    setCurrentPage(1);
+  }, [pages]);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
-  
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, pages.length));
   };
-  
-  const zoomIn = () => {
-    if (zoomLevel < 2) {
-      setZoomLevel(zoomLevel + 0.1);
-    }
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.25, 2.5));
   };
-  
-  const zoomOut = () => {
-    if (zoomLevel > 0.5) {
-      setZoomLevel(zoomLevel - 0.1);
-    }
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.25, 0.5));
   };
-  
-  const handleAddPages = (newPages: FlipbookPage[]) => {
-    setPages([...pages, ...newPages]);
+
+  const handleResetZoom = () => {
+    setZoomLevel(1);
   };
-  
-  const removePage = () => {
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (!files) return;
+
+    const newPages: FlipbookPage[] = [];
+    
+    Array.from(files).forEach(file => {
+      const url = URL.createObjectURL(file);
+      newPages.push({
+        url,
+        title: file.name
+      });
+    });
+    
+    setPages((prev) => [...prev, ...newPages]);
+  };
+
+  const handleRemovePage = () => {
+    if (pages.length === 0) return;
+    
     const newPages = [...pages];
-    newPages.splice(currentPage, 1);
+    newPages.splice(currentPage - 1, 1);
+    
     setPages(newPages);
-
-    // Adjust current page if needed
-    if (currentPage >= newPages.length) {
-      setCurrentPage(Math.max(0, newPages.length - 1));
-    }
-    toast({
-      title: "Page removed",
-      description: "The page has been removed from the flipbook"
-    });
+    setCurrentPage((prev) => Math.min(prev, newPages.length || 1));
   };
-  
-  const downloadCurrentPage = () => {
-    const currentPageContent = pages[currentPage];
-    if (!currentPageContent) return;
 
-    // For image content that has a URL in it
-    const imgElement = document.querySelector('.flipbook-page-content img') as HTMLImageElement;
-    if (imgElement && imgElement.src) {
-      const a = document.createElement('a');
-      a.href = imgElement.src;
-      a.download = `engineer-community-page-${currentPage + 1}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      return;
-    }
-
-    // For PDF content
-    const iframeElement = document.querySelector('.flipbook-page-content iframe') as HTMLIFrameElement;
-    if (iframeElement && iframeElement.src) {
-      window.open(iframeElement.src, '_blank');
-      return;
-    }
-    toast({
-      title: "Download failed",
-      description: "Could not download the current page",
-      variant: "destructive"
-    });
-  };
+  if (pages.length === 0) {
+    return <EmptyFlipbook onFileUpload={handleFileUpload} allowUpload={allowUpload} />;
+  }
 
   return (
-    <div className="flipbook-container">
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
-      
-      {pages.length > 0 ? (
-        <>
-          <div 
-            className="flipbook-display" 
-            style={{transform: `scale(${zoomLevel})`}}
-          >
-            <PageDisplay 
-              currentPage={pages[currentPage]} 
-              pageNumber={currentPage + 1}
-              totalPages={pages.length}
-            />
-          </div>
-          
-          <div className="flipbook-controls mt-4 flex justify-between items-center">
+    <Card className="w-full overflow-hidden border shadow-md">
+      <CardContent className="p-0">
+        <div className="bg-engineering-600 text-white p-4 flex justify-between items-center">
+          <h3 className="text-xl font-semibold">{title}</h3>
+          <div className="flex space-x-2">
             <NavigationControls 
               currentPage={currentPage} 
-              totalPages={pages.length}
-              onPrevPage={prevPage}
-              onNextPage={nextPage}
-              onRemovePage={removePage}
+              totalPages={pages.length} 
+              onPrevPage={handlePrevPage} 
+              onNextPage={handleNextPage} 
             />
-            
+          </div>
+        </div>
+        
+        <div ref={flipbookRef} className="relative w-full bg-gray-100 flex justify-center p-4">
+          <PageDisplay 
+            page={pages[currentPage - 1]} 
+            zoomLevel={zoomLevel} 
+          />
+        </div>
+        
+        <div className="flex justify-between items-center p-4 border-t">
+          <div className="text-sm">
+            Page {currentPage} of {pages.length}
+          </div>
+          
+          <div className="flex space-x-3">
             <ZoomControls 
               zoomLevel={zoomLevel}
-              onZoomIn={zoomIn}
-              onZoomOut={zoomOut}
+              onZoomIn={handleZoomIn}
+              onZoomOut={handleZoomOut}
+              onResetZoom={handleResetZoom}
             />
             
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={downloadCurrentPage}
-              className="flex items-center gap-1"
-            >
-              <Download size={16} />
-              <span>Download</span>
-            </Button>
+            {allowUpload && (
+              <UploadControls 
+                onFileUpload={handleFileUpload} 
+                onRemovePage={handleRemovePage} 
+              />
+            )}
           </div>
-        </>
-      ) : (
-        <EmptyFlipbook />
-      )}
-      
-      {allowUpload && (
-        <UploadControls onAddPages={handleAddPages} />
-      )}
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
