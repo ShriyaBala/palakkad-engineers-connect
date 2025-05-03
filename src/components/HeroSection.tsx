@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Users, FileText, Calendar } from 'lucide-react';
@@ -9,7 +10,10 @@ const HeroSection: React.FC = () => {
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-heading leading-tight">
-                Palakkad District <span className="text-kerala-300"> PALAKKAD DISTRICT COMMITTEE</span>
+                LENSFED <span className="text-kerala-300 block text-2xl md:text-3xl lg:text-4xl mt-2">
+                  (Licensed Engineers and Supervisors Federation)
+                </span>
+                <span className="text-kerala-300 mt-2 block text-2xl md:text-3xl lg:text-4xl">PALAKKAD DISTRICT COMMITTEE</span>
               </h1>
               <p className="text-lg text-gray-200 max-w-lg">
                 Uniting engineering professionals across Palakkad district to foster innovation, 
