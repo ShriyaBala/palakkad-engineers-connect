@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => {
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-heading leading-tight">
-                Palakkad District <span className="text-kerala-300">Engineers Association</span>
+                Palakkad District <span className="text-kerala-300"> PALAKKAD DISTRICT COMMITTEE</span>
               </h1>
               <p className="text-lg text-gray-200 max-w-lg">
                 Uniting engineering professionals across Palakkad district to foster innovation, 
@@ -40,7 +40,7 @@ const HeroSection: React.FC = () => {
 
           <div className="hidden md:block relative">
             <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl transform rotate-2">
-              <img alt="Engineering project in Palakkad" src="/lovable-uploads/da1bd724-8c2f-444e-bcd8-8b6124249174.jpg" className="w-full h-auto rounded object-fill" />
+              <img alt="Engineering project in Palakkad" className="w-full h-auto rounded object-fill" src="/lovable-uploads/0aef2227-d19f-4932-b12a-247e6444cdbe.jpg" />
             </div>
             
             <div className="absolute -bottom-10 left-10 z-0 w-24 h-24 bg-engineering-500/30 rounded-full blur-md"></div>
