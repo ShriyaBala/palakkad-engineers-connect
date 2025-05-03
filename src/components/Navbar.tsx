@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, ChevronDown } from 'lucide-react';
-
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-
   const toggleDropdown = (dropdown: string) => {
     if (activeDropdown === dropdown) {
       setActiveDropdown(null);
@@ -15,17 +12,12 @@ const Navbar: React.FC = () => {
       setActiveDropdown(dropdown);
     }
   };
-
   return <header className="shadow-sm bg-white sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <div className="h-10 w-10 rounded-md bg-engineering-600 flex items-center justify-center">
-              <img 
-                src="/public/resources/lensfed1.jpeg" 
-                alt="LENSFED" 
-                className="h-8 w-8 object-contain"
-              />
+              <img alt="LENSFED" className="h-8 w-8 object-contain" src="/lovable-uploads/1cf1e315-d53c-496f-a41f-75635c3a7166.jpg" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-lg sm:text-xl text-engineering-800">LENSFED</span>
