@@ -20,10 +20,8 @@ const Navbar: React.FC = () => {
               <span className="text-white font-bold text-xl">PE</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-bold text-lg sm:text-xl text-engineering-800">
-                Palakkad Engineers
-              </span>
-              <span className="text-xs text-gray-500">District Association</span>
+              <span className="font-heading font-bold text-lg sm:text-xl text-engineering-800">LENSFED</span>
+              <span className="text-xs text-gray-500">Palakkad</span>
             </div>
           </Link>
           
