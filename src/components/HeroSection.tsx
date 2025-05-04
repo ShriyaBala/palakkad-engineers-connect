@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Users, FileText, Calendar } from 'lucide-react';
@@ -43,7 +42,7 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className="hidden md:block relative">
-            <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl transform rotate-2">
+            <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl">
               <img alt="Engineering project in Palakkad" className="w-full h-auto rounded object-fill" src="/lovable-uploads/0aef2227-d19f-4932-b12a-247e6444cdbe.jpg" />
             </div>
             
