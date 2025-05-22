@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
@@ -8,10 +7,8 @@ import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { FileText, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const Index = () => {
-  return (
-    <Layout>
+  return <Layout>
       {/* Hero Section with Association Logo */}
       <HeroSection />
       
@@ -47,27 +44,8 @@ const Index = () => {
       
       {/* Brief Call to Action */}
       <section className="py-10 bg-engineering-700 text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Looking for the right engineering professional?</h2>
-          <p className="text-engineering-100 mb-6 max-w-2xl mx-auto">
-            Browse our comprehensive directory of qualified engineers in Palakkad district.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/members">
-              <Button className="bg-white text-engineering-800 hover:bg-gray-100">
-                View Member Directory
-              </Button>
-            </Link>
-            <Link to="/events">
-              <Button variant="outline" className="text-white border-white hover:bg-white/10">
-                Upcoming Events
-              </Button>
-            </Link>
-          </div>
-        </div>
+        
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
