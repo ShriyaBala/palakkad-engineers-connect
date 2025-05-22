@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import MarketersShowcase from '@/components/MarketersShowcase';
 import ShopFinder from '@/components/ShopFinder';
+import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { FileText, Search, Store } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -11,13 +12,16 @@ import { Link } from 'react-router-dom';
 const Index = () => {
   return (
     <Layout>
+      {/* Hero Section with Association Logo */}
+      <HeroSection />
+      
       {/* Main Advertisement Section */}
       <section className="py-8 bg-gradient-to-r from-engineering-50 to-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
               LENSFED Palakkad District Advertisements
-            </h1>
+            </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Connect with engineering professionals, suppliers, and service providers in Palakkad district.
               Find the right business for your needs.
