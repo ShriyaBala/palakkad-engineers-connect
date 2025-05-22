@@ -123,7 +123,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
         
         {/* Premium/Video Marketers - Displayed vertically with larger cards */}
         <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-4 text-center">Premium Advertisements</h3>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {premiumMarketers.map(marketer => {
             const typeDetails = getTypeDetails(marketer.type);
