@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Phone, Video, FilePdf } from 'lucide-react';
+import { Phone, FileText, Video } from 'lucide-react';
 
 interface Marketer {
   id: number;
@@ -111,6 +111,11 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
 }) => {
   // Sort marketers by priority (highest first)
   const sortedMarketers = [...marketers].sort((a, b) => b.priority - a.priority);
+  
+  // Separate marketers by type for vertical display
+  const premiumMarketers = sortedMarketers.filter(m => m.type === 'video');
+  const standardMarketers = sortedMarketers.filter(m => m.type === 'pdf');
+  const basicMarketers = sortedMarketers.filter(m => m.type === 'basic');
 
   const getTypeDetails = (type: string) => {
     switch (type) {
@@ -123,7 +128,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
       case 'pdf':
         return {
           label: 'Standard',
-          icon: <FilePdf size={16} className="mr-2 text-blue-500" />,
+          icon: <FileText size={16} className="mr-2 text-blue-500" />,
           badgeClass: 'bg-blue-100 text-blue-800 border-blue-300'
         };
       default:
@@ -149,7 +154,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
               <Video size={16} className="mr-2" /> Premium
             </Badge>
             <Badge className="bg-blue-100 text-blue-800 border border-blue-300 flex items-center">
-              <FilePdf size={16} className="mr-2" /> Standard
+              <FileText size={16} className="mr-2" /> Standard
             </Badge>
             <Badge className="bg-gray-100 text-gray-800 border border-gray-300 flex items-center">
               <Phone size={16} className="mr-2" /> Basic
@@ -157,83 +162,132 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
           </div>
         </div>
         
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {sortedMarketers.map((marketer) => {
+        {/* Premium/Video Marketers - Displayed vertically with larger cards */}
+        <div className="mb-10">
+          <h3 className="text-xl font-semibold mb-4 text-center">Premium Advertisements</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {premiumMarketers.map(marketer => {
               const typeDetails = getTypeDetails(marketer.type);
               
               return (
-                <CarouselItem key={marketer.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                  <Card className={`overflow-hidden h-full ${marketer.type === 'video' ? 'border-2 border-yellow-400 shadow-lg' : marketer.type === 'pdf' ? 'border border-blue-300' : ''}`}>
-                    {(marketer.type === 'video' || marketer.type === 'pdf') && (
-                      <div className="relative h-48">
-                        {marketer.type === 'video' && marketer.mediaUrl && marketer.mediaUrl.endsWith('.mp4') ? (
-                          <video 
-                            src={marketer.mediaUrl} 
-                            className="w-full h-full object-cover" 
-                            autoPlay 
-                            muted 
-                            loop
-                          />
-                        ) : (
-                          <img 
-                            src={marketer.mediaUrl} 
-                            alt={marketer.name} 
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                        <Badge className={`absolute top-2 right-2 ${typeDetails.badgeClass}`}>
-                          {typeDetails.label}
-                        </Badge>
-                      </div>
+                <Card key={marketer.id} className="overflow-hidden border-2 border-yellow-400 shadow-lg">
+                  <div className="relative h-64">
+                    {marketer.mediaUrl && marketer.mediaUrl.endsWith('.mp4') ? (
+                      <video 
+                        src={marketer.mediaUrl} 
+                        className="w-full h-full object-cover" 
+                        autoPlay 
+                        muted 
+                        loop
+                      />
+                    ) : (
+                      <img 
+                        src={marketer.mediaUrl} 
+                        alt={marketer.name} 
+                        className="w-full h-full object-cover"
+                      />
                     )}
-                    <CardContent className={`p-4 ${marketer.type === 'basic' ? 'pt-6' : ''}`}>
-                      <div className="flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className={`font-semibold ${marketer.type === 'video' ? 'text-xl' : marketer.type === 'pdf' ? 'text-lg' : 'text-base'}`}>
-                            {marketer.name}
-                          </h3>
-                          {marketer.type === 'basic' && (
-                            <Badge variant="outline" className={typeDetails.badgeClass}>
-                              {typeDetails.label}
-                            </Badge>
-                          )}
-                        </div>
-                        {marketer.industry && marketer.type !== 'basic' && (
-                          <Badge variant="outline" className="self-start mb-2">
-                            {marketer.industry}
-                          </Badge>
-                        )}
-                        <a 
-                          href={`tel:${marketer.phoneNumber}`} 
-                          className={`flex items-center ${marketer.type === 'video' ? 'text-engineering-600 font-medium mt-3' : marketer.type === 'pdf' ? 'text-engineering-500 mt-2' : 'text-gray-700 mt-1'} hover:text-engineering-800 transition-colors`}
-                        >
-                          <Phone size={16} className="mr-2" />
-                          <span>{marketer.phoneNumber}</span>
-                        </a>
-                        {marketer.industry && marketer.type === 'basic' && (
-                          <span className="text-sm text-gray-500 mt-1">
-                            {marketer.industry}
-                          </span>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
+                    <Badge className={`absolute top-2 right-2 ${typeDetails.badgeClass}`}>
+                      {typeDetails.label}
+                    </Badge>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-xl font-semibold">{marketer.name}</h3>
+                    </div>
+                    {marketer.industry && (
+                      <Badge variant="outline" className="mb-3">
+                        {marketer.industry}
+                      </Badge>
+                    )}
+                    <a 
+                      href={`tel:${marketer.phoneNumber}`} 
+                      className="flex items-center text-engineering-600 font-medium hover:text-engineering-800 transition-colors"
+                    >
+                      <Phone size={16} className="mr-2" />
+                      <span>{marketer.phoneNumber}</span>
+                    </a>
+                  </CardContent>
+                </Card>
               );
             })}
-          </CarouselContent>
-          <div className="flex justify-center mt-6 gap-2">
-            <CarouselPrevious className="static transform-none" />
-            <CarouselNext className="static transform-none" />
           </div>
-        </Carousel>
+        </div>
+        
+        {/* Standard/PDF Marketers - Displayed vertically with medium cards */}
+        <div className="mb-10">
+          <h3 className="text-xl font-semibold mb-4 text-center">Standard Advertisements</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {standardMarketers.map(marketer => {
+              const typeDetails = getTypeDetails(marketer.type);
+              
+              return (
+                <Card key={marketer.id} className="overflow-hidden border border-blue-300">
+                  <div className="relative h-48">
+                    <img 
+                      src={marketer.mediaUrl} 
+                      alt={marketer.name} 
+                      className="w-full h-full object-cover"
+                    />
+                    <Badge className={`absolute top-2 right-2 ${typeDetails.badgeClass}`}>
+                      {typeDetails.label}
+                    </Badge>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="text-lg font-semibold mb-1">{marketer.name}</h3>
+                    {marketer.industry && (
+                      <Badge variant="outline" className="mb-2">
+                        {marketer.industry}
+                      </Badge>
+                    )}
+                    <a 
+                      href={`tel:${marketer.phoneNumber}`} 
+                      className="flex items-center text-engineering-500 hover:text-engineering-700 transition-colors"
+                    >
+                      <Phone size={16} className="mr-2" />
+                      <span>{marketer.phoneNumber}</span>
+                    </a>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+        
+        {/* Basic Marketers - Displayed in a single row */}
+        <div>
+          <h3 className="text-lg font-semibold mb-3 text-center">Basic Advertisements</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {basicMarketers.map(marketer => {
+              const typeDetails = getTypeDetails(marketer.type);
+              
+              return (
+                <Card key={marketer.id} className="overflow-hidden">
+                  <CardContent className="p-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-base font-medium">{marketer.name}</h3>
+                      <Badge variant="outline" className={typeDetails.badgeClass.replace('bg-', '')}>
+                        Basic
+                      </Badge>
+                    </div>
+                    <a 
+                      href={`tel:${marketer.phoneNumber}`} 
+                      className="flex items-center text-gray-700 text-sm hover:text-engineering-600 transition-colors"
+                    >
+                      <Phone size={14} className="mr-1" />
+                      <span>{marketer.phoneNumber}</span>
+                    </a>
+                    {marketer.industry && (
+                      <span className="text-xs text-gray-500 mt-1 block">
+                        {marketer.industry}
+                      </span>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
