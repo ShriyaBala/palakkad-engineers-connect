@@ -6,7 +6,7 @@ import MarketersShowcase from '@/components/MarketersShowcase';
 import ShopFinder from '@/components/ShopFinder';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
-import { FileText, Search, Store } from 'lucide-react';
+import { FileText, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Index = () => {
@@ -18,28 +18,20 @@ const Index = () => {
       {/* Main Advertisement Section */}
       <section className="py-8 bg-gradient-to-r from-engineering-50 to-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              LENSFED Palakkad District Advertisements
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Connect with engineering professionals, suppliers, and service providers in Palakkad district.
-              Find the right business for your needs.
-            </p>
-            <div className="flex justify-center gap-3 mt-4">
-              <Link to="/advertising">
-                <Button className="bg-engineering-600 text-white hover:bg-engineering-700 flex items-center gap-2">
-                  <FileText size={18} />
-                  <span>Advertise With Us</span>
-                </Button>
-              </Link>
-              <Link to="/engineers">
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Search size={18} />
-                  <span>Find Engineers</span>
-                </Button>
-              </Link>
-            </div>
+          {/* Removed the advertisement heading as requested */}
+          <div className="flex justify-center gap-3 mt-4 mb-8">
+            <Link to="/advertising">
+              <Button className="bg-engineering-600 text-white hover:bg-engineering-700 flex items-center gap-2">
+                <FileText size={18} />
+                <span>Advertise With Us</span>
+              </Button>
+            </Link>
+            <Link to="/engineers">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Search size={18} />
+                <span>Find Engineers</span>
+              </Button>
+            </Link>
           </div>
           
           {/* Featured Carousel Advertisement */}
