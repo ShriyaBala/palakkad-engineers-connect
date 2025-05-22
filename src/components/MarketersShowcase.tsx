@@ -153,7 +153,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
         
         {/* Standard/PDF Marketers - Displayed vertically with medium cards */}
         <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-4 text-center">Standard Advertisements</h3>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {standardMarketers.map(marketer => {
             const typeDetails = getTypeDetails(marketer.type);
@@ -181,7 +181,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
         
         {/* Basic Marketers - Displayed in a single row */}
         <div>
-          <h3 className="text-lg font-semibold mb-3 text-center">Basic Advertisements</h3>
+          
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {basicMarketers.map(marketer => {
             const typeDetails = getTypeDetails(marketer.type);

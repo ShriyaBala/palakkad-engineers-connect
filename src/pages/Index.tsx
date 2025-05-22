@@ -24,10 +24,7 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/engineers">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Search size={18} />
-                <span>Find Engineers</span>
-              </Button>
+              
             </Link>
           </div>
           
