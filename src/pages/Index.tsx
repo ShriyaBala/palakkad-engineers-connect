@@ -6,32 +6,37 @@ import EnhancedSearch from '@/components/EnhancedSearch';
 import FeaturedEngineers from '@/components/FeaturedEngineers';
 import EngineeringPDFFlipbook from '@/components/EngineeringPDFFlipbook';
 import IndustryAds from '@/components/IndustryAds';
+import MarketersShowcase from '@/components/MarketersShowcase';
 import { Button } from '@/components/ui/button';
 import { CalendarCheck, MapPin, FileText, Users, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+
 const Index = () => {
   // Sample upcoming events
-  const upcomingEvents = [{
-    id: 1,
-    title: "Monthly Technical Meetup",
-    date: "May 15, 2025",
-    location: "Palakkad Town Hall",
-    type: "Workshop"
-  }, {
-    id: 2,
-    title: "Civil Engineering Symposium",
-    date: "May 22, 2025",
-    location: "Engineering College, Palakkad",
-    type: "Conference"
-  }, {
-    id: 3,
-    title: "Electrical Engineers Association Meeting",
-    date: "May 29, 2025",
-    location: "Hotel Indraprastha, Palakkad",
-    type: "Meeting"
-  }];
-  return <Layout>
+  const upcomingEvents = [
+    {
+      id: 1,
+      title: "Monthly Technical Meetup",
+      date: "May 15, 2025",
+      location: "Palakkad Town Hall",
+      type: "Workshop"
+    }, {
+      id: 2,
+      title: "Civil Engineering Symposium",
+      date: "May 22, 2025",
+      location: "Engineering College, Palakkad",
+      type: "Conference"
+    }, {
+      id: 3,
+      title: "Electrical Engineers Association Meeting",
+      date: "May 29, 2025",
+      location: "Hotel Indraprastha, Palakkad",
+      type: "Meeting"
+    }
+  ];
+  return (
+    <Layout>
       <HeroSection />
       
       <section className="py-12 bg-white">
@@ -128,9 +133,11 @@ const Index = () => {
         </div>
       </section>
       
+      {/* Add the new MarketersShowcase component */}
+      <MarketersShowcase title="Connect with our Marketing Partners" />
+      
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          
           <EnhancedAdvertisements />
           <div className="text-center mt-8">
             <Link to="/advertising">
@@ -142,12 +149,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Add the new IndustryAds component for industry-specific advertisements */}
+      {/* IndustryAds component */}
       <IndustryAds />
       
       <EnhancedSearch />
-      
-      
       
       <FeaturedEngineers />
       
@@ -172,6 +177,8 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default Index;
