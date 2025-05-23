@@ -100,6 +100,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
       alt="PDF Advertisement Page"
       style={{ display: 'block' }}
     />
+    
   </section>
 );
 };
