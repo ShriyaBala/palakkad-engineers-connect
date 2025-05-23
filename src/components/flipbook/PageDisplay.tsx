@@ -33,12 +33,14 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
           src={`${page.url}#toolbar=0`}
           className="w-full h-[600px] border-0 shadow-lg"
           title={page.title || "PDF Document"}
+          style={{ display: 'block' }}
         />
       ) : (
         <img 
           src={page.url}
           alt={page.title || "Flipbook Page"}
-          className="max-w-full shadow-lg mx-auto"
+          className="w-full shadow-lg mx-auto"
+          style={{ display: 'block' }}
         />
       )}
     </div>

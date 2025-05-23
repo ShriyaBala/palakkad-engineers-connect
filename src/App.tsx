@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Members from "./pages/Members";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
+import ShopFinder from "./components/ShopFinder";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/shop-search" element={<ShopFinder />} />
           
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />

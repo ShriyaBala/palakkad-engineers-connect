@@ -1,17 +1,13 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Phone, MapPin, Store, Globe, Mail } from 'lucide-react';
 
-// Shop categories for selection
+// Shop categories and locations for selection
 const shopCategories = ["All Categories", "Tiles", "Electrical", "Plumbing", "Hardware", "Paint", "Furniture", "Construction Materials", "Home Appliances", "Electronics", "Automation"];
-
-// Locations for selection
 const locations = ["All Locations", "Palakkad Town", "Kanjikode", "Ottapalam", "Chittur", "Mannarkkad", "Shoranur", "Pattambi", "Alathur"];
 
 // Sample shop data
@@ -148,8 +144,8 @@ const ShopFinder: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
-  const [searchTab, setSearchTab] = useState('location');
-  const [searchResults, setSearchResults] = useState<Shop[]>(sampleShops);
+  const [searchResults, setSearchResults] = useState<Shop[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
 
   // Handle search
   const handleSearch = () => {
@@ -173,6 +169,7 @@ const ShopFinder: React.FC = () => {
     }
     
     setSearchResults(results);
+    setHasSearched(true);
   };
 
   // Handle input change
@@ -185,7 +182,8 @@ const ShopFinder: React.FC = () => {
     setSearchTerm('');
     setSelectedCategory('All Categories');
     setSelectedLocation('All Locations');
-    setSearchResults(sampleShops);
+    setSearchResults([]);
+    setHasSearched(false);
   };
 
   // Open map link
@@ -200,150 +198,98 @@ const ShopFinder: React.FC = () => {
         
         <Card className="mb-8">
           <CardContent className="pt-6">
-            <Tabs defaultValue={searchTab} onValueChange={setSearchTab} className="w-full">
-              <TabsList className="grid grid-cols-2 w-full mb-4">
-                <TabsTrigger value="location">Search by Location</TabsTrigger>
-                <TabsTrigger value="category">Search by Category</TabsTrigger>
-              </TabsList>
+            <div className="space-y-4">
+              <Input 
+                placeholder="Search for shops by name..." 
+                value={searchTerm} 
+                onChange={handleInputChange} 
+                className="w-full"
+              />
               
-              <TabsContent value="location" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="col-span-1 md:col-span-3">
-                    <Input 
-                      placeholder="Search for shops by name..." 
-                      value={searchTerm} 
-                      onChange={handleInputChange} 
-                      className="w-full"
-                    />
-                  </div>
-                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {locations.map(location => (
-                        <SelectItem key={location} value={location}>
-                          {location}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {shopCategories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <div className="flex space-x-2">
-                    <Button onClick={handleSearch} className="flex-1">Search</Button>
-                    <Button variant="outline" onClick={clearFilters}>Clear</Button>
-                  </div>
-                </div>
-              </TabsContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {shopCategories.map(category => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {locations.map(location => (
+                      <SelectItem key={location} value={location}>
+                        {location}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               
-              <TabsContent value="category" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="col-span-1 md:col-span-3">
-                    <Input 
-                      placeholder="Search for shops by name..." 
-                      value={searchTerm} 
-                      onChange={handleInputChange} 
-                      className="w-full"
-                    />
-                  </div>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {shopCategories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {locations.map(location => (
-                        <SelectItem key={location} value={location}>
-                          {location}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <div className="flex space-x-2">
-                    <Button onClick={handleSearch} className="flex-1">Search</Button>
-                    <Button variant="outline" onClick={clearFilters}>Clear</Button>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
+              <div className="flex space-x-2">
+                <Button onClick={handleSearch} className="flex-1">Search</Button>
+                <Button variant="outline" onClick={clearFilters}>Clear</Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        {/* Simplified Search Results - showing only name and contact */}
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold mb-4">
-            Found {searchResults.length} shops
-          </h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {searchResults.map(shop => (
-              <Card key={shop.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-lg mb-3">{shop.name}</h3>
-                  
-                  <div className="space-y-3">
-                    <div 
-                      className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors cursor-pointer"
-                      onClick={() => shop.mapLink && openMapLink(shop.mapLink)}
-                    >
-                      <MapPin size={16} className="mr-2 flex-shrink-0" />
-                      <span className="underline">{shop.location}</span>
-                    </div>
+        {/* Search Results - showing only name and contact */}
+        {hasSearched && (
+          <div className="mt-6">
+            <h3 className="text-xl font-semibold mb-4">
+              Found {searchResults.length} shops
+            </h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {searchResults.map(shop => (
+                <Card key={shop.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-lg mb-3">{shop.name}</h3>
+                    
+                    <div className="space-y-3">
+                      <div 
+                        className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors cursor-pointer"
+                        onClick={() => shop.mapLink && openMapLink(shop.mapLink)}
+                      >
+                        <MapPin size={16} className="mr-2 flex-shrink-0" />
+                        <span className="underline">{shop.location}</span>
+                      </div>
 
-                    <a href={`tel:${shop.phone}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
-                      <Phone size={16} className="mr-2 flex-shrink-0" />
-                      {shop.phone}
-                    </a>
-                    
-                    {shop.email && (
-                      <a href={`mailto:${shop.email}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
-                        <Mail size={16} className="mr-2 flex-shrink-0" />
-                        <span className="text-sm truncate">{shop.email}</span>
+                      <a href={`tel:${shop.phone}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
+                        <Phone size={16} className="mr-2 flex-shrink-0" />
+                        {shop.phone}
                       </a>
-                    )}
-                    
-                    {shop.website && (
-                      <a href={`https://${shop.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
-                        <Globe size={16} className="mr-2 flex-shrink-0" />
-                        <span className="text-sm truncate">{shop.website}</span>
-                      </a>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          {searchResults.length === 0 && (
-            <div className="text-center py-8">
-              <Store className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="mt-2 text-xl font-semibold text-gray-900">No shops found</p>
-              <p className="mt-1 text-gray-500">Try changing your search filters</p>
+                      
+                      {shop.email && (
+                        <a href={`mailto:${shop.email}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
+                          <Mail size={16} className="mr-2 flex-shrink-0" />
+                          <span className="text-sm truncate">{shop.email}</span>
+                        </a>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-          )}
-        </div>
+            
+            {searchResults.length === 0 && (
+              <div className="text-center py-8">
+                <Store className="mx-auto h-12 w-12 text-gray-400" />
+                <p className="mt-2 text-xl font-semibold text-gray-900">No shops found</p>
+                <p className="mt-1 text-gray-500">Try changing your search filters</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

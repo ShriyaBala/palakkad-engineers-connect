@@ -3,7 +3,6 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import MarketersShowcase from '@/components/MarketersShowcase';
-import ShopFinder from '@/components/ShopFinder';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { FileText, Search } from 'lucide-react';
@@ -26,7 +25,7 @@ const Index = () => {
                 <span>Advertise With Us</span>
               </Button>
             </Link>
-            <Link to="#shopfinder">
+            <Link to="/shop-search">
               <Button variant="outline" className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2">
                 <Search size={18} />
                 <span>Find Shops</span>
@@ -48,11 +47,6 @@ const Index = () => {
       
       {/* Marketers Showcase - Book/PDF Style Layout */}
       <MarketersShowcase title="Connect with our Marketing Partners" />
-      
-      {/* Shop Finder Section */}
-      <div id="shopfinder">
-        <ShopFinder />
-      </div>
     </Layout>
   );
 };
