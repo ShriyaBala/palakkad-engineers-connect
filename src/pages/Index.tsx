@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { FileText, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SimpleLineAd from '@/components/SimpleLineAd';
+import ShopFinder from '@/components/ShopFinder';
 
 const Index = () => {
   return (
@@ -25,12 +26,15 @@ const Index = () => {
                 <span>Advertise With Us</span>
               </Button>
             </Link>
-            <Link to="/shop-search">
-              <Button variant="outline" className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2">
-                <Search size={18} />
-                <span>Find Shops</span>
-              </Button>
-            </Link>
+            <Button variant="outline" className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2" onClick={() => {
+              const shopFinderSection = document.getElementById('shop-finder-section');
+              if (shopFinderSection) {
+                shopFinderSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}>
+              <Search size={18} />
+              <span>Find Shops</span>
+            </Button>
           </div>
           
           {/* Featured Carousel Advertisement */}
@@ -44,6 +48,14 @@ const Index = () => {
         phoneNumber="+91 9876543210" 
         email="contact@keralatiles.com" 
       />
+
+      {/* Shop Finder Section */}
+      <section id="shop-finder-section" className="py-8 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-8">Find Shops in Palakkad</h2>
+          <ShopFinder />
+        </div>
+      </section>
       
       {/* Marketers Showcase - Book/PDF Style Layout */}
       <MarketersShowcase title="Connect with our Marketing Partners" />

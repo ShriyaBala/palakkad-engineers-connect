@@ -29,12 +29,17 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
       }}
     >
       {isPDF ? (
-        <iframe 
-          src={`${page.url}#toolbar=0`}
-          className="w-full h-[600px] border-0 shadow-lg"
-          title={page.title || "PDF Document"}
-          style={{ display: 'block' }}
-        />
+        <div className="w-full border shadow-md">
+          <iframe 
+            src={`${page.url}#toolbar=0`}
+            className="w-full h-[600px] border-0"
+            title={page.title || "PDF Document"}
+            style={{ 
+              display: 'block',
+              background: 'white'
+            }}
+          />
+        </div>
       ) : (
         <img 
           src={page.url}
