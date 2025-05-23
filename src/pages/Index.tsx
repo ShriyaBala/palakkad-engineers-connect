@@ -8,6 +8,7 @@ import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { FileText, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import IndustryAds from '@/components/IndustryAds';
 
 const Index = () => {
   return (
@@ -38,7 +39,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Marketers Showcase - Vertical Layout */}
+      {/* Marketers Showcase - Book/PDF Style Layout */}
       <MarketersShowcase title="Connect with our Marketing Partners" />
       
       {/* Shop Finder Section */}

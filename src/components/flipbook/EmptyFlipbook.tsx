@@ -1,26 +1,46 @@
 
 import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
 
-interface EmptyFlipbookProps {
-  allowUpload: boolean;
+export interface EmptyFlipbookProps {
+  allowUpload?: boolean;
 }
 
-export const EmptyFlipbook: React.FC<EmptyFlipbookProps> = ({ allowUpload }) => {
+const EmptyFlipbook: React.FC<EmptyFlipbookProps> = ({ allowUpload = true }) => {
   return (
-    <div className="w-full aspect-[3/2] bg-white rounded-lg flipbook-shadow flex flex-col items-center justify-center p-6">
-      <Upload size={48} className="text-gray-300 mb-4" />
-      <h3 className="text-xl font-medium text-gray-500 mb-2">No pages available</h3>
-      {allowUpload ? (
-        <p className="text-gray-400 text-center">
-          Upload images or PDFs to create your flipbook
+    <Card className="w-full border border-dashed border-gray-300 shadow-sm">
+      <CardContent className="p-8 flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="mb-4">
+          <Upload size={40} className="text-gray-400" />
+        </div>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">No Pages Available</h3>
+        <p className="text-gray-500 mb-6 max-w-md">
+          {allowUpload 
+            ? "Upload PDF files or images to create your flipbook." 
+            : "No content is currently available."}
         </p>
-      ) : (
-        <p className="text-gray-400 text-center">
-          No content has been added to this flipbook yet
-        </p>
-      )}
-    </div>
+        {allowUpload && (
+          <div>
+            <input
+              type="file"
+              id="empty-upload"
+              className="hidden"
+              accept="image/*,application/pdf"
+              multiple
+            />
+            <Button 
+              onClick={() => document.getElementById('empty-upload')?.click()}
+              className="bg-engineering-600 hover:bg-engineering-700"
+            >
+              <Upload size={18} className="mr-2" />
+              Upload Files
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

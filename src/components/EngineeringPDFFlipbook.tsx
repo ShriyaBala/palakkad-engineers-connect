@@ -1,6 +1,6 @@
 
 import React from 'react';
-import EnhancedFlipbook from './EnhancedFlipbook';
+import EnhancedFlipbook, { FlipbookPage } from './EnhancedFlipbook';
 import { engineeringResourcesPages } from './FlipbookPages';
 import { toast } from '@/components/ui/use-toast';
 import { FileText } from 'lucide-react';
@@ -9,33 +9,29 @@ import { FileText } from 'lucide-react';
 // This would be the path to your pre-loaded PDF file
 const DEFAULT_PDF_URL = "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf";
 
-// Make sure the type matches exactly what's defined in EnhancedFlipbook
-interface FlipbookPage {
-  id: number;
-  type: 'image' | 'pdf';
-  content: React.ReactNode;
-}
-
 const EngineeringPDFFlipbook: React.FC = () => {
   // Create the PDF pages from the default PDF URL
   const pdfPages: FlipbookPage[] = [
     {
-      id: Date.now(),
-      type: 'pdf',
-      content: (
-        <div className="h-full w-full">
-          <iframe 
-            src={`${DEFAULT_PDF_URL}#toolbar=0`} 
-            className="w-full h-full" 
-            title="Engineering Community PDF"
-          ></iframe>
-        </div>
-      )
+      url: DEFAULT_PDF_URL,
+      title: "Engineering Community PDF"
     }
   ];
   
-  // Combine PDF and existing sample pages that also conform to the FlipbookPage interface
-  const allPages = [...pdfPages, ...engineeringResourcesPages] as FlipbookPage[];
+  // Create dummy pages that match the FlipbookPage interface
+  const dummyPages: FlipbookPage[] = [
+    {
+      url: "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0001.jpg",
+      title: "Directory Page 1"
+    },
+    {
+      url: "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0002.jpg",
+      title: "Directory Page 2"
+    }
+  ];
+  
+  // Combine PDF and existing pages
+  const allPages = [...pdfPages, ...dummyPages];
   
   React.useEffect(() => {
     toast({
