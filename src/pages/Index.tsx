@@ -42,7 +42,16 @@ const Index = () => {
       </section>
       
       {/* Simple one-line advertisement */}
-      <SimpleLineAd shopName="Kerala Tiles Market" phoneNumber="+91 9876543210" email="contact@keralatiles.com" />
+      <div className="marquee-ad bg-sky-600">
+       <div className="marquee-ad-content">
+        <SimpleLineAd
+         shopName="Kerala Tiles Market"
+         phoneNumber="+91 9876543210"
+         email="contact@keralatiles.com"
+        />
+       </div>
+      </div>
+
 
       
       <section className="flex justify-center items-center py-8 bg-gradient-to-r from-gray-50 to-gray-100">
@@ -52,8 +61,11 @@ const Index = () => {
       </section>
       
       {/* Simple one-line advertisement */}
+  <div className="marquee-ad bg-sky-700">
+    <div className="marquee-ad-content">
       <SimpleLineAd shopName="Automobile Shop" phoneNumber="+91 9652143210" email="contact@automobiles.com" />
-
+    </div>
+  </div>
       
 
       {/* Shop Finder Section */}
@@ -63,6 +75,6 @@ const Index = () => {
           <ShopFinder />
         </div>
       </section>
-  </Layout>;
+</Layout>;
 };
 export default Index;

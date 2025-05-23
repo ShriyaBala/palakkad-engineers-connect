@@ -129,4 +129,20 @@
   .section-heading {
     @apply text-3xl font-bold text-engineering-800 mb-6 font-heading;
   }
+  .marquee-ad {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.marquee-ad-content {
+  display: inline-block;
+  
+  animation: marquee-right 24s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 }

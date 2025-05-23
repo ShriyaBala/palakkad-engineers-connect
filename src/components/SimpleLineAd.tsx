@@ -5,14 +5,16 @@ interface SimpleLineAdProps {
   phoneNumber: string;
   email: string;
 }
+// ...existing imports...
 const SimpleLineAd: React.FC<SimpleLineAdProps> = ({
   shopName,
   phoneNumber,
   email
 }) => {
-  return <div className="border-t border-b border-engineering-100 py-3 text-sm bg-sky-600">
+  return (
+    <div className="py-3 text-sm bg-sky-600">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+        <div className="flex flex-nowrap items-center gap-4 md:gap-8">
           <span className="font-medium">{shopName}</span>
           <div className="flex items-center">
             <Phone size={14} className="mr-1 text-engineering-600" />
@@ -24,6 +26,7 @@ const SimpleLineAd: React.FC<SimpleLineAdProps> = ({
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default SimpleLineAd;
