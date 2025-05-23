@@ -8,7 +8,7 @@ import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { FileText, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import IndustryAds from '@/components/IndustryAds';
+import SimpleLineAd from '@/components/SimpleLineAd';
 
 const Index = () => {
   return (
@@ -38,6 +38,13 @@ const Index = () => {
           <EnhancedAdvertisements />
         </div>
       </section>
+      
+      {/* Simple one-line advertisement */}
+      <SimpleLineAd 
+        shopName="Kerala Tiles Market" 
+        phoneNumber="+91 9876543210" 
+        email="contact@keralatiles.com" 
+      />
       
       {/* Marketers Showcase - Book/PDF Style Layout */}
       <MarketersShowcase title="Connect with our Marketing Partners" />

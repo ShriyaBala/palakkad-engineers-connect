@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Phone, MapPin, Store, Globe } from 'lucide-react';
+import { Phone, MapPin, Store, Globe, Mail } from 'lucide-react';
 
 // Shop categories for selection
 const shopCategories = ["All Categories", "Tiles", "Electrical", "Plumbing", "Hardware", "Paint", "Furniture", "Construction Materials", "Home Appliances", "Electronics", "Automation"];
@@ -21,7 +21,9 @@ interface Shop {
   category: string;
   location: string;
   phone: string;
+  email?: string;
   website?: string;
+  mapLink?: string;
 }
 
 const sampleShops: Shop[] = [
@@ -31,14 +33,18 @@ const sampleShops: Shop[] = [
     category: "Tiles",
     location: "Palakkad Town",
     phone: "+91 9876543210",
-    website: "www.keralatiles.com"
+    email: "contact@keralatiles.com",
+    website: "www.keralatiles.com",
+    mapLink: "https://maps.google.com/?q=Palakkad+Town+Kerala+India"
   },
   {
     id: 2,
     name: "TechAutomation Store",
     category: "Automation",
     location: "Kanjikode",
-    phone: "+91 9876543211"
+    phone: "+91 9876543211",
+    email: "info@techautomation.in",
+    mapLink: "https://maps.google.com/?q=Kanjikode+Kerala+India"
   },
   {
     id: 3,
@@ -46,14 +52,18 @@ const sampleShops: Shop[] = [
     category: "Hardware",
     location: "Palakkad Town",
     phone: "+91 9876543212",
-    website: "www.metalcraftshop.com"
+    email: "sales@metalcraftshop.com",
+    website: "www.metalcraftshop.com",
+    mapLink: "https://maps.google.com/?q=Palakkad+Town+Kerala+India"
   },
   {
     id: 4,
     name: "Palakkad Builders Mart",
     category: "Construction Materials",
     location: "Chittur",
-    phone: "+91 9876543213"
+    phone: "+91 9876543213",
+    email: "info@buildersmart.co.in",
+    mapLink: "https://maps.google.com/?q=Chittur+Kerala+India"
   },
   {
     id: 5,
@@ -61,7 +71,9 @@ const sampleShops: Shop[] = [
     category: "Electronics",
     location: "Kanjikode",
     phone: "+91 9876543214",
-    website: "www.smartfactory.in"
+    email: "contact@smartfactory.in",
+    website: "www.smartfactory.in",
+    mapLink: "https://maps.google.com/?q=Kanjikode+Kerala+India"
   },
   {
     id: 6,
@@ -69,14 +81,18 @@ const sampleShops: Shop[] = [
     category: "Furniture",
     location: "Ottapalam",
     phone: "+91 9876543215",
-    website: "www.designprostudio.com"
+    email: "hello@designprostudio.com",
+    website: "www.designprostudio.com",
+    mapLink: "https://maps.google.com/?q=Ottapalam+Kerala+India"
   },
   {
     id: 7,
     name: "Electrical World",
     category: "Electrical",
     location: "Shoranur",
-    phone: "+91 9876543216"
+    phone: "+91 9876543216",
+    email: "sales@electricalworld.in",
+    mapLink: "https://maps.google.com/?q=Shoranur+Kerala+India"
   },
   {
     id: 8,
@@ -84,7 +100,9 @@ const sampleShops: Shop[] = [
     category: "Construction Materials",
     location: "Mannarkkad",
     phone: "+91 9876543217",
-    website: "www.civilstore.com"
+    email: "info@civilstore.com",
+    website: "www.civilstore.com",
+    mapLink: "https://maps.google.com/?q=Mannarkkad+Kerala+India"
   },
   {
     id: 9,
@@ -92,21 +110,27 @@ const sampleShops: Shop[] = [
     category: "Electronics",
     location: "Pattambi",
     phone: "+91 9876543218",
-    website: "www.greenenergy.net"
+    email: "connect@greenenergy.net",
+    website: "www.greenenergy.net",
+    mapLink: "https://maps.google.com/?q=Pattambi+Kerala+India"
   },
   {
     id: 10,
     name: "Modern Tiles Gallery",
     category: "Tiles",
     location: "Palakkad Town",
-    phone: "+91 9876543219"
+    phone: "+91 9876543219",
+    email: "info@moderntilesgallery.com",
+    mapLink: "https://maps.google.com/?q=Palakkad+Town+Kerala+India"
   },
   {
     id: 11,
     name: "Safety First Hardware",
     category: "Hardware",
     location: "Alathur",
-    phone: "+91 9876543220"
+    phone: "+91 9876543220",
+    email: "contact@safetyhardware.in",
+    mapLink: "https://maps.google.com/?q=Alathur+Kerala+India"
   },
   {
     id: 12,
@@ -114,7 +138,9 @@ const sampleShops: Shop[] = [
     category: "Plumbing",
     location: "Ottapalam",
     phone: "+91 9876543221",
-    website: "www.plumbingsolutions.co.in"
+    email: "info@plumbingsolutions.co.in",
+    website: "www.plumbingsolutions.co.in",
+    mapLink: "https://maps.google.com/?q=Ottapalam+Kerala+India"
   }
 ];
 
@@ -160,6 +186,11 @@ const ShopFinder: React.FC = () => {
     setSelectedCategory('All Categories');
     setSelectedLocation('All Locations');
     setSearchResults(sampleShops);
+  };
+
+  // Open map link
+  const openMapLink = (mapLink: string) => {
+    window.open(mapLink, '_blank');
   };
 
   return (
@@ -270,26 +301,33 @@ const ShopFinder: React.FC = () => {
             {searchResults.map(shop => (
               <Card key={shop.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg">{shop.name}</h3>
-                    <Badge>{shop.category}</Badge>
-                  </div>
+                  <h3 className="font-semibold text-lg mb-3">{shop.name}</h3>
                   
-                  <div className="flex items-center text-gray-600 mb-2 mt-2">
-                    <MapPin size={16} className="mr-2 text-engineering-600 flex-shrink-0" />
-                    <span className="text-sm">{shop.location}</span>
-                  </div>
-                  
-                  <div className="space-y-2 mt-3">
-                    <a href={`tel:${shop.phone}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors font-medium">
+                  <div className="space-y-3">
+                    <div 
+                      className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors cursor-pointer"
+                      onClick={() => shop.mapLink && openMapLink(shop.mapLink)}
+                    >
+                      <MapPin size={16} className="mr-2 flex-shrink-0" />
+                      <span className="underline">{shop.location}</span>
+                    </div>
+
+                    <a href={`tel:${shop.phone}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
                       <Phone size={16} className="mr-2 flex-shrink-0" />
                       {shop.phone}
                     </a>
                     
+                    {shop.email && (
+                      <a href={`mailto:${shop.email}`} className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
+                        <Mail size={16} className="mr-2 flex-shrink-0" />
+                        <span className="text-sm truncate">{shop.email}</span>
+                      </a>
+                    )}
+                    
                     {shop.website && (
-                      <a href={`https://${shop.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors text-sm">
+                      <a href={`https://${shop.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors">
                         <Globe size={16} className="mr-2 flex-shrink-0" />
-                        {shop.website}
+                        <span className="text-sm truncate">{shop.website}</span>
                       </a>
                     )}
                   </div>
