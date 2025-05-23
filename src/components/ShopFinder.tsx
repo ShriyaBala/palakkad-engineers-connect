@@ -172,7 +172,7 @@ const ShopFinder: React.FC = () => {
   const openMapLink = (mapLink: string) => {
     window.open(mapLink, '_blank');
   };
-  return <section className="py-12 rounded-none bg-sky-50">
+  return <section className="py-12 rounded-none bg-sky-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">Find Shops in Palakkad</h2>
         
