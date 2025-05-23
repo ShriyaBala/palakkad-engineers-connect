@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Phone, FileText, Video, Mail, Globe, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Marketer {
   id: number;

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ZoomIn, ZoomOut, ZoomReset } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 
 export interface ZoomControlsProps {
   zoomLevel: number;
@@ -45,6 +45,7 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({
         onClick={onResetZoom}
         className="text-xs"
       >
+        <RotateCcw size={14} className="mr-1" />
         Reset
       </Button>
     </div>
