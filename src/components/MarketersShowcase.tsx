@@ -106,7 +106,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
         <div className="flex flex-col lg:flex-row gap-8 items-stretch">
           <div className="lg:w-1/2">
             {/* First page of the book */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden transform -rotate-1 mb-6">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6 min-h-[500px] flex flex-col">
               <div className="h-6 bg-engineering-600"></div>
               <div className="p-6 mx-[4px] my-px px-[29px] py-[27px] rounded-none">
                 <div className="border-b border-gray-200 pb-4 mb-4">
@@ -142,14 +142,14 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
                     </a>}
                 </div>
                 
-                <div className="text-right text-sm text-gray-500">Page 1</div>
+               
               </div>
             </div>
             
             {/* Third page */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden transform rotate-1 mt-6">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mt-6 min-h-[500px] flex flex-col">
               <div className="h-6 bg-engineering-600"></div>
-              <div className="p-6">
+              <div className="p-6 flex-1 flex flex-col">
                 <div className="border-b border-gray-200 pb-4 mb-4">
                   <h3 className="text-2xl font-bold">{sortedMarketers[2].name}</h3>
                   <Badge className="mt-2">{sortedMarketers[2].industry}</Badge>
@@ -183,16 +183,16 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
                     </a>}
                 </div>
                 
-                <div className="text-right text-sm text-gray-500">Page 3</div>
+           
               </div>
             </div>
           </div>
           
           <div className="lg:w-1/2">
             {/* Second page */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden transform rotate-1 mb-6">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6 min-h-[500px] flex flex-col">
               <div className="h-6 bg-engineering-600"></div>
-              <div className="p-6">
+              <div className="p-6 flex-1 flex flex-col">
                 <div className="border-b border-gray-200 pb-4 mb-4">
                   <h3 className="text-2xl font-bold">{sortedMarketers[1].name}</h3>
                   <Badge className="mt-2">{sortedMarketers[1].industry}</Badge>
@@ -226,14 +226,14 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
                     </a>}
                 </div>
                 
-                <div className="text-right text-sm text-gray-500">Page 2</div>
+
               </div>
             </div>
             
             {/* Fourth page */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden transform -rotate-1 mt-6">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mt-6 min-h-[500px] flex flex-col">
               <div className="h-6 bg-engineering-600"></div>
-              <div className="p-6">
+              <div className="p-6 flex-1 flex flex-col">
                 <div className="border-b border-gray-200 pb-4 mb-4">
                   <h3 className="text-2xl font-bold">{sortedMarketers[3].name}</h3>
                   <Badge className="mt-2">{sortedMarketers[3].industry}</Badge>
@@ -267,7 +267,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
                     </a>}
                 </div>
                 
-                <div className="text-right text-sm text-gray-500">Page 4</div>
+                
               </div>
             </div>
           </div>
