@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { MapPin, Briefcase } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from "@/components/ui/badge";
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Phone, Mail, Globe, MapPin, Award, CheckCircle } from 'lucide-react';
 import { Engineer } from '@/contexts/SearchContext';
 
 interface EngineerCardProps {
@@ -12,57 +11,94 @@ interface EngineerCardProps {
 
 const EngineerCard: React.FC<EngineerCardProps> = ({ engineer }) => {
   return (
-    <Card key={engineer.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <CardContent className="p-0">
-        <div className="flex items-start p-4">
-          <div className="relative">
-            <img 
-              src={engineer.profileImage}
-              alt={engineer.name}
-              className="w-16 h-16 object-cover rounded-full mr-4"
-            />
-            {engineer.verified && (
-              <span className="absolute -top-1 -right-1 bg-green-500 rounded-full p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </span>
-            )}
-          </div>
-          <div>
-            <h3 className="font-medium text-lg">{engineer.name}</h3>
-            <p className="text-sm text-gray-600">{engineer.specialization}</p>
-            <div className="flex items-center text-sm text-gray-500 mt-2">
-              <MapPin size={14} className="mr-1" />
-              {engineer.location} ({engineer.distance})
-            </div>
-            <div className="flex items-center text-sm text-gray-500 mt-1">
-              <Briefcase size={14} className="mr-1" />
-              {engineer.occupation} • {engineer.experience} years
-            </div>
-          </div>
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
+      <div className="relative">
+        <img 
+          src={engineer.profileImage} 
+          alt={engineer.name} 
+          className="h-48 w-full object-cover"
+        />
+        {engineer.verified && (
+          <Badge className="absolute top-2 right-2 bg-green-100 text-green-800 border-green-300 flex items-center gap-1">
+            <CheckCircle size={12} />
+            <span>Verified</span>
+          </Badge>
+        )}
+      </div>
+      
+      <CardContent className="p-4 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="font-semibold text-lg">{engineer.name}</h3>
+          <Badge variant="outline">{engineer.specialization}</Badge>
         </div>
         
-        <div className="px-4 py-2 border-t border-gray-100">
-          <div className="flex flex-wrap gap-1 mb-3">
-            {engineer.skills?.slice(0, 3).map((skill, i) => (
-              <Badge key={i} variant="outline" className="text-xs bg-engineering-50">
-                {skill}
-              </Badge>
-            ))}
+        {engineer.occupation && (
+          <div className="flex items-center mb-3">
+            <Award size={16} className="mr-2 text-engineering-500" />
+            <span className="text-gray-700">{engineer.occupation}</span>
           </div>
+        )}
+        
+        <div className="flex items-center text-gray-600 mb-2">
+          <MapPin size={16} className="mr-2 text-engineering-600" />
+          <span>{engineer.location}</span>
+          <span className="ml-1 text-gray-400 text-sm">({engineer.distance})</span>
         </div>
         
-        <div className="border-t border-gray-100 p-4 flex justify-between items-center">
-          <div className="text-sm">
-            {engineer.contactDetails?.email && (
-              <a href={`mailto:${engineer.contactDetails.email}`} className="text-engineering-600 hover:underline">
-                Contact
-              </a>
-            )}
+        {engineer.skills && engineer.skills.length > 0 && (
+          <div className="mb-3">
+            <div className="flex flex-wrap gap-1 mt-1">
+              {engineer.skills.map((skill, index) => (
+                <span 
+                  key={index}
+                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-          <Button variant="outline" size="sm">View Profile</Button>
+        )}
+        
+        <div className="mt-auto space-y-2">
+          {engineer.contactDetails?.phone && (
+            <a 
+              href={`tel:${engineer.contactDetails.phone}`}
+              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors font-medium"
+            >
+              <Phone size={16} className="mr-2" />
+              {engineer.contactDetails.phone}
+            </a>
+          )}
+          
+          {engineer.contactDetails?.email && (
+            <a 
+              href={`mailto:${engineer.contactDetails.email}`}
+              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors"
+            >
+              <Mail size={16} className="mr-2" />
+              <span className="text-sm">{engineer.contactDetails.email}</span>
+            </a>
+          )}
+          
+          {engineer.contactDetails?.website && (
+            <a 
+              href={`https://${engineer.contactDetails.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors"
+            >
+              <Globe size={16} className="mr-2" />
+              <span className="text-sm">{engineer.contactDetails.website}</span>
+            </a>
+          )}
         </div>
+        
+        {engineer.experience && (
+          <div className="mt-3 text-sm text-gray-600">
+            {engineer.experience} years of experience
+          </div>
+        )}
       </CardContent>
     </Card>
   );
