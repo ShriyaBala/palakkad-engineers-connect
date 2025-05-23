@@ -7,8 +7,8 @@ import React, { useEffect, useState } from 'react';
 const pdfAds = [
   "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0006.jpg",
   "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0007.jpg",
-  "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0008.jpg",
-  "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0009.jpg"
+  "https://dcassetcdn.com/design_img/3837580/456467/24259615/k6h6tq8n973mammy0w7bfrat69_thumbnail.png",
+  "https://design-assets.adobeprojectm.com/content/download/express/public/urn:aaid:sc:VA6C2:344ad42e-5176-5256-95da-d868bf3ade97/component?assetType=TEMPLATE&etag=dd2f5ecdf13646be9f0f9622ee37b734&revision=b9aec714-4e40-4425-9b00-3ba131be20c1&component_id=3aba44f2-c50f-4b04-b5b3-db2f03ee4c90"
   // Add more PDF ad image paths here if needed
 ];
 
