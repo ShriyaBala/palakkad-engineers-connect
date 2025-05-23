@@ -45,7 +45,7 @@ const Index = () => {
       <SimpleLineAd shopName="Kerala Tiles Market" phoneNumber="+91 9876543210" email="contact@keralatiles.com" />
 
       
-      <section className="flex justify-center items-center py-8 bg-gradient-to-r from-gray-50 to-gray-100"></section>
+      <section className="flex justify-center items-center py-8 bg-gradient-to-r from-gray-50 to-gray-100">
     
       {/* Marketers Showcase - Book/PDF Style Layout */}
       <MarketersShowcase title="Connect with our Marketing Partners" />
@@ -60,6 +60,7 @@ const Index = () => {
           <ShopFinder />
         </div>
       </section>
-    </Layout>;
+  </Layout>
 };
+
 export default Index;
