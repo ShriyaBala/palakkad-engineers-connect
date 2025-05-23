@@ -51,6 +51,9 @@ const Index = () => {
       <MarketersShowcase title="Connect with our Marketing Partners" />
       </section>
       
+      {/* Simple one-line advertisement */}
+      <SimpleLineAd shopName="Automobile Shop" phoneNumber="+91 9652143210" email="contact@automobiles.com" />
+
       
 
       {/* Shop Finder Section */}

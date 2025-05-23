@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Phone, FileText, Video, Mail, Globe, MapPin } from 'lucide-react';
@@ -91,17 +92,29 @@ interface MarketersShowcaseProps {
 const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({
   title = "Our Marketing Partners"
 }) => {
+   const imageAdUrl = "https://www.adbanao.com/img/industryimages_new/tiles-sanitary-fittings/tiles-sanitary-fittings.webp";
   // Sort marketers by priority (highest first)
   const sortedMarketers = [...marketers].sort((a, b) => b.priority - a.priority);
   return (
   <section className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-50 to-gray-100">
-    <img
-      src="/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0006.jpg"
-      alt="PDF Advertisement Page"
-      style={{ display: 'block' }}
-    />
-    
+    <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl items-center justify-center px-4">
+      {/* First PDF Advertisement */}
+      <img
+        src="/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0006.jpg"
+        alt="PDF Advertisement Page 1"
+        className="block max-h-[80vh] w-auto h-auto max-w-full rounded shadow"
+        style={{ objectFit: 'contain' }}
+      />
+      {/* Second PDF Advertisement */}
+      <img
+        src="/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0007.jpg"
+        alt="PDF Advertisement Page 2"
+        className="block max-h-[80vh] w-auto h-auto max-w-full rounded shadow"
+        style={{ objectFit: 'contain' }}
+      />
+    </div>
   </section>
 );
+
 };
 export default MarketersShowcase;
