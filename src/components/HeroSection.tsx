@@ -27,16 +27,10 @@ const HeroSection: React.FC = () => {
                 
               </Link>
               <Link to="/resources" className="w-full">
-                <Button variant="secondary" className="flex items-center gap-2 w-full">
-                  <FileText size={18} />
-                  <span>Resources</span>
-                </Button>
+                
               </Link>
               <Link to="/members" className="w-full">
-                <Button className="bg-kerala-600 text-white hover:bg-kerala-700 flex items-center gap-2 w-full">
-                  <Search size={18} />
-                  <span>Find Engineers</span>
-                </Button>
+                
               </Link>
             </div>
           </div>
