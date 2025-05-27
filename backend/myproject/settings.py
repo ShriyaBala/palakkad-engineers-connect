@@ -57,11 +57,6 @@ INSTALLED_APPS = [
     'myapi',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'allauth',
-    'allauth.account',
-    'dj_rest_auth.registration',
     
    
 
