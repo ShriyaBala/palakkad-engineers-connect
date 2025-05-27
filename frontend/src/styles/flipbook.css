@@ -1,0 +1,199 @@
+.flipbook {
+  transition: transform 0.5s ease;
+}
+
+.page {
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.page-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.page-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.book-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  min-height: 800px;
+}
+
+.book {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+  aspect-ratio: 1.5;
+}
+
+.pages {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-page {
+  border-right: 1px solid #ddd;
+}
+
+.right-page {
+  border-left: 1px solid #ddd;
+}
+
+.page-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1rem;
+}
+
+.page-number {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.controls {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.control-button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.control-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.control-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.demo-book {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  background: white;
+  border: 1px solid #ddd;
+}
+
+/* Page turn effect */
+.page.--hard {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  box-shadow: inset -7px 0 30px -7px rgba(0, 0, 0, 0.1);
+}
+
+.page.--turning {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .book-container {
+    padding: 1rem;
+    min-height: 600px;
+  }
+
+  .book {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .page {
+    width: 100%;
+  }
+
+  .page-image {
+    padding: 0.5rem;
+  }
+
+  .controls {
+    bottom: -40px;
+  }
+
+  .control-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
