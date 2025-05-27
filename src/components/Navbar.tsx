@@ -42,19 +42,17 @@ const Navbar: React.FC = () => {
               </button>
               {activeDropdown === 'about' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
                 <Link to="/about" className="block px-4 py-2 hover:bg-gray-50">About Us</Link>
-              
               </div>}
             </div>
             
             <div className="relative">
               <button className="flex items-center space-x-1 text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1" onClick={() => toggleDropdown('members')}>
-                
-                
+                <span>Members</span>
+                <ChevronDown size={16} />
               </button>
               {activeDropdown === 'members' && <div className="absolute top-full left-0 bg-white shadow-md rounded-md py-2 w-48 z-50">
-                  
-                  
-                </div>}
+                <Link to="/members" className="block px-4 py-2 hover:bg-gray-50">Members</Link>
+              </div>}
             </div>
             
             <Link to="/events" className="text-gray-700 hover:text-engineering-600 transition-colors px-2 py-1">
@@ -75,8 +73,12 @@ const Navbar: React.FC = () => {
           </nav>
           
           <div className="hidden md:flex items-center space-x-2">
-            <Button size="sm" variant="outline">Log in</Button>
-            <Button size="sm">Join Us</Button>
+            <Link to="/login">
+              <Button size="sm" variant="outline">Log in</Button>
+            </Link>
+            <Link to="/register">
+              <Button size="sm">Join Us</Button>
+            </Link>
           </div>
           
           {/* Mobile menu button */}
@@ -117,8 +119,12 @@ const Navbar: React.FC = () => {
               </Link>
               
               <div className="flex flex-col space-y-2 px-4 pt-4 border-t mt-2">
-                <Button size="sm" variant="outline" className="w-full">Log in</Button>
-                <Button size="sm" className="w-full">Join Us</Button>
+                <Link to="/login">
+                  <Button size="sm" variant="outline" className="w-full">Log in</Button>
+                </Link>
+                <Link to="/register">
+                  <Button size="sm" className="w-full">Join Us</Button>
+                </Link>
               </div>
             </nav>
           </div>}

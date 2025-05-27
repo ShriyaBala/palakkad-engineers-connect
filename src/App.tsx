@@ -12,6 +12,8 @@ import About from "./pages/About";
 import Members from "./pages/Members";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />
