@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 
 import '@/styles/flipbook.css'; // ✅ Ensure this path is correct
 import { engineeringResourcesPages } from '@/components/FlipbookPages'; // ✅ Ensure this path is correct
-import Flipbook from '../components/Flipbook';
+import FlipBook from '../components/Flipbook';
 
 
 const Resources = () => (
@@ -15,7 +15,7 @@ const Resources = () => (
         </h1>
         
         <div className="w-full">
-          <Flipbook />
+          <FlipBook />
         </div>
       </div>
     </div>
