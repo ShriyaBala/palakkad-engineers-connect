@@ -1,20 +1,50 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt:', { email, password });
+    setError('');
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/auth/login/', {
+        email,
+        password,
+      });
+
+      // Store token in localStorage
+      localStorage.setItem('accessToken', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
+
+
+      // Navigate to dashboard or home
+      navigate('/dashboard');
+    }  catch (err: any) {
+    if (err.response?.data?.detail) {
+      setError(err.response.data.detail); // common JWT error key
+    } else if (err.response?.data?.non_field_errors) {
+      setError(err.response.data.non_field_errors[0]);
+    } else {
+      setError('Login failed. Please try again.');
+    }
+  }
   };
 
   return (
@@ -31,6 +61,9 @@ const Login = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="text-red-600 text-sm text-center">{error}</div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -61,12 +94,12 @@ const Login = () => {
             <CardFooter className="flex flex-col space-y-2">
               <div className="text-sm text-center text-gray-600">
                 Don't have an account?{' '}
-                <Link to="/register" className="text-engineering-600 hover:underline">
+                <Link to="/register" className="text-blue-600 hover:underline">
                   Sign up here
                 </Link>
               </div>
               <div className="text-sm text-center">
-                <Link to="/forgot-password" className="text-engineering-600 hover:underline">
+                <Link to="/forgot-password" className="text-blue-600 hover:underline">
                   Forgot your password?
                 </Link>
               </div>

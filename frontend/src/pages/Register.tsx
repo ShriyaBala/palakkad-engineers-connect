@@ -1,36 +1,83 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
+import API from '@/api/axios'; // Axios instance
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
 
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (error) setError(null);
+    if (success) setSuccess(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match.');
       return;
     }
-    // Handle registration logic here
-    console.log('Registration attempt:', formData);
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const payload = {
+        username: formData.username,
+        email: formData.email,
+        password1: formData.password,
+        password2: formData.confirmPassword
+      };
+
+      const response = await API.post('auth/registration/', payload);
+
+      setSuccess('Registration successful! Redirecting to login...');
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err: any) {
+      if (err.response?.data) {
+        const messages = Object.values(err.response.data).flat();
+        setError(messages.join(' ') || 'Registration failed.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,45 +93,36 @@ const Register = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      placeholder="First name"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      placeholder="Last name"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                  />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="you@example.com"
                     value={formData.email}
                     onChange={handleChange}
                     required
+                    autoComplete="email"
+                    disabled={loading}
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input
@@ -95,29 +133,43 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    autoComplete="new-password"
+                    disabled={loading}
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
-                    placeholder="Confirm your password"
+                    placeholder="Re-enter your password"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    autoComplete="new-password"
+                    disabled={loading}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Create Account
+
+                {error && (
+                  <div className="text-sm text-red-600 text-center">{error}</div>
+                )}
+
+                {success && (
+                  <div className="text-sm text-green-600 text-center">{success}</div>
+                )}
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </form>
             </CardContent>
             <CardFooter className="text-center">
               <div className="text-sm text-gray-600">
                 Already have an account?{' '}
-                <Link to="/login" className="text-engineering-600 hover:underline">
+                <Link to="/login" className="text-blue-600 hover:underline">
                   Sign in here
                 </Link>
               </div>
