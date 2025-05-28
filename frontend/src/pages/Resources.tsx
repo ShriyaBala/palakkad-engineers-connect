@@ -1,5 +1,8 @@
 import React from 'react';
 import Layout from '@/components/Layout';
+
+import '@/styles/flipbook.css'; // ✅ Ensure this path is correct
+import { engineeringResourcesPages } from '@/components/FlipbookPages'; // ✅ Ensure this path is correct
 import Flipbook from '../components/Flipbook';
 
 
