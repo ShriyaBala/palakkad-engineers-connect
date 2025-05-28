@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@/components/Layout';
-import Flipbook from '@/components/Flipbook';
+import Flipbook from '../components/Flipbook';
+
 
 const Resources = () => (
   <Layout>
