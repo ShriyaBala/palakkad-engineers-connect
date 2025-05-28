@@ -1,15 +1,10 @@
-
-
 import { Card, CardContent } from '@/components/ui/card';
-import React, { useEffect, useState } from 'react';
-// ...other imports...
+import React, { useEffect, useRef, useState } from 'react';
 
 const pdfAds = [
-  "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0006.jpg",
-  "/resources/ilovepdf_pages-to-jpg (1)/directory inner_page-0007.jpg",
-  "https://dcassetcdn.com/design_img/3837580/456467/24259615/k6h6tq8n973mammy0w7bfrat69_thumbnail.png",
-  "https://design-assets.adobeprojectm.com/content/download/express/public/urn:aaid:sc:VA6C2:344ad42e-5176-5256-95da-d868bf3ade97/component?assetType=TEMPLATE&etag=dd2f5ecdf13646be9f0f9622ee37b734&revision=b9aec714-4e40-4425-9b00-3ba131be20c1&component_id=3aba44f2-c50f-4b04-b5b3-db2f03ee4c90"
-  // Add more PDF ad image paths here if needed
+  "/resources/WhatsApp Image 2025-05-28 at 12.33.42_55b4be14.jpg",
+  "/videos/WhatsApp Video 2025-05-28 at 12.33.44_81a0e804.mp4", // Video ad
+  // Add more image or video paths here if needed
 ];
 
 interface MarketersShowcaseProps {
@@ -18,14 +13,26 @@ interface MarketersShowcaseProps {
 
 const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({ title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isVideo = pdfAds[currentIndex].toLowerCase().endsWith('.mp4');
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % pdfAds.length);
-    }, 5000); // 3000ms = 3 seconds
+    let timer: NodeJS.Timeout | undefined;
+    if (!isVideo) {
+      timer = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % pdfAds.length);
+      }, 5000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [currentIndex, isVideo]);
 
-    return () => clearInterval(timer);
-  }, []);
+  // Handler for when the video ends
+  const handleVideoEnd = () => {
+    setCurrentIndex((prev) => (prev + 1) % pdfAds.length);
+  };
 
   return (
     <div>
@@ -33,12 +40,26 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({ title }) => {
       <div className="flex justify-center">
         <Card>
           <CardContent>
-            <img
-              src={pdfAds[currentIndex]}
-              alt={`Ad ${currentIndex + 1}`}
-              className="w-full h-auto rounded max-h-[80vh]"
-              style={{ objectFit: 'contain' }}
-            />
+            {isVideo ? (
+              <video
+                ref={videoRef}
+                src={pdfAds[currentIndex]}
+                className="w-full h-auto rounded max-h-[80vh]"
+                style={{ objectFit: 'contain' }}
+                controls
+                playsInline
+                preload="auto"
+                onEnded={handleVideoEnd}
+                autoPlay
+              />
+            ) : (
+              <img
+                src={pdfAds[currentIndex]}
+                alt={`Ad ${currentIndex + 1}`}
+                className="w-full h-auto rounded max-h-[80vh]"
+                style={{ objectFit: 'contain' }}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
