@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const pdfAds = [
   "/resources/WhatsApp Image 2025-05-28 at 12.33.42_55b4be14.jpg",
-  "/videos/WhatsApp Video 2025-05-28 at 12.33.44_81a0e804.mp4", // Video ad
+  "/videos/WhatsApp Video 2025-05-28 at 12.33.42_e9909f36.mp4", // Video ad
   // Add more image or video paths here if needed
 ];
 

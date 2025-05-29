@@ -57,7 +57,7 @@ const Index = () => {
       <section className="flex justify-center items-center py-8 bg-gradient-to-r from-gray-50 to-gray-100">
     
       {/* Marketers Showcase - Book/PDF Style Layout */}
-      <MarketersShowcase title="Connect with our Marketing Partners" />
+      <MarketersShowcase title />
       </section>
       
       {/* Simple one-line advertisement */}

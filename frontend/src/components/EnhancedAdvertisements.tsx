@@ -13,15 +13,10 @@ interface Advertisement {
 
 const advertisements: Advertisement[] = [
   {
-    id: 1,
-    type: 'image',
-    src: '/resources/WhatsApp Image 2025-05-28 at 12.33.42_55b4be14.jpg',
     
-  },
-  {
-    id: 2,
+    id: 1,
     type: 'video',
-    src: '/videos/WhatsApp Video 2025-05-28 at 12.33.42_e9909f36.mp4',
+    src: '/videos/WhatsApp Video 2025-05-28 at 12.33.44_81a0e804.mp4',
     
   }
 ];
