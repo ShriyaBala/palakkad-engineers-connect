@@ -10,9 +10,9 @@ router.register(r'pages', PageContentViewSet)
 urlpatterns = [
   
     path('register', CreateUserView.as_view(), name='user-register'),
-    path('myapi/user/login/', TokenObtainPairView.as_view(), name='get_token'),
-    path('myapi/user/token/refresh/', TokenRefreshView.as_view(), name='refresh'),
-    path('myapi-auth/',include('rest_framework.urls')),
+    path('api/user/login/', TokenObtainPairView.as_view(), name='get_token'),
+    path('api/user/token/refresh/', TokenRefreshView.as_view(), name='refresh'),
+    path('api-auth/',include('rest_framework.urls')),
     path('', include(router.urls)),
     path('api/auth/', include('dj_rest_auth.urls')),  # login/logout
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),  # signup

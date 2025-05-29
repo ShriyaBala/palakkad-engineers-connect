@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 
 import '@/styles/flipbook.css'; // ✅ Ensure this path is correct
 import { engineeringResourcesPages } from '@/components/FlipbookPages'; // ✅ Ensure this path is correct
-import FlipBook from '../components/Flipbook';
+import FlipBook from '../components/FlipBook';
 
 
 const Resources = () => (

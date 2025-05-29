@@ -48,24 +48,29 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapi',
+
+    # Third-party apps
     'rest_framework',
-    'corsheaders',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
+
     'allauth',
     'allauth.account',
-    'dj_rest_auth.registration',
-    
-   
+    'allauth.socialaccount',  # <--- THIS IS MISSING IN YOUR ERROR
+    'rest_framework_simplejwt.token_blacklist',
 
+    # Your apps
+    'myapi',  # replace with your actual app name
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,6 +81,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # React runs on this port

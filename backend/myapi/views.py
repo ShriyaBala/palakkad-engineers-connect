@@ -15,3 +15,15 @@ class PageContentViewSet(viewsets.ModelViewSet):
     queryset = PageContent.objects.all()
     serializer_class = PageContentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+def register(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        if not username or not password:
+            return HttpResponse("This field is required.")
+
+        # Now create the user
+        User.objects.create_user(username=username, password=password)
+        return redirect("login")
+    return render(request, "register.html")
