@@ -211,20 +211,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
         >
           <ChevronRight size={24} />
         </Button>
-        <div className="absolute bottom-20 right-6 flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="bg-black/60 hover:bg-black/80 text-white rounded-full w-8 h-8"
-            onClick={toggleAutoplay}
-          >
-            {isPlaying && !isVideoPlaying ? (
-              <Pause size={16} />
-            ) : (
-              <Play size={16} />
-            )}
-          </Button>
-        </div>
+        
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {filteredAds.map((_, index) => {
             const tierStyle = getTierStyles(filteredAds[index].tier);
