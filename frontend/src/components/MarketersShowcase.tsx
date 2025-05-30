@@ -36,7 +36,7 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({ title }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">{title || "Marketers Showcase"}</h2>
+      
       <div className="flex justify-center">
         <Card>
           <CardContent>

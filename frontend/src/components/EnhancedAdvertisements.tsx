@@ -132,77 +132,61 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
 
   return (
     <>
-      <div className="relative overflow-hidden bg-white shadow-md rounded-lg">
+      <div className="relative overflow-hidden">
         <div className="text-center py-6">
           {showTierIndicator && (
             <div className="flex justify-center gap-3 mb-4"></div>
           )}
         </div>
         <div className="relative">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateX(-${currentIndex * 100}%)`
-            }}
-          >
-            {filteredAds.map((ad, idx) => {
-              const tierStyle = getTierStyles(ad.tier);
-              return (
-                <div
-                  key={ad.id}
-                  className={`min-w-full border-t-4 ${tierStyle.class} relative`}
-                >
-                  {ad.type === 'video' ? (
-                    <div className="relative flex flex-col items-center justify-center h-full">
-                      <video
-                        key={currentIndex === idx ? ad.src : undefined}
-                        ref={el => {
-                          if (idx === currentIndex) videoRef.current = el;
-                        }}
-                        src={ad.src}
-                        className="w-full h-[400px] object-cover"
-                        controls
-                        playsInline
-                        preload="auto"
-                        autoPlay
-                        muted={currentIndex !== idx}
-                        onPlay={handleVideoPlay}
-                        onEnded={handleVideoEnd}
-                        onPause={() => setIsVideoPlaying(false)}
-                        onError={e => {
-                          console.error("Video error:", e);
-                          if (videoRef.current) {
-                            videoRef.current.load();
-                          }
-                        }}
-                      />
-                      {ad.tier && (
-                        <div className="absolute top-4 right-4">
-                          <Badge className={tierStyle.badge}>
-                            {tierStyle.label}
-                          </Badge>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="relative flex flex-col items-center justify-center h-full">
-                      <img
-                        src={ad.src}
-                        alt={ad.title}
-                        className="w-full h-[400px] object-cover"
-                      />
-                      {ad.tier && (
-                        <div className="absolute top-4 right-4">
-                          <Badge className={tierStyle.badge}>
-                            {tierStyle.label}
-                          </Badge>
-                        </div>
-                      )}
+          <div className="flex transition-transform duration-500 ease-in-out">
+            <div className="min-w-full border-t-4 relative">
+              {filteredAds[currentIndex].type === 'video' ? (
+                <div className="relative flex flex-col items-center justify-center h-full">
+                  <video
+                    ref={videoRef}
+                    src={filteredAds[currentIndex].src}
+                    className="w-full h-[400px] object-cover"
+                    controls
+                    playsInline
+                    preload="auto"
+                    autoPlay
+                    muted={false}
+                    onPlay={handleVideoPlay}
+                    onEnded={handleVideoEnd}
+                    onPause={() => setIsVideoPlaying(false)}
+                    onError={e => {
+                      console.error("Video error:", e);
+                      if (videoRef.current) {
+                        videoRef.current.load();
+                      }
+                    }}
+                  />
+                  {filteredAds[currentIndex].tier && (
+                    <div className="absolute top-4 right-4">
+                      <Badge className={getTierStyles(filteredAds[currentIndex].tier).badge}>
+                        {getTierStyles(filteredAds[currentIndex].tier).label}
+                      </Badge>
                     </div>
                   )}
                 </div>
-              );
-            })}
+              ) : (
+                <div className="relative flex flex-col items-center justify-center h-full">
+                  <img
+                    src={filteredAds[currentIndex].src}
+                    alt={filteredAds[currentIndex].title}
+                    className="w-full h-[400px] object-cover"
+                  />
+                  {filteredAds[currentIndex].tier && (
+                    <div className="absolute top-4 right-4">
+                      <Badge className={getTierStyles(filteredAds[currentIndex].tier).badge}>
+                        {getTierStyles(filteredAds[currentIndex].tier).label}
+                      </Badge>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <Button
@@ -222,9 +206,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
         
         
       </div>
-      <div className="bg-gray-50 p-4 text-center text-sm text-gray-500">
-        Interested in advertising? Contact us to learn about our different advertising tiers.
-      </div>
+      
     </>
   );
 };
