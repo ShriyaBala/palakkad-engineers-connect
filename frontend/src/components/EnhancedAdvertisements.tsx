@@ -164,6 +164,8 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
                         controls
                         playsInline
                         preload="auto"
+                        autoPlay
+                        muted
                         onPlay={handleVideoPlay}
                         onEnded={handleVideoEnd}
                         onPause={() => setIsVideoPlaying(false)}
