@@ -212,25 +212,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
           <ChevronRight size={24} />
         </Button>
         
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {filteredAds.map((_, index) => {
-            const tierStyle = getTierStyles(filteredAds[index].tier);
-            return (
-              <button
-                key={index}
-                className={`w-3 h-3 rounded-full transition-colors border ${
-                  index === currentIndex
-                    ? `bg-white border-white ${
-                        filteredAds[index].tier === 'premium' &&
-                        'animate-pulse-highlight'
-                      }`
-                    : `bg-white/40 border-transparent hover:bg-white/70`
-                }`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            );
-          })}
-        </div>
+        
       </div>
       <div className="bg-gray-50 p-4 text-center text-sm text-gray-500">
         Interested in advertising? Contact us to learn about our different advertising tiers.
