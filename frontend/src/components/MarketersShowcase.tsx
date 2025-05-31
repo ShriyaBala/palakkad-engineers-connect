@@ -38,14 +38,13 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({ title }) => {
     <div>
       
       <div className="flex justify-center">
-        <Card>
-          <CardContent>
+        <Card className="bg-transparent shadow-none border-none">
+          <CardContent className="bg-transparent p-0">
             {isVideo ? (
               <video
                 ref={videoRef}
                 src={pdfAds[currentIndex]}
                 className="w-full h-auto rounded max-h-[80vh]"
-                style={{ objectFit: 'contain' }}
                 controls
                 playsInline
                 preload="auto"
@@ -57,7 +56,6 @@ const MarketersShowcase: React.FC<MarketersShowcaseProps> = ({ title }) => {
                 src={pdfAds[currentIndex]}
                 alt={`Ad ${currentIndex + 1}`}
                 className="w-full h-auto rounded max-h-[80vh]"
-                style={{ objectFit: 'contain' }}
               />
             )}
           </CardContent>
