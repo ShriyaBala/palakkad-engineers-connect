@@ -146,7 +146,7 @@ const EnhancedAdvertisements: React.FC<EnhancedAdvertisementsProps> = ({
                   <video
                     ref={videoRef}
                     src={filteredAds[currentIndex].src}
-                    className="w-full h-[400px] object-cover"
+                    className="w-full max-w-2x1 h-auto object-contain rounded"
                     controls
                     playsInline
                     preload="auto"
