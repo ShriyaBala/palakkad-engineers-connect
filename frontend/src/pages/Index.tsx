@@ -14,35 +14,40 @@ const Index = () => {
       <HeroSection />
       
       {/* Main Advertisement Section */}
-      <section className="py-12 bg-gradient-to-r from-engineering-50 to-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center gap-3 mt-4 mb-8">
-            <Link to="/advertising">
-              <Button
-  variant="outline"
-  className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2"
->
-  <FileText size={18} />
-  <span>Advertise With Us</span>
-</Button>
-            </Link>
-            <Button variant="outline" className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2" onClick={() => {
-            const shopFinderSection = document.getElementById('shop-finder-section');
-            if (shopFinderSection) {
-              shopFinderSection.scrollIntoView({
-                behavior: 'smooth'
-              });
-            }
-          }}>
-              <Search size={18} />
-              <span>Find Shops</span>
-            </Button>
-          </div>
-          
-          {/* Featured Carousel Advertisement */}
-          <EnhancedAdvertisements />
-        </div>
-      </section>
+     {/* Main Advertisement Section */}
+<section className="py-24 bg-gradient-to-r from-engineering-50 to-gray-50 flex flex-col items-center justify-center">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    {/* Centered Button Group */}
+    <div className="flex flex-row justify-center items-center gap-6 mb-12">
+      <Link to="/advertising">
+        <Button
+          variant="outline"
+          className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2"
+        >
+          <FileText size={18} />
+          <span>Advertise With Us</span>
+        </Button>
+      </Link>
+      <Button
+        variant="outline"
+        className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2"
+        onClick={() => {
+          const shopFinderSection = document.getElementById('shop-finder-section');
+          if (shopFinderSection) {
+            shopFinderSection.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        }}
+      >
+        <Search size={18} />
+        <span>Find Shops</span>
+      </Button>
+    </div>
+    {/* Featured Carousel Advertisement */}
+    <EnhancedAdvertisements />
+  </div>
+</section>
       
       {/* Simple one-line advertisement */}
       <div className="marquee-ad bg-sky-600">
