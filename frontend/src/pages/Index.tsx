@@ -15,10 +15,10 @@ const Index = () => {
       
       {/* Main Advertisement Section */}
      {/* Main Advertisement Section */}
-<section className="py-24 bg-gradient-to-r from-engineering-50 to-gray-50 flex flex-col items-center justify-center">
+<section className="py-8 bg-gradient-to-r from-engineering-50 to-gray-50 flex flex-col items-center justify-center">
   <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
     {/* Centered Button Group */}
-    <div className="flex flex-row justify-center items-center gap-6 mb-12">
+    <div className="flex flex-row justify-center items-center gap-6 my-4">
       <Link to="/advertising">
         <Button
           variant="outline"
