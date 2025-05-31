@@ -18,10 +18,13 @@ const Index = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center gap-3 mt-4 mb-8">
             <Link to="/advertising">
-              <Button className="bg-engineering-600 text-white hover:bg-engineering-700 flex items-center gap-2">
-                <FileText size={18} />
-                <span>Advertise With Us</span>
-              </Button>
+              <Button
+  variant="outline"
+  className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2"
+>
+  <FileText size={18} />
+  <span>Advertise With Us</span>
+</Button>
             </Link>
             <Button variant="outline" className="border-engineering-600 text-engineering-600 hover:bg-engineering-50 flex items-center gap-2" onClick={() => {
             const shopFinderSection = document.getElementById('shop-finder-section');
