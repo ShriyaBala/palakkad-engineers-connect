@@ -23,22 +23,23 @@ interface Shop {
 }
 const sampleShops: Shop[] = [{
   id: 1,
-  name: "Kerala Tiles Market",
+  name: "Rakesh Marble & Granite",
   category: "Tiles",
   location: "Palakkad Town",
-  phone: "+91 9876543210",
-  email: "contact@keralatiles.com",
-  website: "www.keralatiles.com",
+  phone: "0491 2544882,2545672",
+  email: "contact@rakeshtiles.com",
+  
   mapLink: "https://maps.google.com/?q=Palakkad+Town+Kerala+India"
 }, {
   id: 2,
-  name: "TechAutomation Store",
-  category: "Automation",
-  location: "Kanjikode",
+  name: "Drisya Marble",
+  category: "Tiles",
+  location: "Chittur",
   phone: "+91 9876543211",
   email: "info@techautomation.in",
-  mapLink: "https://maps.google.com/?q=Kanjikode+Kerala+India"
+  mapLink:  "https://maps.google.com/?q=Chittur+Kerala+India"
 }, {
+
   id: 3,
   name: "MetalCraft Shop",
   category: "Hardware",
