@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
+  Card, CardHeader, CardTitle, CardDescription,
+  CardContent, CardFooter
 } from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
-import API from '@/api/axios'; // Axios instance
+import API from '@/api/axios';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,94 +16,62 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    phone: ''
   });
-
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError(null);
-    if (success) setSuccess(null);
+    setError('');
+    setSuccess('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-
     setLoading(true);
-    setError(null);
-    setSuccess(null);
-
     try {
-      const payload = {
-        username: formData.username,
-        email: formData.email,
-        password1: formData.password,
-        password2: formData.confirmPassword
-      };
-
-      const response = await API.post('auth/registration/', payload);
-
-      setSuccess('Registration successful! Redirecting to login...');
-      setFormData({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
-
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } catch (err: any) {
-      if (err.response?.data) {
-        const messages = Object.values(err.response.data).flat();
-        setError(messages.join(' ') || 'Registration failed.');
-      } else {
-        setError('An unexpected error occurred. Please try again.');
-      }
+      await API.post('/api/join-us/', formData);
+      setSuccess('Registration successful! Please check your email for your default password.');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      setError('Registration failed. Please check your details and try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-md mx-auto">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center">Join LENSFED</CardTitle>
+              <CardTitle className="text-2xl text-center">Registration</CardTitle>
               <CardDescription className="text-center">
-                Create your account to become a member
+                Create your account .<br />
+                <span className="font-semibold text-green-700">
+                  After registration, a default password will be sent to your email.
+                </span>
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
                     name="username"
                     type="text"
-                    placeholder="username"
+                    placeholder="Your username"
                     value={formData.username}
                     onChange={handleChange}
                     required
-                    disabled={loading}
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -118,61 +82,34 @@ const Register = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    autoComplete="email"
-                    disabled={loading}
                   />
                 </div>
-
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="phone">Phone Number</Label>
                   <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Create a password"
-                    value={formData.password}
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="Your phone number"
+                    value={formData.phone}
                     onChange={handleChange}
                     required
-                    autoComplete="new-password"
-                    disabled={loading}
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="Re-enter your password"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                    autoComplete="new-password"
-                    disabled={loading}
-                  />
-                </div>
-
-                {error && (
-                  <div className="text-sm text-red-600 text-center">{error}</div>
-                )}
-
-                {success && (
-                  <div className="text-sm text-green-600 text-center">{success}</div>
-                )}
-
+                {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+                {success && <p className="text-green-600 text-sm text-center">{success}</p>}
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Creating Account...' : 'Create Account'}
+                  {loading ? 'Registering...' : 'Register'}
                 </Button>
               </form>
             </CardContent>
             <CardFooter className="text-center">
-              <div className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600">
                 Already have an account?{' '}
                 <Link to="/login" className="text-blue-600 hover:underline">
-                  Sign in here
+                  Login here
                 </Link>
-              </div>
+              </p>
             </CardFooter>
           </Card>
         </div>

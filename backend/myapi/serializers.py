@@ -1,23 +1,45 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import PageContent
+from django.contrib.auth.hashers import make_password
+from .models import CustomUser
 
-class PageContentSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PageContent
-        fields = '__all__'
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'password', 'email']
-        extra_kwargs = {'password': {'write_only': True}}
-
+        model = CustomUser
+        exclude = ['password']
+        field = ['username', 'email', 'phone', 'area']
     def create(self, validated_data):
-        user = User(
-            username=validated_data['username'],
-            email=validated_data['email']
+        import random, string
+        from django.core.mail import send_mail
+
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        validated_data['password'] = make_password(password)
+        user = CustomUser.objects.create(**validated_data)
+
+        send_mail(
+            'Your LENSFED Account Password',
+            f'Your temporary password is: {password}',
+            'noreply@lensfed.in',
+            [user.email],
+            fail_silently=False,
         )
-        user.set_password(validated_data['password'])
+        return user
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['name', 'email', 'phone', 'area']
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is incorrect.")
+        return value
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
         user.save()
         return user

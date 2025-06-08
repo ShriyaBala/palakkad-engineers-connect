@@ -1,9 +1,8 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Advertising from "./pages/Advertising";
@@ -14,6 +13,8 @@ import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from './pages/User_Dashboard';
+import JoinUs from './pages/JoinUs';
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,8 @@ const App = () => (
           <Route path="/resources" element={<Resources />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/join-us" element={<JoinUs />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />
@@ -53,5 +56,12 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+// In App.tsx or routes
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem('accessToken');
+  return token ? children : <Navigate to="/login" />;
+};
+
+<Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 
 export default App;

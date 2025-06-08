@@ -1,10 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import EnhancedSearch from '@/components/EnhancedSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, Users, BadgeCheck } from 'lucide-react';
+
 import { 
   Accordion,
   AccordionContent,
@@ -12,8 +12,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import JoinUs from '@/pages/JoinUs'; // Adjust the path if needed
+
+
 
 const Members = () => {
+  const [showJoinUs, setShowJoinUs] = useState(false);
+
   return (
     <Layout>
       <div className="py-12 bg-white">
@@ -271,15 +277,32 @@ const Members = () => {
                   like-minded professionals committed to engineering excellence.
                 </p>
                 <div className="flex justify-center">
-                  <a href="/become-member" className="bg-engineering-600 text-white px-6 py-3 rounded-md hover:bg-engineering-700 transition-colors">
-                    Become a Member
-                  </a>
+                 <Link
+                  to="/join-us"
+                  className="bg-engineering-600 text-white px-6 py-3 rounded-md hover:bg-engineering-700 transition-colors inline-block"
+                 >
+                 Become a Member
+                </Link>
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+      
+      {showJoinUs && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded shadow-lg p-6 max-w-lg w-full relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowJoinUs(false)}
+            >
+              ✕
+            </button>
+            <JoinUs />
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

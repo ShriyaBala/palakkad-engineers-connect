@@ -1,11 +1,4 @@
-asgiref
-Django
-django-cors-headers
+Django>=4.0
 djangorestframework
 djangorestframework-simplejwt
-psycopg2-binary
-python-dotenv
-PyJWT
-sqlparse
-Pytz
-
+django-cors-headers

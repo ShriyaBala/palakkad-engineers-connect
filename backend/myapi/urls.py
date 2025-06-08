@@ -1,21 +1,12 @@
-from django.urls import path,include
-from rest_framework.routers import DefaultRouter
-from .views import PageContentViewSet
-from django.contrib import admin
-from myapi.views import CreateUserView
+from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from . import views
 
-router = DefaultRouter()
-router.register(r'pages', PageContentViewSet)
 urlpatterns = [
-  
-    path('register', CreateUserView.as_view(), name='user-register'),
-    path('api/user/login/', TokenObtainPairView.as_view(), name='get_token'),
-    path('api/user/token/refresh/', TokenRefreshView.as_view(), name='refresh'),
-    path('api-auth/',include('rest_framework.urls')),
-    path('', include(router.urls)),
-    path('api/auth/', include('dj_rest_auth.urls')),  # login/logout
-    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),  # signup
-
+    path('join-us/', views.join_us, name='join_us'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('me/', views.me, name='me'),
+    path('update-profile/', views.update_profile, name='update_profile'),
+    path('change-password/', views.change_password, name='change_password'),
 ]
-

@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import PageContent
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
-admin.site.register(PageContent)
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    list_display = ('username', 'email', 'phone', 'area', 'is_staff')
 
-# Register your models here.
+admin.site.register(CustomUser, CustomUserAdmin)

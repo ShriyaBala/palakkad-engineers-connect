@@ -11,11 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from datetime import timedelta
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,69 +20,48 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(v%=_ekt8kc+ql=9@#^omexhyet#b-g^v2hue3(21ew5dtf^6a'
+SECRET_KEY = 'django-insecure-^nip#!-c+m2o2i%4@m)37=46rdg^*15aodgl&da4$)_mo(3s-p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-REST_FRAMEWORK ={
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        
-    ],
-    
-}
+ALLOWED_HOSTS = []
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
- } # 1 hour
+
+
 # Application definition
 
 INSTALLED_APPS = [
-    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-party apps
     'rest_framework',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',  # <--- THIS IS MISSING IN YOUR ERROR
-    'rest_framework_simplejwt.token_blacklist',
-
-    # Your apps
-    'myapi',  # replace with your actual app name
+    'rest_framework_simplejwt',
+    'myapi',
+    'corsheaders',
+  
 ]
 
-
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    
 
 ]
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',  # React runs on this port
-]
+
+CORS_ALLOWED_ALL_ORIGINS = True
+# For development only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -112,11 +87,11 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lensfedDB',
-        'USER': 'postgres',
-        'PASSWORD': 'admin@123',
+        'NAME': 'lensfed_palakkad',        # Your database name
+        'USER': 'postgres',           # Your PostgreSQL username
+        'PASSWORD': 'admin@123',  # Your PostgreSQL password
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -163,5 +138,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWS_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
+    ),
+    
+    
+}
+from rest_framework.permissions import AllowAny
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shriyabminnu@gmail.com'         # Your Gmail address
+EMAIL_HOST_PASSWORD = 'sxkn qcmr fmwl vzgq'        # Gmail App Password (see below)
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+    
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Adjust as needed
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Adjust as needed
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+CORS_ALLOW_ALL_ORIGINS = True  # Temporary for development
+AUTH_USER_MODEL = 'myapi.CustomUser'
