@@ -33,7 +33,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await API.post('/api/join-us/', formData);
+      await API.post('/api/register/', formData);
       setSuccess('Registration successful! Please check your email for your default password.');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {

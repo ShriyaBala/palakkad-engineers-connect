@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [pwdMsg, setPwdMsg] = useState('');
+  const navigate = useNavigate();
 
   // 🔄 Fetch profile on mount
   useEffect(() => {
@@ -72,6 +74,7 @@ const Dashboard = () => {
       });
       setPwdMsg('✅ Password changed successfully!');
       setPasswordData({ current_password: '', new_password: '' });
+      setTimeout(() => navigate('/'), 1500);
     } catch {
       setPwdMsg('❌ Error changing password. Please check your current password.');
     }
@@ -141,6 +144,14 @@ const Dashboard = () => {
         {pwdMsg && <p className="text-sm text-green-600">{pwdMsg}</p>}
         <Button type="submit" variant="secondary">Change Password</Button>
       </form>
+
+      <Button
+        variant="outline"
+        className="mb-4"
+        onClick={() => navigate('/')}
+      >
+        ← Back to Home
+      </Button>
     </div>
   );
 };

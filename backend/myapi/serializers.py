@@ -6,7 +6,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         exclude = ['password']
-        field = ['username', 'email', 'phone', 'area']
+        field = ['username', 'email', 'phone']
     def create(self, validated_data):
         import random, string
         from django.core.mail import send_mail
@@ -27,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['name', 'email', 'phone', 'area']
+        fields = ['name', 'email', 'phone']
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)

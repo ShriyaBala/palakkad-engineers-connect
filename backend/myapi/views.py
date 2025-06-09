@@ -64,7 +64,7 @@ def generate_password(length=8):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 @api_view(['POST'])
-def join_us(request):
+def register_user(request):
     username = request.data.get('username')
     email = request.data.get('email')
     phone = request.data.get('phone')

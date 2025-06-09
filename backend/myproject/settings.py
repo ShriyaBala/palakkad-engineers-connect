@@ -59,8 +59,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ALL_ORIGINS = True
-# For development only
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 
 ROOT_URLCONF = 'myproject.urls'
@@ -149,7 +148,7 @@ REST_FRAMEWORK = {
 }
 from rest_framework.permissions import AllowAny
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
