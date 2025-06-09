@@ -25,4 +25,31 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+class MemberApplication(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    area = models.CharField(max_length=100, blank=True)
+    dob = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, blank=True)
+    maritalStatus = models.CharField(max_length=20, blank=True)
+    aadhaar = models.CharField(max_length=12, blank=True)
+    residentialAddress = models.TextField(blank=True)
+    officeAddress = models.TextField(blank=True)
+    postOffice = models.CharField(max_length=100, blank=True)
+    pin = models.CharField(max_length=10, blank=True)
+    licenseNo = models.CharField(max_length=50, blank=True)
+    licenseDate = models.DateField(null=True, blank=True)
+    renewalDate = models.DateField(null=True, blank=True)
+    qualification = models.CharField(max_length=200, blank=True)
+    additionalQualification = models.CharField(max_length=200, blank=True)
+    skills = models.CharField(max_length=200, blank=True)
+    bloodGroup = models.CharField(max_length=5, blank=True)
+    unit = models.CharField(max_length=100, blank=True)
+    panchayath = models.CharField(max_length=100, blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
+
 

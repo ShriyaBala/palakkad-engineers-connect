@@ -51,7 +51,7 @@ const JoinUs = () => {
     setLoading(true);
     try {
       await API.post('/api/join-us/', formData);
-      setMessage('✅ Membership application submitted! Your login password will be sent to your email after approval.');
+      setMessage('✅ Membership application submitted!');
       setTimeout(() => navigate('/login'), 4000);
     } catch (err) {
       setError('❌ Submission failed. Please check your details and try again.');

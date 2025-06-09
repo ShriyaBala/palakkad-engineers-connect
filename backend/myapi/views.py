@@ -55,7 +55,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CustomUser  # Use your custom user model
+from .models import CustomUser, MemberApplication  # Use your custom user model
 from django.core.mail import send_mail
 import random
 import string
@@ -128,3 +128,31 @@ def change_password(request):
     user.set_password(new_password)
     user.save()
     return Response({'message': 'Password changed successfully!'})
+
+@api_view(['POST'])
+def join_us(request):
+    data = request.data
+    MemberApplication.objects.create(
+        name=data.get('name', ''),
+        email=data.get('email', ''),
+        phone=data.get('phone', ''),
+        area=data.get('area', ''),
+        dob=data.get('dob') or None,
+        gender=data.get('gender', ''),
+        maritalStatus=data.get('maritalStatus', ''),
+        aadhaar=data.get('aadhaar', ''),
+        residentialAddress=data.get('residentialAddress', ''),
+        officeAddress=data.get('officeAddress', ''),
+        postOffice=data.get('postOffice', ''),
+        pin=data.get('pin', ''),
+        licenseNo=data.get('licenseNo', ''),
+        licenseDate=data.get('licenseDate') or None,
+        renewalDate=data.get('renewalDate') or None,
+        qualification=data.get('qualification', ''),
+        additionalQualification=data.get('additionalQualification', ''),
+        skills=data.get('skills', ''),
+        bloodGroup=data.get('bloodGroup', ''),
+        unit=data.get('unit', ''),
+        panchayath=data.get('panchayath', ''),
+    )
+    return Response({'message': 'Membership application submitted!'}, status=status.HTTP_201_CREATED)
