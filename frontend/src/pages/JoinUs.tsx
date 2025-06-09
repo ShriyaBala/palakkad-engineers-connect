@@ -63,9 +63,9 @@ const JoinUs = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto">
-          <Card>
+      <div className="container mx-auto px-2 sm:px-4 py-8 sm:py-16">
+        <div className="w-full max-w-2xl mx-auto">
+          <Card className="w-full">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl text-center">LENSFED Membership Application</CardTitle>
               <CardDescription className="text-center">
@@ -124,14 +124,29 @@ const JoinUs = () => {
 const InputField = ({ label, name, value, type = 'text', onChange }) => (
   <div className="space-y-2">
     <Label htmlFor={name}>{label}</Label>
-    <Input id={name} name={name} type={type} value={value} onChange={onChange} required />
+    <Input
+      id={name}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      required
+      className="w-full"
+    />
   </div>
 );
 
 const SelectField = ({ label, name, value, onChange, options }) => (
   <div className="space-y-2">
     <Label htmlFor={name}>{label}</Label>
-    <select id={name} name={name} value={value} onChange={onChange} className="w-full border rounded px-3 py-2" required>
+    <select
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full border rounded px-3 py-2"
+      required
+    >
       <option value="">Select {label}</option>
       {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
     </select>

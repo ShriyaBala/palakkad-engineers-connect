@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
                     <Link to="/login">
                       <Button size="sm" variant="outline" className="w-full">Log in</Button>
                     </Link>
-                    <Link to="/register">
+                    <Link to="join-us">
                       <Button size="sm" className="w-full">Join Us</Button>
                     </Link>
                   </>
