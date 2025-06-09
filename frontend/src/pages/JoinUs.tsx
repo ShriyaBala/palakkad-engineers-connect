@@ -65,6 +65,13 @@ const JoinUs = () => {
       <Navbar />
       <div className="container mx-auto px-2 sm:px-4 py-8 sm:py-16">
         <div className="w-full max-w-2xl mx-auto">
+          <Button
+            variant="outline"
+            className="mb-4"
+            onClick={() => navigate('/')}
+          >
+            ← Back to Home
+          </Button>
           <Card className="w-full">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl text-center">LENSFED Membership Application</CardTitle>
