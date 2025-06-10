@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import API from '@/api/axios';
 import Layout from '@/components/Layout';
 import EnhancedAdvertisements from '@/components/EnhancedAdvertisements';
 import MarketersShowcase from '@/components/MarketersShowcase';
@@ -9,6 +10,14 @@ import { Link } from 'react-router-dom';
 import SimpleLineAd from '@/components/SimpleLineAd';
 import ShopFinder from '@/components/ShopFinder';
 const Index = () => {
+  const [shops, setShops] = useState([]);
+  const [ads, setAds] = useState([]);
+
+  useEffect(() => {
+    API.get('/api/shops/').then(res => setShops(res.data));
+    API.get('/api/ads/').then(res => setAds(res.data));
+  }, []);
+
   return <Layout>
   {/* Hero Section with Association Logo */}
   <div className="my-12 w-full flex justify-center">

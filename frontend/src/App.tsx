@@ -14,7 +14,12 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from './pages/User_Dashboard';
+
+import JoinUsLanding from './pages/JoinUsLanding';
 import JoinUs from './pages/JoinUs';
+
+
+
 
 const queryClient = new QueryClient();
 
@@ -29,8 +34,12 @@ const App = () => (
           <Route path="/advertising" element={<Advertising />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/join-us" element={<JoinUs />} />
+      
+// Inside your Router component:
+<Route path="/join" element={<JoinUsLanding />} />
+<Route path="/joinus" element={<JoinUs />} />
+<Route path="/register" element={<Register />} />
+
           <Route path="/dashboard" element={<Dashboard />} />
           
           {/* Added pages with dummy content */}

@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
                 <Link to="/login">
                   <Button size="sm" variant="outline">Log in</Button>
                 </Link>
-                <Link to="/join-us" className="bg-engineering-600 text-white px-6 py-3 rounded-md hover:bg-engineering-700 transition-colors inline-block">
+                <Link to="/join" className="bg-engineering-600 text-white px-6 py-3 rounded-md hover:bg-engineering-700 transition-colors inline-block">
                   Join Us
                 </Link>
               </>
@@ -143,9 +143,10 @@ const Navbar: React.FC = () => {
                     <Link to="/login">
                       <Button size="sm" variant="outline" className="w-full">Log in</Button>
                     </Link>
-                    <Link to="join-us">
-                      <Button size="sm" className="w-full">Join Us</Button>
-                    </Link>
+                    <Link to="/join">
+  <Button size="sm" className="w-full">Join Us</Button>
+</Link>
+
                   </>
                 )}
               </div>
