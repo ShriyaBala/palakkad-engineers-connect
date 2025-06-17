@@ -3,12 +3,12 @@ from django.contrib.auth.hashers import make_password
 from .models import CustomUser
 
 class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
+     class Meta:
         model = CustomUser
         exclude = ['password']
         field = ['username', 'email', 'phone']
-    def create(self, validated_data):
-        import random, string
+     def create(self, validated_data):
+        import random, string 
         from django.core.mail import send_mail
 
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
@@ -43,3 +43,18 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+# class ShopSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Shop
+#         fields = '__all__'
+
+# class EventSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Event
+#         fields = '__all__'
+
+# class AdvertisementSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Advertisement
+#         fields = '__all__'

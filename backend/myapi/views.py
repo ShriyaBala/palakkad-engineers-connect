@@ -52,84 +52,49 @@
 
 
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CustomUser, MemberApplication  # Use your custom user model
+from .models import CustomUser, MemberApplication
 from django.core.mail import send_mail
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 import random
 import string
+from knox.views import LoginView as KnoxLoginView
 
 def generate_password(length=8):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
+# Registration: user is created immediately, password sent by email
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register_user(request):
-    username = request.data.get('username')
-    email = request.data.get('email')
-    phone = request.data.get('phone')
-
-    if not username or not email or not phone:
-        return Response({'error': 'All fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
-    if CustomUser.objects.filter(username=username).exists():
-        return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-    if CustomUser.objects.filter(email=email).exists():
-        return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    password = generate_password()
-    user = CustomUser.objects.create_user(
-        username=username,
-        email=email,
-        password=password,
-        phone=phone
-    )
-    user.save()
-
-    send_mail(
-        'Your LENSFED Account Password',
-        f'Your temporary password is: {password}',
-        'shriyabminnu@gmail.com',  # Or use settings.DEFAULT_FROM_EMAIL
-        [email],
-        fail_silently=False,
-    )
-
-    return Response({'message': 'Registration successful! Please check your email for your password.'}, status=status.HTTP_201_CREATED)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def me(request):
-    user = request.user
-    return Response({
-        "name": user.username,
-        "email": user.email,
-        "phone": user.phone,
-        "area": user.area,
-    })
-
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def update_profile(request):
-    user = request.user
     data = request.data
-    user.username = data.get('name', user.username)
-    user.phone = data.get('phone', user.phone)
-    user.area = data.get('area', user.area)
-    user.save()
-    return Response({'message': 'Profile updated successfully!'})
+    if CustomUser.objects.filter(email=data.get('email')).exists():
+        return Response({'error': 'Email already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+    password = generate_password()
+    user = CustomUser.objects.create(
+        username=data.get('username', data.get('email').split('@')[0]),
+        email=data.get('email'),
+        phone=data.get('phone', ''),
+        password=make_password(password),
+        role='user',
+        is_approved=True,
+        location=data.get('location', ''),
+    )
+    send_mail(
+        'Registration Successful',
+        f'Thank you for registering! Your password is: {password}',
+        'noreply@yourdomain.com',
+        [user.email],
+        fail_silently=True,
+    )
+    return Response({'message': 'Registration successful. Check your email for your password.'}, status=status.HTTP_201_CREATED)
 
+# Membership: needs admin approval, password sent after approval (handled in admin.py)
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def change_password(request):
-    user = request.user
-    current_password = request.data.get('current_password')
-    new_password = request.data.get('new_password')
-    if not user.check_password(current_password):
-        return Response({'error': 'Current password is incorrect.'}, status=400)
-    user.set_password(new_password)
-    user.save()
-    return Response({'message': 'Password changed successfully!'})
-
-@api_view(['POST'])
+@permission_classes([AllowAny])
 def join_us(request):
     data = request.data
     MemberApplication.objects.create(
@@ -152,7 +117,64 @@ def join_us(request):
         additionalQualification=data.get('additionalQualification', ''),
         skills=data.get('skills', ''),
         bloodGroup=data.get('bloodGroup', ''),
-        unit=data.get('unit', ''),
         panchayath=data.get('panchayath', ''),
+        unit=data.get('unit', ''),
+        location=data.get('location', ''),
+        is_approved=False,
     )
-    return Response({'message': 'Membership application submitted!'}, status=status.HTTP_201_CREATED)
+    send_mail(
+        'Membership Application Received',
+        'Thank you for applying for membership. Your application is pending admin approval.',
+        'noreply@yourdomain.com',
+        [data.get('email')],
+        fail_silently=True,
+    )
+    return Response({'message': 'Application submitted. Await admin approval.'}, status=201)
+
+# Knox login: authenticate with email and password
+class LoginAPI(KnoxLoginView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            return super().post(request)
+        return Response({'error': 'Invalid credentials'}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def me(request):
+    user = request.user
+    return Response({
+        "name": user.username,
+        "email": user.email,
+        "phone": user.phone,
+        "location": user.location,
+        "role": user.role,
+        "is_approved": user.is_approved,
+    })
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    user = request.user
+    data = request.data
+    user.username = data.get('name', user.username)
+    user.phone = data.get('phone', user.phone)
+    user.location = data.get('location', user.location)
+    user.save()
+    return Response({'message': 'Profile updated successfully!'})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    current_password = request.data.get('current_password')
+    new_password = request.data.get('new_password')
+    if not user.check_password(current_password):
+        return Response({'error': 'Current password is incorrect.'}, status=400)
+    user.set_password(new_password)
+    user.save()
+    return Response({'message': 'Password changed successfully!'})

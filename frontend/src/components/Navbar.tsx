@@ -8,11 +8,13 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     setIsLoggedIn(!!token);
+    setRole(localStorage.getItem('role'));
   }, []);
 
   const toggleDropdown = (dropdown: string) => {
@@ -70,6 +72,11 @@ const Navbar: React.FC = () => {
                 <Link to="/dashboard">
                   <Button size="sm" variant="outline">Dashboard</Button>
                 </Link>
+                {role === 'admin' && (
+                  <Link to="/admin-dashboard">
+                    <Button size="sm" variant="secondary">Admin Dashboard</Button>
+                  </Link>
+                )}
                 <Button size="sm" variant="destructive" onClick={handleLogout}>Logout</Button>
               </>
             ) : (
@@ -134,6 +141,11 @@ const Navbar: React.FC = () => {
                     <Link to="/dashboard">
                       <Button size="sm" variant="outline" className="w-full">Dashboard</Button>
                     </Link>
+                    {role === 'admin' && (
+                      <Link to="/admin-dashboard">
+                        <Button size="sm" variant="secondary" className="w-full">Admin Dashboard</Button>
+                      </Link>
+                    )}
                     <Button size="sm" variant="destructive" className="w-full" onClick={handleLogout}>
                       Logout
                     </Button>

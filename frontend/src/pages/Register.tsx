@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,11 +16,66 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    phone: ''
+    phone: '',
+    location: '',
+    district: '',
+    area: '',
+    unit: '',
+    customArea: '',
+    customUnit: ''
   });
+  const [districts, setDistricts] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [units, setUnits] = useState([]);
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const areaUnits = {
+    "Palakkad Town": ["Olavakkode", "Kunnathurmedu", "Vadakkanthara", "Other"],
+    "Ottapalam": ["Vaniyamkulam", "Ambalapara", "Anakkara", "Other"],
+    "Chittur": ["Nallepilly", "Ayiloor", "Thekkedesom", "Other"],
+    "Alathur": ["Alathur Town", "Kizhakkenchery", "Kuthannur", "Other"],
+    "Mannarkkad": ["Mannarkkad Town", "Kanjirappuzha", "Alanallur", "Other"],
+    "Shoranur": ["Shoranur Town", "Kulappully", "Vadanamkurussi", "Other"],
+    "Pattambi": ["Pattambi Town", "Koppam", "Muthuthala", "Other"],
+    "Cherpulassery": ["Cherpulassery Town", "Karalmanna", "Kappur", "Other"],
+    "Kollengode": ["Kollengode Town", "Koduvayur", "Puthunagaram", "Other"],
+    "Nemmara": ["Nemmara Town", "Vellangallur", "Elavanchery", "Other"],
+    "Parli": ["Parli Town", "Pallassana", "Kottayi", "Other"],
+    "Kongad": ["Kongad Town", "Mannur", "Kottayi", "Other"],
+    "Kozhinjampara": ["Kozhinjampara Town", "Meenakshipuram", "Eruthempathy", "Other"],
+    "Muthalamada": ["Muthalamada Town", "Elavanchery", "Parambikulam", "Other"],
+    "Other": ["Other"]
+  };
+
+  const allAreas = Object.keys(areaUnits);
+
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      const res = await API.get('/api/districts/');
+      setDistricts(res.data);
+    };
+    fetchDistricts();
+  }, []);
+
+  useEffect(() => {
+    if (formData.district) {
+      API.get(`/api/areas/?district_id=${formData.district}`)
+        .then(res => setAreas(res.data));
+    }
+    setFormData(prev => ({ ...prev, area: '', unit: '' }));
+    setUnits([]);
+  }, [formData.district]);
+
+  useEffect(() => {
+    if (formData.area) {
+      API.get(`/api/units/?area_id=${formData.area}`)
+        .then(res => setUnits(res.data));
+    }
+    setFormData(prev => ({ ...prev, unit: '' }));
+  }, [formData.area]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,7 +88,12 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await API.post('/api/register/', formData);
+      // Use customArea if area is "Other", else use selected area
+      // Use customUnit if unit is "Other", else use selected unit
+      const area = formData.area === "Other" ? formData.customArea : formData.area;
+      const unit = formData.unit === "Other" ? formData.customUnit : formData.unit;
+
+      await API.post('/api/register/', { ...formData, area, unit });
       setSuccess('Registration successful! Please check your email for your default password.');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
@@ -96,6 +156,74 @@ const Register = () => {
                     required
                   />
                 </div>
+
+                {/* Area Dropdown */}
+                <div className="space-y-2">
+                  <Label htmlFor="area">Area</Label>
+                  <select
+                    name="area"
+                    id="area"
+                    value={formData.area}
+                    onChange={handleChange}
+                    required
+                    className="w-full border p-2 rounded"
+                  >
+                    <option value="">Select Area</option>
+                    {allAreas.map(area => (
+                      <option key={area} value={area}>{area}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* If "Other" area, show input */}
+                {formData.area === "Other" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="customArea">Custom Area</Label>
+                    <Input
+                      id="customArea"
+                      name="customArea"
+                      type="text"
+                      placeholder="Enter your area"
+                      value={formData.customArea}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                )}
+
+                {/* Unit Dropdown */}
+                {formData.area && (
+                  <div className="space-y-2">
+                    <Label htmlFor="unit">Unit</Label>
+                    <select
+                      name="unit"
+                      id="unit"
+                      value={formData.unit}
+                      onChange={handleChange}
+                      required
+                      className="w-full border p-2 rounded"
+                    >
+                      <option value="">Select Unit</option>
+                      {(areaUnits[formData.area] || []).map(unit => (
+                        <option key={unit} value={unit}>{unit}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {/* If "Other" unit, show input */}
+                {formData.unit === "Other" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="customUnit">Custom Unit</Label>
+                    <Input
+                      id="customUnit"
+                      name="customUnit"
+                      type="text"
+                      placeholder="Enter your unit"
+                      value={formData.customUnit}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                )}
                 {error && <p className="text-red-600 text-sm text-center">{error}</p>}
                 {success && <p className="text-green-600 text-sm text-center">{success}</p>}
                 <Button type="submit" className="w-full" disabled={loading}>

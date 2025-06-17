@@ -8,40 +8,51 @@ import {
   CardContent, CardFooter
 } from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
-import API from '@/api/axios';
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
 
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(''); // <-- Success message state
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
+    setSuccess('');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    setSuccess('');
     try {
-      const response = await API.post('/api/token/', formData); // JWT login
-      const { access, refresh } = response.data;
+      const response = await axios.post("/api/login/", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', access);
-      localStorage.setItem('refreshToken', refresh);
+      localStorage.setItem('token', response.data.token);
 
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Optionally fetch user info here...
+
+      setSuccess('✅ User logged in successfully!'); // <-- Set success message
+
+      // Redirect after a short delay (optional)
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
+
     } catch (err) {
-      setError('❌ Invalid username or password. Please try again.');
+      setError('❌ Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -56,19 +67,18 @@ const Login = () => {
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
               <CardDescription className="text-center">
-                Login using your <b>username</b> and the password sent to your email.
+                Login using your <b>email</b> and the password sent to your email.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
-                    id="username"
-                    name="username"
-                    type="text"
-                    placeholder="Your username"
-                    value={formData.username}
+                    name="email"
+                    type="email"
+                    placeholder="Your email"
+                    value={formData.email}
                     onChange={handleChange}
                     required
                   />
@@ -77,7 +87,6 @@ const Login = () => {
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input
-                    id="password"
                     name="password"
                     type="password"
                     placeholder="Enter your password"
@@ -88,6 +97,7 @@ const Login = () => {
                 </div>
 
                 {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+                {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Logging in...' : 'Log In'}

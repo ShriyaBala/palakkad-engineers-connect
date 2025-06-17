@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from './pages/User_Dashboard';
+import AdminDashboard from './pages/Admin_Dashboard';
 
 import JoinUsLanding from './pages/JoinUsLanding';
 import JoinUs from './pages/JoinUs';
@@ -41,6 +42,11 @@ const App = () => (
 <Route path="/register" element={<Register />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin-dashboard" element={
+  <AdminRoute>
+    <AdminDashboard />
+  </AdminRoute>
+} />
           
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />
@@ -72,5 +78,21 @@ const PrivateRoute = ({ children }) => {
 };
 
 <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+
+const AdminRoute = ({ children }) => {
+  const token = localStorage.getItem('accessToken');
+  const userRole = localStorage.getItem('role'); // Save 'role' in localStorage on login
+
+  if (!token) return <Navigate to="/login" />;
+  if (userRole !== 'admin') return <Navigate to="/" />; // or show a "Not Authorized" page
+
+  return children;
+};
+
+<Route path="/admin-dashboard" element={
+  <AdminRoute>
+    <AdminDashboard />
+  </AdminRoute>
+} />
 
 export default App;

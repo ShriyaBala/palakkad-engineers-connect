@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
     dob = models.DateField(null=True, blank=True)  # allow null DOB
     gender = models.CharField(max_length=10, blank=True, default='')
     maritalStatus = models.CharField(max_length=20, blank=True, default='')
-    aadhaar = models.CharField(max_length=12, unique=True, null=True)  # default Aadhaar
+    aadhaar = models.CharField(max_length=12, unique=True,blank=True, null=True)  # default Aadhaar
     residentialAddress = models.TextField(blank=True, default='')
     officeAddress = models.TextField(blank=True, default='')
     postOffice = models.CharField(max_length=100, blank=True, default='')
@@ -22,9 +22,19 @@ class CustomUser(AbstractUser):
     bloodGroup = models.CharField(max_length=5, blank=True, default='')
     unit = models.CharField(max_length=100, blank=True, default='')
     panchayath = models.CharField(max_length=100, blank=True, default='')
+    location = models.CharField(max_length=255, blank=True)  # Add this line
+    ROLE_CHOICES = [
+        ('user', 'User'),
+        ('member', 'Member'),
+        ('admin', 'Admin'),
+        ('both', 'Both'),
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+    is_approved = models.BooleanField(default=False)
+
     def __str__(self):
         return self.email
-
+ 
 class MemberApplication(models.Model):
     name = models.CharField(max_length=150)
     email = models.EmailField()
@@ -47,9 +57,37 @@ class MemberApplication(models.Model):
     bloodGroup = models.CharField(max_length=5, blank=True)
     unit = models.CharField(max_length=100, blank=True)
     panchayath = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=255, blank=True)  # Add this line
     submitted_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+    approved_at = models.DateTimeField(null=True, blank=True)  # Optionally, add a timestamp for approval
 
     def __str__(self):
         return f"{self.name} ({self.email})"
+
+# class Shop(models.Model):
+#     name = models.CharField(max_length=100)
+#     category = models.CharField(max_length=50)
+#     location = models.CharField(max_length=100)
+#     phone = models.CharField(max_length=50)
+#     email = models.EmailField(blank=True, null=True)
+#     website = models.URLField(blank=True, null=True)
+#     map_link = models.URLField(blank=True, null=True)
+
+#     def __str__(self):
+#         return self.name
+
+# class Event(models.Model):
+#     title = models.CharField(max_length=100)
+#     date = models.DateTimeField()
+#     description = models.TextField()
+#     # ...other fields...
+
+# class Advertisement(models.Model):
+#     title = models.CharField(max_length=100)
+#     image = models.ImageField(upload_to='ads/')
+#     video = models.FileField(upload_to='ads/videos/', blank=True, null=True)
+#     link = models.URLField(blank=True)
+#     # ...other fields...
 
 
