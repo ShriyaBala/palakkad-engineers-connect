@@ -10,6 +10,12 @@ import {
 import Navbar from '@/components/Navbar';
 import API from '@/api/axios';
 
+const roles = [
+  { value: "area_admin", label: "Area Admin" },
+  { value: "admin", label: "Admin" },
+  { value: "unit_admin", label: "Unit Admin" }
+];
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -22,7 +28,8 @@ const Register = () => {
     area: '',
     unit: '',
     customArea: '',
-    customUnit: ''
+    customUnit: '',
+    role: ''
   });
   const [districts, setDistricts] = useState([]);
   const [areas, setAreas] = useState([]);
@@ -31,6 +38,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPending, setShowPending] = useState(false);
+  const [showApproved, setShowApproved] = useState(false);
 
   const areaUnits = {
     "Palakkad Town": ["Olavakkode", "Kunnathurmedu", "Vadakkanthara", "Other"],
@@ -77,7 +86,9 @@ const Register = () => {
     setFormData(prev => ({ ...prev, unit: '' }));
   }, [formData.area]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
@@ -95,6 +106,7 @@ const Register = () => {
 
       await API.post('/api/register/', { ...formData, area, unit });
       setSuccess('Registration successful! Please check your email for your default password.');
+      setShowPending(true);
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
       setError('Registration failed. Please check your details and try again.');
@@ -224,6 +236,22 @@ const Register = () => {
                     />
                   </div>
                 )}
+                <div className="space-y-2">
+                  <Label htmlFor="role">Position</Label>
+                  <select
+                    name="role"
+                    id="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                    className="w-full border p-2 rounded"
+                  >
+                    <option value="">Select Position</option>
+                    {roles.map(r => (
+                      <option key={r.value} value={r.value}>{r.label}</option>
+                    ))}
+                  </select>
+                </div>
                 {error && <p className="text-red-600 text-sm text-center">{error}</p>}
                 {success && <p className="text-green-600 text-sm text-center">{success}</p>}
                 <Button type="submit" className="w-full" disabled={loading}>
@@ -242,6 +270,20 @@ const Register = () => {
           </Card>
         </div>
       </div>
+
+      {/* After registration, show this message */}
+      {showPending && (
+        <div className="popup">
+          Registration successful! Please wait for admin approval.
+        </div>
+      )}
+
+      {/* After login, if user is approved */}
+      {showApproved && (
+        <div className="popup">
+          Your account is approved! You can now log in.
+        </div>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(''); // <-- Success message state
   const [loading, setLoading] = useState(false);
+  const [popup, setPopup] = useState(""); // <-- Popup message state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +35,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     setSuccess('');
+    setPopup(""); // Clear previous popup
     try {
       const response = await axios.post("/api/login/", {
         email: formData.email,
@@ -45,6 +47,7 @@ const Login = () => {
       // Optionally fetch user info here...
 
       setSuccess('✅ User logged in successfully!'); // <-- Set success message
+      setPopup("Your account is approved! You can now log in."); // <-- Set popup message
 
       // Redirect after a short delay (optional)
       setTimeout(() => {
@@ -52,7 +55,12 @@ const Login = () => {
       }, 1000);
 
     } catch (err) {
-      setError('❌ Invalid email or password. Please try again.');
+      if (err.response && err.response.status === 403) {
+        setPopup("Your account is pending approval.");
+      } else {
+        setError('❌ Invalid email or password. Please try again.');
+        
+      }
     } finally {
       setLoading(false);
     }
@@ -98,6 +106,7 @@ const Login = () => {
 
                 {error && <p className="text-red-600 text-sm text-center">{error}</p>}
                 {success && <p className="text-green-600 text-sm text-center">{success}</p>}
+                {popup && <div className="popup text-center">{popup}</div>}
 
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Logging in...' : 'Log In'}
@@ -113,6 +122,9 @@ const Login = () => {
               </p>
             </CardFooter>
           </Card>
+          <div style={{ marginTop: "1em" }}>
+            <Link to="/forgot-password">Forgot password?</Link>
+          </div>
         </div>
       </div>
     </div>

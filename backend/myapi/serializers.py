@@ -5,8 +5,10 @@ from .models import CustomUser
 class RegisterSerializer(serializers.ModelSerializer):
      class Meta:
         model = CustomUser
-        exclude = ['password']
-        field = ['username', 'email', 'phone']
+        field = ['username', 'email', 'role', 'phone', 'area', 'unit','is_approved']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
      def create(self, validated_data):
         import random, string 
         from django.core.mail import send_mail
@@ -43,6 +45,13 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.IntegerField()
+    token = serializers.CharField()
+    password = serializers.CharField(min_length=8)
 
 # class ShopSerializer(serializers.ModelSerializer):
 #     class Meta:

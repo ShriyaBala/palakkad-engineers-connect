@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Advertising from "./pages/Advertising";
@@ -11,16 +11,15 @@ import About from "./pages/About";
 import Members from "./pages/Members";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
-import Login from "./pages/Login";
+import LoginForm from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from './pages/User_Dashboard';
 import AdminDashboard from './pages/Admin_Dashboard';
+import ForgotPasswordForm from "./pages/ForgotPasswordForm";
+import ResetPasswordForm from "./pages/ResetPasswordForm";
 
 import JoinUsLanding from './pages/JoinUsLanding';
 import JoinUs from './pages/JoinUs';
-
-
-
 
 const queryClient = new QueryClient();
 
@@ -29,18 +28,16 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <Router>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/advertising" element={<Advertising />} />
           <Route path="/resources" element={<Resources />} />
-          <Route path="/login" element={<Login />} />
-      
-// Inside your Router component:
-<Route path="/join" element={<JoinUsLanding />} />
-<Route path="/joinus" element={<JoinUs />} />
-<Route path="/register" element={<Register />} />
-
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+          <Route path="/join" element={<JoinUsLanding />} />
+          <Route path="/joinus" element={<JoinUs />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-dashboard" element={
   <AdminRoute>
@@ -66,8 +63,9 @@ const App = () => (
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
+          <Route path="/reset-password/:uid/:token" element={<ResetPasswordForm />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </TooltipProvider>
   </QueryClientProvider>
 );

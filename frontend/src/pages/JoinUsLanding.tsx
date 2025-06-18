@@ -38,7 +38,7 @@ const JoinUsLanding = () => {
               className="w-full"
               onClick={() => navigate('/register')}
             >
-              Join as User
+              Join as Moderator
             </Button>
           </CardContent>
         </Card>
