@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import EnhancedSearch from '@/components/EnhancedSearch';
@@ -12,13 +12,54 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import JoinUs from '@/pages/JoinUs'; // Adjust the path if needed
+import axios from '@/api/axios';
 
-
-
+const navigate: any = useNavigate;
 const Members = () => {
   const [showJoinUs, setShowJoinUs] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('/api/membership/')
+      .then(() => {
+        setAuthorized(true);
+        setLoading(false);
+      })
+      .catch(() => {
+        setUnauthorized(true);
+        setLoading(false);
+      });
+      
+      },[]);
+  
+
+   
+if(loading) return <div className="text-center py-20">loading.....</div>;
+  if (unauthorized) {
+    return (
+      <Layout>
+        <div className="text-center py-20">
+          <h2 className="text-2xl font-semibold text-gray-800">Access Restricted</h2>
+          <p className="mt-4 text-gray-600">
+            This page is accessible only to logged-in users with a valid membership.
+          </p>
+          <Link to="/login">
+            <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Go to Login
+            </button>
+          </Link>
+        </div>
+      </Layout>
+    );
+  }
+
+
 
   return (
     <Layout>
