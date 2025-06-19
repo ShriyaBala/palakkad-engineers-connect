@@ -259,7 +259,7 @@ from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
 from .models import MembershipApplication
-
+from knox.models import AuthToken
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -284,6 +284,7 @@ def register_user(request):
         role=data.get('role', 'member'),
         is_approved=False,  # All registrations need approval
     )
+    print(password)
     send_mail(
         'Registration Successful',
         f'Thank you for registering! Your password is: {password}',
@@ -293,18 +294,18 @@ def register_user(request):
     )
     return Response({'message': 'Registration successful. Await admin approval.'}, status=status.HTTP_201_CREATED)
 
-class LoginAPI(KnoxLoginView):
-    permission_classes = (AllowAny,)
+# class LoginAPI(KnoxLoginView):
+#     permission_classes = (AllowAny,)
 
-    def post(self, request, format=None):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            if not user.is_approved:
-                return Response({'error': 'Your account is pending approval.'}, status=403)
-            return super().post(request)
-        return Response({'error': 'Invalid credentials'}, status=400)
+#     def post(self, request, format=None):
+#         email = request.data.get('email')
+#         password = request.data.get('password')
+#         user = authenticate(request, email=email, password=password)
+#         if user is not None:
+#             if not user.is_approved:
+#                 return Response({'error': 'Your account is pending approval.'}, status=403)
+#             return super().post(request)
+#         return Response({'error': 'Invalid credentials'}, status=400)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -358,21 +359,35 @@ def password_reset_confirm(request):
     except CustomUser.DoesNotExist:
         return Response({"error": "Invalid user."}, status=400)
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
     email = request.data.get('email')
     password = request.data.get('password')
-    user = authenticate(request, email=email, password=password)
-    if user is not None:
-        # Login successful, return token or user info
-        return Response({"message": "Login successful!"})
-    else:
-        # Login failed
-        return Response({"error": "Invalid email or password."}, status=400)
 
+    if not email or not password:
+        return Response({"error": "Email and password required."}, status=status.HTTP_400_BAD_REQUEST)
 
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({"error": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
 
+    if not user.check_password(password):
+        return Response({"error": "Incorrect password."}, status=status.HTTP_400_BAD_REQUEST)
+
+    token = AuthToken.objects.create(user)[1]
+
+    return Response({
+        "message": "Login successful",
+        "token": token,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            # "member_id": user.member_id
+        }
+    }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

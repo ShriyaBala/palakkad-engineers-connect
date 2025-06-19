@@ -26,7 +26,7 @@ from . import views
 urlpatterns = [
     path('register/', views.register_user, name='register_user'),
     path('join-us/',views.join_us, name='join-us'),
-    path('api/login/', views.LoginAPI.as_view(), name='knox_login'),
+    path('login/', views.login_view, name='knox_login'),
     path('me/', views.me, name='me'),
     path('password-reset/', views.password_reset_request, name='password_reset'),
     path('password-reset-confirm/', views.password_reset_confirm, name='password_reset_confirm'),

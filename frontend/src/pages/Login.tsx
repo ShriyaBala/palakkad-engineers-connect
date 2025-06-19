@@ -8,7 +8,8 @@ import {
   CardContent, CardFooter
 } from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
-import axios from "axios";
+import axios from '@/api/axios';
+
 
 const Login = () => {
   const navigate = useNavigate();
