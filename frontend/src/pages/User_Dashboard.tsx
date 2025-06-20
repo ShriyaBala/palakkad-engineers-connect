@@ -28,7 +28,7 @@ const Dashboard = () => {
   useEffect(() => {
     API.get('/api/me/', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
       .then(res => setProfile(res.data))
@@ -55,7 +55,7 @@ const Dashboard = () => {
     try {
       await API.patch('/api/update-profile/', profile, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       setMsg('✅ Profile updated successfully!');
@@ -69,7 +69,7 @@ const Dashboard = () => {
     try {
       await API.post('/api/change-password/', passwordData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       setPwdMsg('✅ Password changed successfully!');
@@ -81,10 +81,10 @@ const Dashboard = () => {
   };
 
   if (loading) return <p className="text-center mt-10">Loading dashboard...</p>;
-  if (error) return <p className="text-center mt-10 text-red-600">{error}</p>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-10">
+      {error && <p className="text-center mt-4 text-red-600">{error}</p>}
       <h2 className="text-3xl font-bold">👋 Welcome, {profile.name}</h2>
 
       {/* Profile Update Section */}

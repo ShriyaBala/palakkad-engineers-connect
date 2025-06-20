@@ -18,12 +18,26 @@ const AdminDashboard = () => {
   const [editItem, setEditItem] = useState<any>(null);
   const [form, setForm] = useState<any>({});
 
+  // Pending members state
+  const [pendingMembers, setPendingMembers] = useState<any[]>([]);
+
   // Fetch data
   useEffect(() => {
     API.get("/api/shops/").then(res => setShops(res.data));
     API.get("/api/events/").then(res => setEvents(res.data));
     API.get("/api/ads/").then(res => setAds(res.data));
+    API.get("/api/members/?status=pending").then(res => setPendingMembers(res.data));
   }, []);
+
+  // Approve/Reject handlers
+  const handleApproveMember = async (id: number) => {
+    await API.post(`/api/members/${id}/approve/`);
+    setPendingMembers(pendingMembers.filter(m => m.id !== id));
+  };
+  const handleRejectMember = async (id: number) => {
+    await API.post(`/api/members/${id}/reject/`);
+    setPendingMembers(pendingMembers.filter(m => m.id !== id));
+  };
 
   // Helpers
   const openModal = (type: string, item: any = null) => {
@@ -106,6 +120,29 @@ const AdminDashboard = () => {
       <Navbar />
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
+        {/* Pending Member Approvals Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Pending Member Approvals</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul>
+              {pendingMembers.length === 0 && <li className="text-gray-500">No pending members.</li>}
+              {pendingMembers.map(member => (
+                <li key={member.id} className="flex justify-between items-center border-b py-2">
+                  <div>
+                    <b>{member.name}</b> <span className="text-xs text-gray-500">({member.email})</span>
+                  </div>
+                  <div>
+                    <Button size="sm" className="bg-green-600 text-white mr-2" onClick={() => handleApproveMember(member.id)}>Approve</Button>
+                    <Button size="sm" className="bg-red-600 text-white" onClick={() => handleRejectMember(member.id)}>Reject</Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+        {/* Existing grid of Shops, Events, Ads */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Shops */}
           <Card>

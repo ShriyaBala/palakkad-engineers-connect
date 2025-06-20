@@ -45,15 +45,8 @@ const Login = () => {
 
       localStorage.setItem('token', response.data.token);
 
-      // Optionally fetch user info here...
-
-      setSuccess('✅ User logged in successfully!'); // <-- Set success message
-      setPopup("Your account is approved! You can now log in."); // <-- Set popup message
-
-      // Redirect after a short delay (optional)
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1000);
+      // Immediately redirect to dashboard after successful login
+      navigate('/dashboard');
 
     } catch (err) {
       if (err.response && err.response.status === 403) {

@@ -34,14 +34,38 @@ const JoinUs = () => {
     unit: '',
     panchayath: '',
   });
+  const [passportPhoto, setPassportPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
 
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    if (type === 'file') {
+      const file = (e.target as HTMLInputElement).files?.[0] || null;
+      if (file) {
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (!validTypes.includes(file.type)) {
+          setPhotoError('Only JPG or PNG files are allowed.');
+          setPassportPhoto(null);
+          setPhotoPreview(null);
+          return;
+        } else {
+          setPhotoError(null);
+        }
+        setPassportPhoto(file);
+        setPhotoPreview(URL.createObjectURL(file));
+      } else {
+        setPassportPhoto(null);
+        setPhotoPreview(null);
+        setPhotoError(null);
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
     if (error) setError('');
     if (message) setMessage('');
   };
@@ -50,7 +74,13 @@ const JoinUs = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await API.post('/api/join-us/', formData);
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+      if (passportPhoto) data.append('passport_photo', passportPhoto);
+
+      await API.post('/api/join-us/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       setMessage(`✅ Membership application submitted! A default password will be sent to your email (${formData.email}) once an admin approves your application. You can then log in using that password.`);
       setTimeout(() => navigate('/login'), 4000);
     } catch (err) {
@@ -86,7 +116,29 @@ const JoinUs = () => {
                 <InputField label="Email" name="email" value={formData.email} type="email" onChange={handleChange} />
                 <InputField label="Phone" name="phone" value={formData.phone} onChange={handleChange} />
                 <InputField label="Area" name="area" value={formData.area} onChange={handleChange} />
-                
+
+                {/* Passport Photo Upload */}
+                <div className="space-y-2">
+                  <Label htmlFor="passport_photo">Passport Size Photo</Label>
+                  <Input
+                    id="passport_photo"
+                    name="passport_photo"
+                    type="file"
+                    accept=".jpg,.jpeg,.png"
+                    onChange={handleChange}
+                    required
+                  />
+                  <p className="text-xs text-gray-500">Accepted formats: JPG, JPEG, PNG. Recommended size: 300x400px.</p>
+                  {photoError && <p className="text-xs text-red-600">{photoError}</p>}
+                  {photoPreview && !photoError && (
+                    <img
+                      src={photoPreview}
+                      alt="Passport Preview"
+                      className="h-24 w-24 object-cover rounded border mt-2"
+                    />
+                  )}
+                </div>
+
                 {/* Extra Fields */}
                 <InputField label="Date of Birth" name="dob" value={formData.dob} type="date" onChange={handleChange} />
                 <SelectField label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['Male', 'Female']} />
