@@ -121,16 +121,15 @@ class CustomUser(AbstractUser):
         ('superuser', 'Superuser'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='member')
-    area = models.CharField(max_length=100, blank=True)
-    unit = models.CharField(max_length=100, blank=True)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True)
     phone = models.CharField(max_length=15, blank=True, default='')
     area = models.CharField(max_length=100, blank=True, default='')
+    unit = models.CharField(max_length=100, blank=True, default='')
     dob = models.DateField(null=True, blank=True)  # allow null DOB
     gender = models.CharField(max_length=10, blank=True, default='')
     maritalStatus = models.CharField(max_length=20, blank=True, default='')
-    aadhaar = models.CharField(max_length=12, unique=True,blank=True, null=True)  # default Aadhaar
+    aadhaar = models.CharField(max_length=12, unique=True, blank=True, null=True)  # default Aadhaar
     residentialAddress = models.TextField(blank=True, default='')
     officeAddress = models.TextField(blank=True, default='')
     postOffice = models.CharField(max_length=100, blank=True, default='')
@@ -142,12 +141,12 @@ class CustomUser(AbstractUser):
     additionalQualification = models.CharField(max_length=200, blank=True, default='')
     skills = models.CharField(max_length=200, blank=True, default='')
     bloodGroup = models.CharField(max_length=5, blank=True, default='')
-    unit = models.CharField(max_length=100, blank=True, default='')
     panchayath = models.CharField(max_length=100, blank=True, default='')
     is_approved = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
     is_area_admin = models.BooleanField(default=False)
     is_unit_admin = models.BooleanField(default=False)
+    passport_photo = models.ImageField(upload_to='passport_photos/', blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']  # username is still required for admin
@@ -177,7 +176,7 @@ class MembershipApplication(models.Model):
     bloodGroup = models.CharField(max_length=5, blank=True)
     unit = models.CharField(max_length=100, blank=True)
     panchayath = models.CharField(max_length=100, blank=True)
-    #location = models.CharField(max_length=255, blank=True)  # Add this line
+    passport_photo = models.ImageField(upload_to='passport_photos/', blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
     is_approved = models.BooleanField(default=False)
     approved_at = models.DateTimeField(null=True, blank=True)  # Optionally, add a timestamp for approval

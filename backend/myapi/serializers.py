@@ -30,6 +30,27 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['name', 'email', 'phone']
+
+class MemberSearchSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    
+    def get_name(self, obj):
+        if obj.first_name and obj.last_name:
+            return f"{obj.first_name} {obj.last_name}"
+        elif obj.first_name:
+            return obj.first_name
+        else:
+            return obj.username
+    
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 'name', 'email', 'phone', 'area', 'unit', 'role', 
+            'qualification', 'skills', 'licenseNo', 'panchayath',
+            'is_approved', 'is_member', 'passport_photo'
+        ]
+        read_only_fields = ['id', 'is_approved', 'is_member']
+
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)

@@ -43,10 +43,19 @@ const Login = () => {
         password: formData.password,
       });
 
-      localStorage.setItem('token', response.data.token);
+      // Store token and user info
+      localStorage.setItem('accessToken', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('role', response.data.user.role);
+      localStorage.setItem('is_staff', response.data.user.is_staff.toString());
+      localStorage.setItem('is_superuser', response.data.user.is_superuser.toString());
 
-      // Immediately redirect to dashboard after successful login
-      navigate('/dashboard');
+      // Redirect based on user role
+      if (response.data.redirect_to) {
+        navigate(response.data.redirect_to);
+      } else {
+        navigate('/dashboard');
+      }
 
     } catch (err) {
       if (err.response && err.response.status === 403) {

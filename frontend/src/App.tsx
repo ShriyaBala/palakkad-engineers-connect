@@ -23,6 +23,23 @@ import JoinUs from './pages/JoinUs';
 
 const queryClient = new QueryClient();
 
+// Route protection components
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem('accessToken');
+  return token ? children : <Navigate to="/login" />;
+};
+
+const AdminRoute = ({ children }) => {
+  const token = localStorage.getItem('accessToken');
+  const userRole = localStorage.getItem('role');
+  const isStaff = localStorage.getItem('is_staff') === 'true';
+
+  if (!token) return <Navigate to="/login" />;
+  if (!isStaff && userRole !== 'superuser') return <Navigate to="/" />;
+
+  return children;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -38,12 +55,8 @@ const App = () => (
           <Route path="/join" element={<JoinUsLanding />} />
           <Route path="/joinus" element={<JoinUs />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/admin-dashboard" element={
-  <AdminRoute>
-    <AdminDashboard />
-  </AdminRoute>
-} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />
@@ -69,28 +82,5 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-// In App.tsx or routes
-const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem('accessToken');
-  return token ? children : <Navigate to="/login" />;
-};
-
-<Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-
-const AdminRoute = ({ children }) => {
-  const token = localStorage.getItem('accessToken');
-  const userRole = localStorage.getItem('role'); // Save 'role' in localStorage on login
-
-  if (!token) return <Navigate to="/login" />;
-  if (userRole !== 'admin') return <Navigate to="/" />; // or show a "Not Authorized" page
-
-  return children;
-};
-
-<Route path="/admin-dashboard" element={
-  <AdminRoute>
-    <AdminDashboard />
-  </AdminRoute>
-} />
 
 export default App;

@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Phone, Mail, Globe, MapPin, Award, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Award, CheckCircle, User } from 'lucide-react';
 import { Engineer } from '@/contexts/SearchContext';
 
 interface EngineerCardProps {
@@ -13,15 +12,21 @@ const EngineerCard: React.FC<EngineerCardProps> = ({ engineer }) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       <div className="relative">
-        <img 
-          src={engineer.profileImage} 
-          alt={engineer.name} 
-          className="h-48 w-full object-cover"
-        />
-        {engineer.verified && (
+        {engineer.passport_photo ? (
+          <img 
+            src={`http://127.0.0.1:8000${engineer.passport_photo}`}
+            alt={engineer.name} 
+            className="h-48 w-full object-cover"
+          />
+        ) : (
+          <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
+            <User size={48} className="text-gray-400" />
+          </div>
+        )}
+        {engineer.is_approved && (
           <Badge className="absolute top-2 right-2 bg-green-100 text-green-800 border-green-300 flex items-center gap-1">
             <CheckCircle size={12} />
-            <span>Verified</span>
+            <span>Approved</span>
           </Badge>
         )}
       </div>
@@ -29,31 +34,34 @@ const EngineerCard: React.FC<EngineerCardProps> = ({ engineer }) => {
       <CardContent className="p-4 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-semibold text-lg">{engineer.name}</h3>
-          <Badge variant="outline">{engineer.specialization}</Badge>
+          <Badge variant="outline">{engineer.role}</Badge>
         </div>
         
-        {engineer.occupation && (
+        {engineer.qualification && (
           <div className="flex items-center mb-3">
-            <Award size={16} className="mr-2 text-engineering-500" />
-            <span className="text-gray-700">{engineer.occupation}</span>
+            <Award size={16} className="mr-2 text-blue-500" />
+            <span className="text-gray-700">{engineer.qualification}</span>
           </div>
         )}
         
         <div className="flex items-center text-gray-600 mb-2">
-          <MapPin size={16} className="mr-2 text-engineering-600" />
-          <span>{engineer.location}</span>
-          <span className="ml-1 text-gray-400 text-sm">({engineer.distance})</span>
+          <MapPin size={16} className="mr-2 text-blue-600" />
+          <span>{engineer.area}</span>
+          {engineer.unit && (
+            <span className="ml-1 text-gray-400 text-sm">({engineer.unit})</span>
+          )}
         </div>
         
-        {engineer.skills && engineer.skills.length > 0 && (
+        {engineer.skills && (
           <div className="mb-3">
-            <div className="flex flex-wrap gap-1 mt-1">
-              {engineer.skills.map((skill, index) => (
+            <div className="text-sm text-gray-600 mb-1">Skills:</div>
+            <div className="flex flex-wrap gap-1">
+              {engineer.skills.split(',').map((skill, index) => (
                 <span 
                   key={index}
                   className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
                 >
-                  {skill}
+                  {skill.trim()}
                 </span>
               ))}
             </div>
@@ -61,42 +69,36 @@ const EngineerCard: React.FC<EngineerCardProps> = ({ engineer }) => {
         )}
         
         <div className="mt-auto space-y-2">
-          {engineer.contactDetails?.phone && (
+          {engineer.phone && (
             <a 
-              href={`tel:${engineer.contactDetails.phone}`}
-              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors font-medium"
+              href={`tel:${engineer.phone}`}
+              className="flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium"
             >
               <Phone size={16} className="mr-2" />
-              {engineer.contactDetails.phone}
+              {engineer.phone}
             </a>
           )}
           
-          {engineer.contactDetails?.email && (
+          {engineer.email && (
             <a 
-              href={`mailto:${engineer.contactDetails.email}`}
-              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors"
+              href={`mailto:${engineer.email}`}
+              className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
             >
               <Mail size={16} className="mr-2" />
-              <span className="text-sm">{engineer.contactDetails.email}</span>
-            </a>
-          )}
-          
-          {engineer.contactDetails?.website && (
-            <a 
-              href={`https://${engineer.contactDetails.website}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center text-engineering-600 hover:text-engineering-800 transition-colors"
-            >
-              <Globe size={16} className="mr-2" />
-              <span className="text-sm">{engineer.contactDetails.website}</span>
+              <span className="text-sm">{engineer.email}</span>
             </a>
           )}
         </div>
         
-        {engineer.experience && (
+        {engineer.licenseNo && (
           <div className="mt-3 text-sm text-gray-600">
-            {engineer.experience} years of experience
+            License: {engineer.licenseNo}
+          </div>
+        )}
+        
+        {engineer.panchayath && (
+          <div className="mt-1 text-sm text-gray-600">
+            Panchayath: {engineer.panchayath}
           </div>
         )}
       </CardContent>

@@ -1,250 +1,3 @@
-# # from rest_framework.decorators import api_view, permission_classes
-# # from rest_framework.permissions import IsAuthenticated,AllowAny
-# # from rest_framework.response import Response
-# # from rest_framework import status
-# # from .models import CustomUser
-# # from .serializers import RegisterSerializer, ProfileSerializer
-# # from rest_framework.views import APIView
-# # class joinUs(APIView):
-# #     permission_classes = [AllowAny] 
-
-# #     def post(self, request):
-# #         serializer = RegisterSerializer(data=request.data)
-# #         if serializer.is_valid():
-# #             serializer.save()
-# #             return Response({'msg': 'User registered, password sent via email'}, status=status.HTTP_201_CREATED)
-# #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# # @api_view(['POST'])
-# # def join_us(request):
-# #     serializer = RegisterSerializer(data=request.data)
-# #     if serializer.is_valid():
-# #         serializer.save()
-# #         return Response({'msg': 'User registered, password sent via email'}, status=201)
-# #     return Response(serializer.errors, status=400)
-
-# # @api_view(['GET'])
-# # @permission_classes([IsAuthenticated])
-# # def me(request):
-# #     serializer = ProfileSerializer(request.user)
-# #     return Response(serializer.data)
-
-# # @api_view(['PATCH'])
-# # @permission_classes([IsAuthenticated])
-# # def update_profile(request):
-# #     serializer = ProfileSerializer(request.user, data=request.data, partial=True)
-# #     if serializer.is_valid():
-# #         serializer.save()
-# #         return Response({'msg': 'Profile updated'})
-# #     return Response(serializer.errors, status=400)
-
-# # @api_view(['POST'])
-# # @permission_classes([IsAuthenticated])
-# # def change_password(request):
-# #     user = request.user
-# #     current = request.data.get('current_password')
-# #     new = request.data.get('new_password')
-# #     if not user.check_password(current):
-# #         return Response({'error': 'Wrong current password'}, status=400)
-# #     user.set_password(new)
-# #     user.save()
-# #     return Response({'msg': 'Password changed'})
-
-
-
-# from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
-# from rest_framework.response import Response
-# from rest_framework import status
-# from .models import CustomUser, MemberApplication
-# from django.core.mail import send_mail
-# from django.contrib.auth.hashers import make_password
-# from django.contrib.auth import authenticate
-# import random
-# import string
-# from knox.views import LoginView as KnoxLoginView
-
-# def generate_password(length=8):
-#     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
-
-# # Registration: user is created immediately, password sent by email
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def register_user(request):
-#     data = request.data
-#     if CustomUser.objects.filter(email=data.get('email')).exists():
-#         return Response({'error': 'Email already registered.'}, status=status.HTTP_400_BAD_REQUEST)
-#     password = generate_password()
-#     user = CustomUser.objects.create(
-#         username=data.get('username', data.get('email').split('@')[0]),
-#         email=data.get('email'),
-#         phone=data.get('phone', ''),
-#         password=make_password(password),
-#         area=data.get('area', ''),
-#         unit=data.get('unit', ''),
-#         role='user',
-#         is_approved=True,
-       
-#     )
-#     send_mail(
-#         'Registration Successful',
-#         f'Thank you for registering! Your password is: {password}',
-#         'noreply@yourdomain.com',
-#         [user.email],
-#         fail_silently=True,
-#     )
-#     return Response({'message': 'Registration successful. Check your email for your password.'}, status=status.HTTP_201_CREATED)
-
-# # Membership: needs admin approval, password sent after approval (handled in admin.py)
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def join_us(request):
-#     data = request.data
-#     MemberApplication.objects.create(
-#         name=data.get('name', ''),
-#         email=data.get('email', ''),
-#         phone=data.get('phone', ''),
-#         area=data.get('area', ''),
-#         dob=data.get('dob') or None,
-#         gender=data.get('gender', ''),
-#         maritalStatus=data.get('maritalStatus', ''),
-#         aadhaar=data.get('aadhaar', ''),
-#         residentialAddress=data.get('residentialAddress', ''),
-#         officeAddress=data.get('officeAddress', ''),
-#         postOffice=data.get('postOffice', ''),
-#         pin=data.get('pin', ''),
-#         licenseNo=data.get('licenseNo', ''),
-#         licenseDate=data.get('licenseDate') or None,
-#         renewalDate=data.get('renewalDate') or None,
-#         qualification=data.get('qualification', ''),
-#         additionalQualification=data.get('additionalQualification', ''),
-#         skills=data.get('skills', ''),
-#         bloodGroup=data.get('bloodGroup', ''),
-#         panchayath=data.get('panchayath', ''),
-#         unit=data.get('unit', ''),
-#         #location=data.get('location', ''),
-#         is_approved=False,
-#     )
-#     send_mail(
-#         'Membership Application Received',
-#         'Thank you for applying for membership. Your application is pending admin approval.',
-#         'noreply@yourdomain.com',
-#         [data.get('email')],
-#         fail_silently=True,
-#     )
-#     return Response({'message': 'Application submitted. Await admin approval.'}, status=201)
-
-# # Knox login: authenticate with email and password
-# class LoginAPI(KnoxLoginView):
-#     permission_classes = (AllowAny,)
-
-#     def post(self, request, format=None):
-#         email = request.data.get('email')
-#         password = request.data.get('password')
-#         user = authenticate(request, email=email, password=password)
-#         if user is not None:
-#             return super().post(request)
-#         return Response({'error': 'Invalid credentials'}, status=400)
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def me(request):
-#     user = request.user
-#     return Response({
-#         "name": user.username,
-#         "email": user.email,
-#         "phone": user.phone,
-#         "location": user.location,
-#         "role": user.role,
-#         "is_approved": user.is_approved,
-#     })
-
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def register_member(request):
-#     data = request.data
-#     user = CustomUser.objects.create(
-#         username=data.get('email').split('@')[0],
-#         email=data.get('email'),
-#         password=make_password(data.get('password')),
-#         role='member',
-#         is_approved=False,
-#         area=data.get('area', ''),
-#         unit=data.get('unit', ''),
-#     )
-#     return Response({'message': 'Registration submitted. Await admin approval.'}, status=201)
-
-# # Area Admin Registration
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def register_area_admin(request):
-#     data = request.data
-#     user = CustomUser.objects.create(
-#         username=data.get('email').split('@')[0],
-#         email=data.get('email'),
-#         password=make_password(data.get('password')),
-#         role='area_admin',
-#         is_approved=False,
-#         area=data.get('area', ''),
-#         unit='',  # Area admin may not have a unit
-#     )
-#     return Response({'message': 'Area Admin registration submitted. Await admin approval.'}, status=201)
-
-# # Unit Admin Registration
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def register_unit_admin(request):
-#     data = request.data
-#     user = CustomUser.objects.create(
-#         username=data.get('email').split('@')[0],
-#         email=data.get('email'),
-#         password=make_password(data.get('password')),
-#         role='unit_admin',
-#         is_approved=False,
-#         area=data.get('area', ''),
-#         unit=data.get('unit', ''),
-#     )
-#     return Response({'message': 'Unit Admin registration submitted. Await admin approval.'}, status=201)
-
-
-# @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
-# def update_profile(request):
-#     user = request.user
-#     data = request.data
-#     user.username = data.get('name', user.username)
-#     user.phone = data.get('phone', user.phone)
-#     user.location = data.get('location', user.location)
-#     user.save()
-#     return Response({'message': 'Profile updated successfully!'})
-
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def change_password(request):
-#     user = request.user
-#     current_password = request.data.get('current_password')
-#     new_password = request.data.get('new_password')
-#     if not user.check_password(current_password):
-#         return Response({'error': 'Current password is incorrect.'}, status=400)
-#     user.set_password(new_password)
-#     user.save()
-#     return Response({'message': 'Password changed successfully!'})
-
-# @api_view(['POST'])
-# @permission_classes([IsAdminUser])
-# def approve_member_application(request):
-#     email = request.data.get('email')
-#     if not email:
-#         return Response({'error': 'No email provided.'}, status=400)
-#     try:
-#         app = MemberApplication.objects.get(email=email)
-#         app.is_approved = True
-#         app.save()
-#         # Optionally create a CustomUser here
-#         return Response({'message': 'Membership approved!'})
-#     except MemberApplication.DoesNotExist:
-#         return Response({'error': 'Application not found.'}, status=404)
-
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -261,6 +14,8 @@ from django.urls import reverse
 from .models import MembershipApplication
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
+from .serializers import MemberSearchSerializer
+from rest_framework import viewsets, permissions
 
 User = get_user_model()
 
@@ -294,19 +49,6 @@ def register_user(request):
     )
     return Response({'message': 'Registration successful. Await admin approval.'}, status=status.HTTP_201_CREATED)
 
-# class LoginAPI(KnoxLoginView):
-#     permission_classes = (AllowAny,)
-
-#     def post(self, request, format=None):
-#         email = request.data.get('email')
-#         password = request.data.get('password')
-#         user = authenticate(request, email=email, password=password)
-#         if user is not None:
-#             if not user.is_approved:
-#                 return Response({'error': 'Your account is pending approval.'}, status=403)
-#             return super().post(request)
-#         return Response({'error': 'Invalid credentials'}, status=400)
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def me(request):
@@ -320,7 +62,6 @@ def me(request):
         "role": user.role,
         "is_approved": user.is_approved,
     })
-
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -359,7 +100,6 @@ def password_reset_confirm(request):
     except CustomUser.DoesNotExist:
         return Response({"error": "Invalid user."}, status=400)
 
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
@@ -379,13 +119,27 @@ def login_view(request):
 
     token = AuthToken.objects.create(user)[1]
 
+    # Determine redirect based on user role
+    redirect_to = "/dashboard"  # Default redirect
+    if user.is_superuser or user.is_staff:
+        redirect_to = "/admin-dashboard"
+    elif user.role == 'area_admin':
+        redirect_to = "/area-admin-dashboard"
+    elif user.role == 'unit_admin':
+        redirect_to = "/unit-admin-dashboard"
+
     return Response({
         "message": "Login successful",
         "token": token,
+        "redirect_to": redirect_to,
         "user": {
             "id": user.id,
             "email": user.email,
-            # "member_id": user.member_id
+            "name": user.get_full_name() or user.username,
+            "role": user.role,
+            "is_staff": user.is_staff,
+            "is_superuser": user.is_superuser,
+            "is_approved": user.is_approved,
         }
     }, status=status.HTTP_200_OK)
 
@@ -393,58 +147,342 @@ def login_view(request):
 @permission_classes([AllowAny])
 def join_us(request):
     data = request.data
+    MembershipApplication.objects.create(
+        name=data.get('name', ''),
+        email=data.get('email', ''),
+        phone=data.get('phone', ''),
+        area=data.get('area', ''),
+        dob=data.get('dob') or None,
+        gender=data.get('gender', ''),
+        maritalStatus=data.get('maritalStatus', ''),
+        aadhaar=data.get('aadhaar', ''),
+        residentialAddress=data.get('residentialAddress', ''),
+        officeAddress=data.get('officeAddress', ''),
+        postOffice=data.get('postOffice', ''),
+        pin=data.get('pin', ''),
+        licenseNo=data.get('licenseNo', ''),
+        licenseDate=data.get('licenseDate') or None,
+        renewalDate=data.get('renewalDate') or None,
+        qualification=data.get('qualification', ''),
+        additionalQualification=data.get('additionalQualification', ''),
+        skills=data.get('skills', ''),
+        bloodGroup=data.get('bloodGroup', ''),
+        panchayath=data.get('panchayath', ''),
+        unit=data.get('unit', ''),
+        #location=data.get('location', ''),
+        is_approved=False,
+    )
+    send_mail(
+        'Membership Application Received',
+        'Thank you for applying for membership. Your application is pending admin approval.',
+        'noreply@yourdomain.com',
+        [data.get('email')],
+        fail_silently=True,
+    )
+    return Response({'message': 'Application submitted. Await admin approval.'}, status=201)
 
-    # 1) Check duplicates
-    if User.objects.filter(email=data.get('email')).exists():
-        return Response({'error': 'Email already registered'}, status=400)
-    if data.get('aadhaar') and User.objects.filter(aadhaar=data['aadhaar']).exists():
-        return Response({'error': 'Aadhaar already registered'}, status=400)
-    raw_password = generate_password()  
-    # 2) Create user
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def search_members(request):
+    """
+    Search members by name, email, area, unit, qualification, or skills
+    """
+    from django.db.models import Q
+    
+    search_query = request.GET.get('search', '').strip()
+    search_type = request.GET.get('search_type', 'location')
+    specialization = request.GET.get('specialization', '').strip()
+    experience = request.GET.get('experience', '').strip()
+    
+    # Base query for approved members
+    members = CustomUser.objects.filter(is_approved=True, is_member=True)
+    
+    # Apply search query based on search type
+    if search_query:
+        if search_type == 'location':
+            members = members.filter(
+                Q(area__icontains=search_query) |
+                Q(unit__icontains=search_query) |
+                Q(panchayath__icontains=search_query)
+            )
+        elif search_type == 'name':
+            members = members.filter(
+                Q(username__icontains=search_query) |
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query)
+            )
+        elif search_type == 'occupation':
+            members = members.filter(
+                Q(qualification__icontains=search_query) |
+                Q(skills__icontains=search_query)
+            )
+        else:
+            # General search across all fields
+            members = members.filter(
+                Q(username__icontains=search_query) |
+                Q(email__icontains=search_query) |
+                Q(area__icontains=search_query) |
+                Q(unit__icontains=search_query) |
+                Q(qualification__icontains=search_query) |
+                Q(skills__icontains=search_query) |
+                Q(licenseNo__icontains=search_query) |
+                Q(panchayath__icontains=search_query)
+            )
+    
+    # Apply specialization filter
+    if specialization:
+        members = members.filter(qualification__icontains=specialization)
+    
+    # Apply experience filter (if we had experience field, we would use it here)
+    # For now, we'll skip this as we don't have an experience field
+    
+    # Order by username
+    members = members.order_by('username')
+    
+    serializer = MemberSearchSerializer(members, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_all_members(request):
+    """
+    Get all approved members without search
+    """
+    
+    members = CustomUser.objects.filter(
+        is_approved=True,
+        is_member=True
+    ).order_by('username')
+    
+    serializer = MemberSearchSerializer(members, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def admin_dashboard(request):
+    """
+    Get admin dashboard data - only for superusers and staff
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
+    # Get pending members for approval
+    pending_members = CustomUser.objects.filter(is_approved=False).count()
+    total_members = CustomUser.objects.filter(is_approved=True, role='member').count()
+    total_area_admins = CustomUser.objects.filter(is_approved=True, role='area_admin').count()
+    total_unit_admins = CustomUser.objects.filter(is_approved=True, role='unit_admin').count()
+    
+    return Response({
+        "pending_members": pending_members,
+        "total_members": total_members,
+        "total_area_admins": total_area_admins,
+        "total_unit_admins": total_unit_admins,
+        "admin_info": {
+            "name": request.user.get_full_name() or request.user.username,
+            "email": request.user.email,
+            "role": request.user.role,
+        }
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_pending_members(request):
+    """
+    Get all pending members for admin approval
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
+    pending_members = CustomUser.objects.filter(is_approved=False).order_by('-date_joined')
+    serializer = MemberSearchSerializer(pending_members, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def approve_member(request, user_id):
+    """
+    Approve a member by admin
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
     try:
-        user = User.objects.create(
-            username=data.get('name'),
-            email=data.get('email'),
-            phone=data.get('phone', ''),
-            area=data.get('area', ''),
-            dob=data.get('dob') or None,
-            gender=data.get('gender', ''),
-            maritalStatus=data.get('maritalStatus', ''),
-            aadhaar=data.get('aadhaar', ''),
-            residentialAddress=data.get('residentialAddress', ''),
-            officeAddress=data.get('officeAddress', ''),
-            postOffice=data.get('postOffice', ''),
-            pin=data.get('pin', ''),
-            licenseNo=data.get('licenseNo', ''),
-            licenseDate=data.get('licenseDate') or None,
-            renewalDate=data.get('renewalDate') or None,
-            qualification=data.get('qualification', ''),
-            additionalQualification=data.get('additionalQualification', ''),
-            skills=data.get('skills', ''),
-            bloodGroup=data.get('bloodGroup', ''),
-            unit=data.get('unit', ''),
-            panchayath=data.get('panchayath', ''),
-            role='member',
-            is_approved=False,
-            password=make_password(None)  # unusable password
-        )
-    except Exception as e:
-        return Response({'error': f'Failed to create user: {str(e)}'}, status=500)
+        user = CustomUser.objects.get(id=user_id)
+        user.is_approved = True
+        user.is_member = True
+        user.save()
+        
+        # Send approval email
+        try:
+            send_mail(
+                'Your LENSFED Membership Has Been Approved!',
+                f'''Dear {user.get_full_name() or user.username},
+
+Great news! Your LENSFED membership has been approved by the admin.
+
+You can now access all member features and benefits.
+
+Best regards,
+LENSFED Team''',
+                'noreply@lensfed.in',
+                [user.email],
+                fail_silently=True,
+            )
+        except Exception as e:
+            print(f"Failed to send approval email: {e}")
+        
+        return Response({"message": f"User {user.username} has been approved successfully."})
+    except CustomUser.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def reject_member(request, user_id):
+    """
+    Reject a member by admin
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
     try:
-        send_mail(
-            'Your Lensfed Membership Password',
-            f'Hello {user.username},\n\n'
-            f'Thank you for applying for membership. Your temporary password is:\n\n'
-            f'    {raw_password}\n\n'
-            'Once your account is approved by an admin, you can log in with this password '
-            'and then go to “Change Password” to set one of your choice.',
-            'noreply@yourdomain.com',
-            [user.email],
-            fail_silently=False,
-        )
-    except Exception:
-        # if email fails, you might still want to notify or log it, but don't block the API
-        pass
-    # 3) Success response
-    return Response({'message': 'Application submitted. Awaiting approval.'}, status=201)
+        user = CustomUser.objects.get(id=user_id)
+        user.is_approved = False
+        user.save()
+        
+        # Send rejection email
+        try:
+            send_mail(
+                'LENSFED Membership Application Update',
+                f'''Dear {user.get_full_name() or user.username},
+
+We regret to inform you that your LENSFED membership application has not been approved at this time.
+
+If you have any questions, please contact us.
+
+Best regards,
+LENSFED Team''',
+                'noreply@lensfed.in',
+                [user.email],
+                fail_silently=True,
+            )
+        except Exception as e:
+            print(f"Failed to send rejection email: {e}")
+        
+        return Response({"message": f"User {user.username} has been rejected."})
+    except CustomUser.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_admin_password(request):
+    """
+    Change admin password
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
+    current_password = request.data.get('current_password')
+    new_password = request.data.get('new_password')
+    
+    if not current_password or not new_password:
+        return Response({"error": "Current password and new password are required."}, status=400)
+    
+    if not request.user.check_password(current_password):
+        return Response({"error": "Current password is incorrect."}, status=400)
+    
+    request.user.set_password(new_password)
+    request.user.save()
+    
+    return Response({"message": "Password changed successfully."})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_admin_profile(request):
+    """
+    Update admin profile information
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
+    user = request.user
+    
+    # Update allowed fields
+    if 'first_name' in request.data:
+        user.first_name = request.data['first_name']
+    if 'last_name' in request.data:
+        user.last_name = request.data['last_name']
+    if 'email' in request.data:
+        # Check if email is already taken by another user
+        if CustomUser.objects.filter(email=request.data['email']).exclude(id=user.id).exists():
+            return Response({"error": "Email is already taken."}, status=400)
+        user.email = request.data['email']
+    if 'phone' in request.data:
+        user.phone = request.data['phone']
+    
+    user.save()
+    
+    return Response({
+        "message": "Profile updated successfully.",
+        "user": {
+            "name": user.get_full_name() or user.username,
+            "email": user.email,
+            "phone": user.phone,
+            "role": user.role,
+        }
+    })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def bulk_approve_members(request):
+    """
+    Bulk approve multiple members
+    """
+    if not request.user.is_staff:
+        return Response({"error": "Access denied. Admin privileges required."}, status=403)
+    
+    user_ids = request.data.get('user_ids', [])
+    if not user_ids:
+        return Response({"error": "No user IDs provided."}, status=400)
+    
+    approved_count = 0
+    for user_id in user_ids:
+        try:
+            user = CustomUser.objects.get(id=user_id, is_approved=False)
+            user.is_approved = True
+            user.is_member = True
+            user.save()
+            approved_count += 1
+            
+            # Send approval email
+            try:
+                send_mail(
+                    'Your LENSFED Membership Has Been Approved!',
+                    f'''Dear {user.get_full_name() or user.username},
+
+Great news! Your LENSFED membership has been approved by the admin.
+
+You can now access all member features and benefits.
+
+Best regards,
+LENSFED Team''',
+                    'noreply@lensfed.in',
+                    [user.email],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Failed to send approval email: {e}")
+                
+        except CustomUser.DoesNotExist:
+            continue
+    
+    return Response({"message": f"Successfully approved {approved_count} members."})
+
+class IsAdminUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_staff
+
+class AdminUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = MemberSearchSerializer  # Use MemberSearchSerializer for now
+    permission_classes = [IsAdminUser]
 
