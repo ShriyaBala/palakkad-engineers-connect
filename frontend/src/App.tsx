@@ -20,6 +20,8 @@ import ResetPasswordForm from "./pages/ResetPasswordForm";
 
 import JoinUsLanding from './pages/JoinUsLanding';
 import JoinUs from './pages/JoinUs';
+import PendingMembersPage from './pages/PendingMembersPage';
+import TotalMembersPage from './pages/TotalMembersPage';
 
 const queryClient = new QueryClient();
 
@@ -57,7 +59,8 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          
+          <Route path="/admin/pending-members" element={<PendingMembersPage />} />
+          <Route path="/admin/total-members" element={<TotalMembersPage />} />
           {/* Added pages with dummy content */}
           <Route path="/about" element={<About />} />
           <Route path="/members" element={<Members />} />

@@ -241,7 +241,7 @@ def search_members(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_all_members(request):
     """
     Get all approved members without search

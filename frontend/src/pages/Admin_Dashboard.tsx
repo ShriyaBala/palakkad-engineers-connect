@@ -83,8 +83,13 @@ const AdminDashboard = () => {
     );
   }
 
-  const { pending_members, total_members, total_area_admins, total_unit_admins, admin_info } =
-    dashboardData || {};
+  const {
+    pending_members,
+    total_members,
+    total_area_admins,
+    total_unit_admins,
+    admin_info,
+  } = dashboardData || {};
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -116,10 +121,30 @@ const AdminDashboard = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard title="Pending Members" value={pending_members} icon={UserX} color="bg-orange-500" />
-          <StatCard title="Total Members" value={total_members} icon={UserCheck} color="bg-green-500" />
-          <StatCard title="Area Admins" value={total_area_admins} icon={Shield} color="bg-blue-500" />
-          <StatCard title="Unit Admins" value={total_unit_admins} icon={Settings} color="bg-purple-500" />
+          <StatCard
+            title="Pending Members"
+            value={pending_members}
+            icon={UserX}
+            color="bg-orange-500"
+          />
+          <StatCard
+            title="Total Members"
+            value={total_members}
+            icon={UserCheck}
+            color="bg-green-500"
+          />
+          <StatCard
+            title="Area Admins"
+            value={total_area_admins}
+            icon={Shield}
+            color="bg-blue-500"
+          />
+          <StatCard
+            title="Unit Admins"
+            value={total_unit_admins}
+            icon={Settings}
+            color="bg-purple-500"
+          />
         </div>
 
         {/* Quick Actions */}
@@ -128,9 +153,9 @@ const AdminDashboard = () => {
             <Activity className="w-5 h-5 mr-2 text-blue-600" />
             Quick Actions
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div
-              onClick={() => console.log('Navigate to review')}
+              onClick={() => (window.location.href = '/admin/pending-members')}
               className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
             >
               <Eye className="text-blue-600 w-6 h-6" />
@@ -140,23 +165,13 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div
-              onClick={() => console.log('Manage users')}
+              onClick={() => (window.location.href = '/admin/total-members')}
               className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
             >
               <Users className="text-blue-600 w-6 h-6" />
               <div>
-                <p className="font-semibold">Manage Users</p>
-                <p className="text-sm text-gray-600">All system users</p>
-              </div>
-            </div>
-            <div
-              onClick={() => console.log('System Settings')}
-              className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
-            >
-              <Settings className="text-blue-600 w-6 h-6" />
-              <div>
-                <p className="font-semibold">System Settings</p>
-                <p className="text-sm text-gray-600">Manage configuration</p>
+                <p className="font-semibold">Total Members</p>
+                <p className="text-sm text-gray-600">{total_members} approved</p>
               </div>
             </div>
           </div>
