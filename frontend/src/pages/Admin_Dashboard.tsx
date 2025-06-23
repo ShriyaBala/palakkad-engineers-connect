@@ -1,433 +1,166 @@
-import React, { useEffect, useState } from "react";
-import API from "@/api/axios";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
-import Navbar from "@/components/Navbar";
+import React, { useEffect, useState } from 'react';
+import axios from '@/api/axios';
+import {
+  Users,
+  UserCheck,
+  UserX,
+  Shield,
+  Settings,
+  Eye,
+  Activity,
+  RefreshCw,
+} from 'lucide-react';
 
 const AdminDashboard = () => {
-  const { toast } = useToast();
-  
-  // State for dashboard data
-  const [dashboardData, setDashboardData] = useState<any>(null);
-  const [pendingMembers, setPendingMembers] = useState<any[]>([]);
-  const [adminInfo, setAdminInfo] = useState<any>(null);
-  
-  // State for profile management
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [profileForm, setProfileForm] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: ''
-  });
-  const [passwordForm, setPasswordForm] = useState({
-    current_password: '',
-    new_password: '',
-    confirm_password: ''
-  });
-
-  // Fetch dashboard data
-  useEffect(() => {
-    fetchDashboardData();
-    fetchPendingMembers();
-  }, []);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchDashboardData = async () => {
+    setRefreshing(true);
     try {
-      const response = await API.get("/api/admin/dashboard/");
+      const response = await axios.get('/api/admin/dashboard/');
       setDashboardData(response.data);
-      setAdminInfo(response.data.admin_info);
-      setProfileForm({
-        first_name: response.data.admin_info.name.split(' ')[0] || '',
-        last_name: response.data.admin_info.name.split(' ').slice(1).join(' ') || '',
-        email: response.data.admin_info.email,
-        phone: ''
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch dashboard data",
-        variant: "destructive",
-      });
+      setError(null);
+    } catch (err: any) {
+      console.error(err);
+      if (err.response?.status === 401) {
+        setError('Unauthorized. Please login again.');
+        localStorage.clear();
+      } else if (err.response?.status === 403) {
+        setError('Access denied. Admin only.');
+      } else {
+        setError('Something went wrong while fetching data.');
+      }
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const fetchPendingMembers = async () => {
-    try {
-      const response = await API.get("/api/admin/pending-members/");
-      setPendingMembers(response.data);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch pending members",
-        variant: "destructive",
-      });
-    }
-  };
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
-  // Approve/Reject handlers
-  const handleApproveMember = async (userId: number) => {
-    try {
-      await API.post(`/api/admin/approve-member/${userId}/`);
-      toast({
-        title: "Success",
-        description: "Member approved successfully",
-      });
-      fetchPendingMembers();
-      fetchDashboardData();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to approve member",
-        variant: "destructive",
-      });
-    }
-  };
+  const StatCard = ({ title, value, icon: Icon, color }: any) => (
+    <div className="bg-white p-5 rounded-xl shadow border hover:shadow-md transition">
+      <div className="flex items-center space-x-4">
+        <div className={`p-3 rounded-full ${color}`}>
+          <Icon className="text-white w-6 h-6" />
+        </div>
+        <div>
+          <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+          <p className="text-2xl font-bold text-gray-800">{value}</p>
+        </div>
+      </div>
+    </div>
+  );
 
-  const handleRejectMember = async (userId: number) => {
-    try {
-      await API.post(`/api/admin/reject-member/${userId}/`);
-      toast({
-        title: "Success",
-        description: "Member rejected",
-      });
-      fetchPendingMembers();
-      fetchDashboardData();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to reject member",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleBulkApprove = async () => {
-    const selectedMembers = pendingMembers.filter(m => m.selected);
-    if (selectedMembers.length === 0) {
-      toast({
-        title: "Warning",
-        description: "Please select members to approve",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      await API.post("/api/admin/bulk-approve/", {
-        user_ids: selectedMembers.map(m => m.id)
-      });
-      toast({
-        title: "Success",
-        description: `Approved ${selectedMembers.length} members`,
-      });
-      fetchPendingMembers();
-      fetchDashboardData();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to approve members",
-        variant: "destructive",
-      });
-    }
-  };
-
-  // Profile management handlers
-  const handleProfileSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await API.post("/api/admin/update-profile/", profileForm);
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      });
-      setShowProfileModal(false);
-      fetchDashboardData();
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.response?.data?.error || "Failed to update profile",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passwordForm.new_password !== passwordForm.confirm_password) {
-      toast({
-        title: "Error",
-        description: "New passwords don't match",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      await API.post("/api/admin/change-password/", {
-        current_password: passwordForm.current_password,
-        new_password: passwordForm.new_password
-      });
-      toast({
-        title: "Success",
-        description: "Password changed successfully",
-      });
-      setShowPasswordModal(false);
-      setPasswordForm({
-        current_password: '',
-        new_password: '',
-        confirm_password: ''
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.response?.data?.error || "Failed to change password",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const toggleMemberSelection = (userId: number) => {
-    setPendingMembers(prev => 
-      prev.map(member => 
-        member.id === userId 
-          ? { ...member, selected: !member.selected }
-          : member
-      )
-    );
-  };
-
-  if (!dashboardData) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="container mx-auto py-8">
-          <div className="text-center">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-blue-600 font-semibold">Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow text-center">
+          <Shield className="text-red-500 w-8 h-8 mx-auto mb-2" />
+          <h2 className="text-lg font-bold mb-2">Access Error</h2>
+          <p className="text-sm text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => (window.location.href = '/dashboard')}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Go to Main Dashboard
+          </button>
         </div>
       </div>
     );
   }
 
+  const { pending_members, total_members, total_area_admins, total_unit_admins, admin_info } =
+    dashboardData || {};
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <div className="flex gap-2">
-            <Button onClick={() => setShowProfileModal(true)} variant="outline">
-              Edit Profile
-            </Button>
-            <Button onClick={() => setShowPasswordModal(true)} variant="outline">
-              Change Password
-            </Button>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+            <p className="text-gray-500">Welcome, {admin_info?.name}</p>
           </div>
+          <button
+            onClick={fetchDashboardData}
+            disabled={refreshing}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            <RefreshCw className={refreshing ? 'animate-spin' : ''} size={16} />
+            Refresh
+          </button>
         </div>
 
-        {/* Admin Info Card */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Welcome, {adminInfo?.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{dashboardData.pending_members}</div>
-                <div className="text-sm text-gray-600">Pending Members</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{dashboardData.total_members}</div>
-                <div className="text-sm text-gray-600">Total Members</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">{dashboardData.total_area_admins}</div>
-                <div className="text-sm text-gray-600">Area Admins</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{dashboardData.total_unit_admins}</div>
-                <div className="text-sm text-gray-600">Unit Admins</div>
-                  </div>
-                  </div>
-          </CardContent>
-        </Card>
-
-        <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-1">
-            <TabsTrigger value="pending">Pending Approvals</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="pending" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
-                  Pending Member Approvals
-                  {pendingMembers.length > 0 && (
-                    <Button onClick={handleBulkApprove} className="bg-green-600 hover:bg-green-700">
-                      Approve Selected ({pendingMembers.filter(m => m.selected).length})
-                    </Button>
-                  )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-                {pendingMembers.length === 0 ? (
-                  <div className="text-center text-gray-500 py-8">No pending members to approve.</div>
-                ) : (
-                  <div className="space-y-4">
-                    {pendingMembers.map(member => (
-                      <div key={member.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center space-x-4">
-                          <input
-                            type="checkbox"
-                            checked={member.selected || false}
-                            onChange={() => toggleMemberSelection(member.id)}
-                            className="rounded"
-                          />
-                    <div>
-                            <div className="font-semibold">{member.name || member.username}</div>
-                            <div className="text-sm text-gray-600">{member.email}</div>
-                            <div className="text-xs text-gray-500">
-                              Area: {member.area || 'Not specified'} | 
-                              Unit: {member.unit || 'Not specified'}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            size="sm" 
-                            className="bg-green-600 hover:bg-green-700" 
-                            onClick={() => handleApproveMember(member.id)}
-                          >
-                            Approve
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="destructive" 
-                            onClick={() => handleRejectMember(member.id)}
-                          >
-                            Reject
-                          </Button>
-                    </div>
-                    </div>
-                ))}
-                  </div>
-                )}
-            </CardContent>
-          </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Profile Modal */}
-        {showProfileModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md">
-            <CardHeader>
-                <CardTitle>Edit Profile</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleProfileSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="first_name">First Name</Label>
-                    <Input
-                      id="first_name"
-                      value={profileForm.first_name}
-                      onChange={(e) => setProfileForm({...profileForm, first_name: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="last_name">Last Name</Label>
-                    <Input
-                      id="last_name"
-                      value={profileForm.last_name}
-                      onChange={(e) => setProfileForm({...profileForm, last_name: e.target.value})}
-                      required
-                    />
-                  </div>
-                    <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={profileForm.email}
-                      onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
-                      required
-                    />
-                    </div>
-                    <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      value={profileForm.phone}
-                      onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})}
-                    />
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button type="submit" className="flex-1">Update Profile</Button>
-                    <Button type="button" variant="outline" onClick={() => setShowProfileModal(false)}>
-                      Cancel
-                    </Button>
-                    </div>
-                </form>
-            </CardContent>
-          </Card>
-          </div>
-        )}
-
-        {/* Password Modal */}
-        {showPasswordModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md">
-            <CardHeader>
-                <CardTitle>Change Password</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handlePasswordSubmit} className="space-y-4">
-                    <div>
-                    <Label htmlFor="current_password">Current Password</Label>
-                    <Input
-                      id="current_password"
-                      type="password"
-                      value={passwordForm.current_password}
-                      onChange={(e) => setPasswordForm({...passwordForm, current_password: e.target.value})}
-                      required
-                    />
-                    </div>
-                    <div>
-                    <Label htmlFor="new_password">New Password</Label>
-                    <Input
-                      id="new_password"
-                      type="password"
-                      value={passwordForm.new_password}
-                      onChange={(e) => setPasswordForm({...passwordForm, new_password: e.target.value})}
-                      required
-                    />
-                    </div>
-                  <div>
-                    <Label htmlFor="confirm_password">Confirm New Password</Label>
-                    <Input
-                      id="confirm_password"
-                      type="password"
-                      value={passwordForm.confirm_password}
-                      onChange={(e) => setPasswordForm({...passwordForm, confirm_password: e.target.value})}
-                      required
-                    />
+        {/* Admin Info */}
+        <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
+          <h2 className="text-xl font-bold">{admin_info?.name}</h2>
+          <p>{admin_info?.email}</p>
+          <span className="inline-block mt-2 px-3 py-1 bg-blue-800 rounded-full text-xs uppercase tracking-wide">
+            {admin_info?.role}
+          </span>
         </div>
-                  <div className="flex space-x-2">
-                    <Button type="submit" className="flex-1">Change Password</Button>
-                    <Button type="button" variant="outline" onClick={() => setShowPasswordModal(false)}>
-                      Cancel
-                    </Button>
-                </div>
-              </form>
-              </CardContent>
-            </Card>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard title="Pending Members" value={pending_members} icon={UserX} color="bg-orange-500" />
+          <StatCard title="Total Members" value={total_members} icon={UserCheck} color="bg-green-500" />
+          <StatCard title="Area Admins" value={total_area_admins} icon={Shield} color="bg-blue-500" />
+          <StatCard title="Unit Admins" value={total_unit_admins} icon={Settings} color="bg-purple-500" />
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white p-6 rounded-xl shadow border">
+          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <Activity className="w-5 h-5 mr-2 text-blue-600" />
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div
+              onClick={() => console.log('Navigate to review')}
+              className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
+            >
+              <Eye className="text-blue-600 w-6 h-6" />
+              <div>
+                <p className="font-semibold">Review Pending Members</p>
+                <p className="text-sm text-gray-600">{pending_members} waiting</p>
+              </div>
+            </div>
+            <div
+              onClick={() => console.log('Manage users')}
+              className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
+            >
+              <Users className="text-blue-600 w-6 h-6" />
+              <div>
+                <p className="font-semibold">Manage Users</p>
+                <p className="text-sm text-gray-600">All system users</p>
+              </div>
+            </div>
+            <div
+              onClick={() => console.log('System Settings')}
+              className="p-4 border rounded-lg flex items-center gap-4 hover:shadow cursor-pointer"
+            >
+              <Settings className="text-blue-600 w-6 h-6" />
+              <div>
+                <p className="font-semibold">System Settings</p>
+                <p className="text-sm text-gray-600">Manage configuration</p>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

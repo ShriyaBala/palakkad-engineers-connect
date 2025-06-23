@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CustomUser
+from .models import CustomUser, MembershipApplication
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
@@ -11,11 +11,11 @@ import string
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
-from .models import MembershipApplication
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
 from .serializers import MemberSearchSerializer
 from rest_framework import viewsets, permissions
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -68,7 +68,7 @@ def me(request):
 def password_reset_request(request):
     email = request.data.get('email')
     try:
-        user = CustomUser.objects.get(email=email, is_approved=True)
+        user = User.objects.get(email=email, is_approved=True)
         token = default_token_generator.make_token(user)
         reset_url = f"{request.scheme}://{request.get_host()}/reset-password/{user.pk}/{token}/"
         send_mail(
@@ -79,7 +79,7 @@ def password_reset_request(request):
             fail_silently=True,
         )
         return Response({"exists": True})
-    except CustomUser.DoesNotExist:
+    except User.DoesNotExist:
         pass  # Don't reveal if email exists
     return Response({"message": "If your email is registered and approved, a reset link has been sent."})
 
@@ -90,14 +90,14 @@ def password_reset_confirm(request):
     token = request.data.get('token')
     password = request.data.get('password')
     try:
-        user = CustomUser.objects.get(pk=uid)
+        user = User.objects.get(pk=uid)
         if default_token_generator.check_token(user, token):
             user.set_password(password)
             user.save()
             return Response({"message": "Password reset successful!"})
         else:
             return Response({"error": "Invalid or expired token."}, status=400)
-    except CustomUser.DoesNotExist:
+    except User.DoesNotExist:
         return Response({"error": "Invalid user."}, status=400)
 
 @api_view(['POST'])
@@ -147,7 +147,7 @@ def login_view(request):
 @permission_classes([AllowAny])
 def join_us(request):
     data = request.data
-    MembershipApplication.objects.create(
+    MembershipApplication.objects.create(  # type: ignore[attr-defined]
         name=data.get('name', ''),
         email=data.get('email', ''),
         phone=data.get('phone', ''),
@@ -187,8 +187,6 @@ def search_members(request):
     """
     Search members by name, email, area, unit, qualification, or skills
     """
-    from django.db.models import Q
-    
     search_query = request.GET.get('search', '').strip()
     search_type = request.GET.get('search_type', 'location')
     specialization = request.GET.get('specialization', '').strip()
@@ -201,32 +199,32 @@ def search_members(request):
     if search_query:
         if search_type == 'location':
             members = members.filter(
-                Q(area__icontains=search_query) |
-                Q(unit__icontains=search_query) |
-                Q(panchayath__icontains=search_query)
+                Q(area__icontains=search_query) |  # type: ignore[operator]
+                Q(unit__icontains=search_query) |  # type: ignore[operator]
+                Q(panchayath__icontains=search_query)  # type: ignore[operator]
             )
         elif search_type == 'name':
             members = members.filter(
-                Q(username__icontains=search_query) |
-                Q(first_name__icontains=search_query) |
-                Q(last_name__icontains=search_query)
+                Q(username__icontains=search_query) |  # type: ignore[operator]
+                Q(first_name__icontains=search_query) |  # type: ignore[operator]
+                Q(last_name__icontains=search_query)  # type: ignore[operator]
             )
         elif search_type == 'occupation':
             members = members.filter(
-                Q(qualification__icontains=search_query) |
-                Q(skills__icontains=search_query)
+                Q(qualification__icontains=search_query) |  # type: ignore[operator]
+                Q(skills__icontains=search_query)  # type: ignore[operator]
             )
         else:
             # General search across all fields
             members = members.filter(
-                Q(username__icontains=search_query) |
-                Q(email__icontains=search_query) |
-                Q(area__icontains=search_query) |
-                Q(unit__icontains=search_query) |
-                Q(qualification__icontains=search_query) |
-                Q(skills__icontains=search_query) |
-                Q(licenseNo__icontains=search_query) |
-                Q(panchayath__icontains=search_query)
+                Q(username__icontains=search_query) |  # type: ignore[operator]
+                Q(email__icontains=search_query) |  # type: ignore[operator]
+                Q(area__icontains=search_query) |  # type: ignore[operator]
+                Q(unit__icontains=search_query) |  # type: ignore[operator]
+                Q(qualification__icontains=search_query) |  # type: ignore[operator]
+                Q(skills__icontains=search_query) |  # type: ignore[operator]
+                Q(licenseNo__icontains=search_query) |  # type: ignore[operator]
+                Q(panchayath__icontains=search_query)  # type: ignore[operator]
             )
     
     # Apply specialization filter
@@ -307,7 +305,7 @@ def approve_member(request, user_id):
         return Response({"error": "Access denied. Admin privileges required."}, status=403)
     
     try:
-        user = CustomUser.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         user.is_approved = True
         user.is_member = True
         user.save()
@@ -316,14 +314,7 @@ def approve_member(request, user_id):
         try:
             send_mail(
                 'Your LENSFED Membership Has Been Approved!',
-                f'''Dear {user.get_full_name() or user.username},
-
-Great news! Your LENSFED membership has been approved by the admin.
-
-You can now access all member features and benefits.
-
-Best regards,
-LENSFED Team''',
+                f'''Dear {user.get_full_name() or user.username},\n\nGreat news! Your LENSFED membership has been approved by the admin.\n\nYou can now access all member features and benefits.\n\nBest regards,\nLENSFED Team''',
                 'noreply@lensfed.in',
                 [user.email],
                 fail_silently=True,
@@ -332,7 +323,7 @@ LENSFED Team''',
             print(f"Failed to send approval email: {e}")
         
         return Response({"message": f"User {user.username} has been approved successfully."})
-    except CustomUser.DoesNotExist:
+    except User.DoesNotExist:
         return Response({"error": "User not found."}, status=404)
 
 @api_view(['POST'])
@@ -345,7 +336,7 @@ def reject_member(request, user_id):
         return Response({"error": "Access denied. Admin privileges required."}, status=403)
     
     try:
-        user = CustomUser.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         user.is_approved = False
         user.save()
         
@@ -353,14 +344,7 @@ def reject_member(request, user_id):
         try:
             send_mail(
                 'LENSFED Membership Application Update',
-                f'''Dear {user.get_full_name() or user.username},
-
-We regret to inform you that your LENSFED membership application has not been approved at this time.
-
-If you have any questions, please contact us.
-
-Best regards,
-LENSFED Team''',
+                f'''Dear {user.get_full_name() or user.username},\n\nWe regret to inform you that your LENSFED membership application has not been approved at this time.\n\nIf you have any questions, please contact us.\n\nBest regards,\nLENSFED Team''',
                 'noreply@lensfed.in',
                 [user.email],
                 fail_silently=True,
@@ -369,7 +353,7 @@ LENSFED Team''',
             print(f"Failed to send rejection email: {e}")
         
         return Response({"message": f"User {user.username} has been rejected."})
-    except CustomUser.DoesNotExist:
+    except User.DoesNotExist:
         return Response({"error": "User not found."}, status=404)
 
 @api_view(['POST'])
@@ -447,7 +431,7 @@ def bulk_approve_members(request):
     approved_count = 0
     for user_id in user_ids:
         try:
-            user = CustomUser.objects.get(id=user_id, is_approved=False)
+            user = User.objects.get(id=user_id, is_approved=False)
             user.is_approved = True
             user.is_member = True
             user.save()
@@ -457,14 +441,7 @@ def bulk_approve_members(request):
             try:
                 send_mail(
                     'Your LENSFED Membership Has Been Approved!',
-                    f'''Dear {user.get_full_name() or user.username},
-
-Great news! Your LENSFED membership has been approved by the admin.
-
-You can now access all member features and benefits.
-
-Best regards,
-LENSFED Team''',
+                    f'''Dear {user.get_full_name() or user.username},\n\nGreat news! Your LENSFED membership has been approved by the admin.\n\nYou can now access all member features and benefits.\n\nBest regards,\nLENSFED Team''',
                     'noreply@lensfed.in',
                     [user.email],
                     fail_silently=True,
@@ -472,7 +449,7 @@ LENSFED Team''',
             except Exception as e:
                 print(f"Failed to send approval email: {e}")
                 
-        except CustomUser.DoesNotExist:
+        except User.DoesNotExist:
             continue
     
     return Response({"message": f"Successfully approved {approved_count} members."})
